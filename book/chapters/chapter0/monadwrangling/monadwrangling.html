@@ -1,0 +1,507 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Monads in Haskell</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../../../favicon.svg">
+        <link rel="shortcut icon" href="../../../favicon.png">
+        <link rel="stylesheet" href="../../../css/variables.css">
+        <link rel="stylesheet" href="../../../css/general.css">
+        <link rel="stylesheet" href="../../../css/chrome.css">
+        <link rel="stylesheet" href="../../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../../highlight.css">
+        <link rel="stylesheet" href="../../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../../chapters/cover/rewire-by-example.html">ReWire by Example</a></li><li class="chapter-item expanded "><a href="../../../chapters/chapter0/prequisites.html"><strong aria-hidden="true">1.</strong> Prerequisites</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../chapters/chapter0/haskell.html"><strong aria-hidden="true">1.1.</strong> Haskell</a></li><li class="chapter-item expanded "><a href="../../../chapters/chapter0/monadwrangling/monadwrangling.html" class="active"><strong aria-hidden="true">1.2.</strong> Monads in Haskell</a></li></ol></li><li class="chapter-item expanded "><a href="../../../chapters/chapter1/helloworlds.html"><strong aria-hidden="true">2.</strong> Chapter 1: Hello Worlds in ReWire</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../chapters/chapter1/simplemealy.html"><strong aria-hidden="true">2.1.</strong> Simple Mealy</a></li><li class="chapter-item expanded "><a href="../../../chapters/chapter1/fibonacci.html"><strong aria-hidden="true">2.2.</strong> Fibonacci, of course</a></li><li class="chapter-item expanded "><a href="../../../chapters/chapter1/carrysaveadders.html"><strong aria-hidden="true">2.3.</strong> Carry Save Adders</a></li></ol></li><li class="chapter-item expanded "><a href="../../../chapters/chapter2/simpleprocs.html"><strong aria-hidden="true">3.</strong> Chapter 2: Simple Processors</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../chapters/chapter2/tinyisa.html"><strong aria-hidden="true">3.1.</strong> Tiny ISA</a></li></ol></li><li class="chapter-item expanded "><a href="../../../crossbarswitch.html"><strong aria-hidden="true">4.</strong> Cross Bar Switch</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <a href="../../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="monad-wrangling-101"><a class="header" href="#monad-wrangling-101">Monad Wrangling 101</a></h1>
+<p>ReWire is a monadic language, meaning that it is organized in terms of various monads (which ones, we'll get to shortly). There are about a zillion tutorials on monads out there, and most of them are just <em>terrible</em>. This is a shame since the idea of a monad itself is really beautiful and, if you know how to use them correctly, they're a really important part of functional programming practice. And, furthermore, they are a really important part of programming language semantics, too, and consequently an important part of formal methods properly understood.</p>
+<p>What this section does is introduce the monad idea through a sequence of simple language interpreters. As we add features to the language, we have to change the monad we use to define the new interpreter. We will see four interpreters whose core is a language of simple arithmetic expressions.</p>
+<p>To see all of the monads discussed in this tutorial defined in one convenient Haskell file, download this:
+<a href="MonadWrangling.hs">MonadWrangling.hs</a>. These monad and monad transformer definitions are in the style of earlier versions of GHC, which were immensely easier to understand than the current mess.</p>
+<hr />
+<h2 id="simple-arithmetic-expressions"><a class="header" href="#simple-arithmetic-expressions">Simple Arithmetic Expressions</a></h2>
+<p>The first interpreter, found in <a href="Arith.hs">Arith.hs</a>, defines a language <code>Exp</code> that has integer constants, negation, and addition. These correspond to the constructors <code>Const</code>, <code>Neg</code>, and <code>Add</code> of the <code>Exp</code> data type. The interpreter <code>eval0</code> does not use a monad and should be fairly self-explanatory.</p>
+<pre><code class="language-haskell">module Arith where
+
+data Exp = Const Int | Neg Exp | Add Exp Exp
+
+instance Show Exp where
+  show (Const i) = show i
+  show (Neg e)   = "-" ++ show e
+  show (Add e1 e2) = show e1 ++ " + " ++ show e2
+
+eval0 :: Exp -&gt; Int
+eval0 (Const i)   = i
+eval0 (Neg e)     = - (eval0 e)
+eval0 (Add e1 e2) = eval0 e1 + eval0 e2
+
+c = Const 99
+n = Neg c
+a = Add c n
+</code></pre>
+<p>Loading this into GHCi gives you what you'd expect:</p>
+<pre><code>λ&gt; a
+99 + -99
+λ&gt; eval0 a
+0
+</code></pre>
+<hr />
+<h2 id="the-identity-monad-is-a-big-nothingburger"><a class="header" href="#the-identity-monad-is-a-big-nothingburger">The <code>Identity</code> Monad is a Big Nothingburger</a></h2>
+<p>We introduce now the <code>Identity</code> monad, which doesn't really give you anything at all. I introduce it first because it uses Haskell's built-in monad syntax, and it's useful to meet that syntax first when the monad is just a big nothing. The code for this section is found in <a href="IdentityMonad.hs">IdentityMonad.hs</a> and <a href="IdentityMonadDo.hs">IdentityMonadDo.hs</a>.</p>
+<p>First, here's the new interpreter <code>eval1</code>. The salient point is that <code>eval0</code> and <code>eval1</code> are doing the same thing, but what's all this <code>return</code> and <code>&gt;&gt;=</code> business? (They're explained below if you want to skip ahead.)</p>
+<pre><code class="language-haskell">module IdentityMonad where
+
+import Control.Monad.Identity -- this is new.
+
+data Exp = Const Int | Neg Exp | Add Exp Exp
+
+instance Show Exp where
+  show (Const i) = show i
+  show (Neg e)   = "-" ++ show e
+  show (Add e1 e2) = show e1 ++ " + " ++ show e2
+
+eval1 :: Exp -&gt; Identity Int
+eval1 (Const i)   = return i
+eval1 (Neg e)     = eval1 e &gt;&gt;= \ v -&gt; return (- v)
+eval1 (Add e1 e2) = eval1 e1 &gt;&gt;= \ v1 -&gt; eval1 e2 &gt;&gt;= \ v2 -&gt; return (v1 + v2)
+
+c = Const 99
+n = Neg c
+a = Add c n
+</code></pre>
+<p>The <code>Identity</code> monad has the following definition (it's actually a simplification).</p>
+<pre><code class="language-haskell">data Identity a = Identity a -- apologies for overloading the constructors.
+return :: a -&gt; Identity a
+return v = Identity v
+(&gt;&gt;=) :: Identity a -&gt; (a -&gt; Identity b) -&gt; Identity b
+(Identity v) &gt;&gt;= f = f v
+</code></pre>
+<p>So, <code>return</code> just injects its argument into <code>Identity</code>. The operation <code>&gt;&gt;=</code> (a.k.a., "bind") boils down to a backwards apply. It's just a whole lot of applying and pattern-matching on the <code>Identity</code> constructor, signifying nothing. When you load all this into GHCi, you get just what you'd expect:</p>
+<pre><code>λ&gt; a
+99 + -99
+λ&gt; eval1 a
+Identity 0
+λ&gt; 
+</code></pre>
+<h2 id="lessons-learned"><a class="header" href="#lessons-learned">Lessons Learned</a></h2>
+<p>As people say, <code>eval1</code> and <code>eval0</code> are morally equivalent, in the sense that, if you were so inclined, you could <em>prove</em> the equality <code>eval1 a = Identity (eval0 a)</code> holds for any <code>a</code>.</p>
+<h3 id="monadic-syntactic-sugar-or-saccharine"><a class="header" href="#monadic-syntactic-sugar-or-saccharine">Monadic Syntactic Sugar or Saccharine?</a></h3>
+<p>Haskell overloads its monad syntax, so when we see the <code>&gt;&gt;=</code> and <code>return</code> again, they will be typed in different monads than <code>Identity</code>. Overloading is great for some uses, because it removes clutter. I find for formal methods it can be kind of confusing. So, reader beware!</p>
+<p>There is also another shorthand for <code>&gt;&gt;=</code> that is frequently used called <code>do</code> notation; it's defined as:</p>
+<pre><code class="language-haskell">   x &gt;&gt;= f = do
+               v &lt;- x
+		       f v
+</code></pre>
+<p>So, the clause of <code>eval1</code> for <code>Neg</code> is as follows when written in <code>do</code> notation:</p>
+<pre><code class="language-haskell">eval1 (Neg e)     = do
+                      v &lt;- eval1 e
+                      return (- v)
+</code></pre>
+<p>The code <code>IdentityMonadDo.hs</code> just reformulates the code in <code>IdentityMonad.hs</code> using <code>do</code> notation.</p>
+<hr />
+<h2 id="2nd-interpreter-errors-and-maybe"><a class="header" href="#2nd-interpreter-errors-and-maybe">2nd Interpreter: Errors and Maybe</a></h2>
+<p>The code for this section is found in <a href="Errors.hs">Errors.hs</a>. This new interpreter adds a new arithmetic operation <code>Div</code>. I pasted in the <code>eval0</code> with a new case for <code>Div</code>.</p>
+<pre><code class="language-haskell">module Errors where
+
+data Exp = Const Int | Neg Exp | Add Exp Exp
+         | Div Exp Exp                      -- new
+
+instance Show Exp where
+  show (Const i) = show i
+  show (Neg e)   = "-" ++ show e
+  show (Add e1 e2) = show e1 ++ " + " ++ show e2
+  show (Div e1 e2) = show e1 ++ " / " ++ show e2
+
+-- | Same as before, but with a new case
+eval0 :: Exp -&gt; Int
+eval0 (Const i)   = i
+eval0 (Neg e)     = - (eval0 e)
+eval0 (Add e1 e2) = eval0 e1 + eval0 e2
+eval0 (Div e1 e2) = eval0 e1 `div` eval0 e2 -- new
+
+a    = Add c (Neg c)
+        where
+          c = Const 99
+uhoh = Div (Const 1) (Const 0)              -- new
+</code></pre>
+<p>Note that, when you run the <code>Div</code>-extended version of <code>eval0</code>, things don't always end well:</p>
+<pre><code class="language-haskell">λ&gt; uhoh
+1 / 0
+λ&gt; eval0 uhoh
+*** Exception: divide by zero
+λ&gt; 
+</code></pre>
+<h3 id="why-cant-we-just-check-for-0"><a class="header" href="#why-cant-we-just-check-for-0">Why can't we just check for 0?</a></h3>
+<p>Think about it this way, what should I replace <code>????</code> with below? There's no way of handling that exceptional case and it crashes the program.</p>
+<pre><code class="language-haskell">eval0 (Div e1 e2) = if v2 == 0 then ???? else eval0 e1 `div` v2 
+   where
+      v2 = eval0 e2
+</code></pre>
+<p>But with the <code>Maybe</code> monad, we can use its <code>Nothing</code> constructor for this erroneous case; recall the definition of the <code>Maybe</code> data type:</p>
+<pre><code class="language-haskell">data Maybe a = Nothing | Just a
+</code></pre>
+<p>Here's the definition of <code>eval2</code> whhich is typed in the <code>Maybe</code> monad:</p>
+<pre><code class="language-haskell">eval2 :: Exp -&gt; Maybe Int     -- N.b., the new type
+eval2 (Const i)   = return i
+eval2 (Neg e)     = do
+                      v &lt;- eval2 e
+                      return (- v)
+eval2 (Add e1 e2) = do
+                      v1 &lt;- eval2 e1
+                      v2 &lt;- eval2 e2
+                      return (v1 + v2)
+eval2 (Div e1 e2) = do
+                      v1 &lt;- eval2 e1
+                      v2 &lt;- eval2 e2
+                      if v2==0 then Nothing else return (v1 `div` v2) -- fill in ???? with Nothing
+</code></pre>
+<pre><code class="language-haskell">λ&gt; uhoh
+1 / 0
+λ&gt; eval2 uhoh
+Nothing
+</code></pre>
+<h3 id="maybe-under-the-hood"><a class="header" href="#maybe-under-the-hood">Maybe Under the Hood</a></h3>
+<p>Below is the definition of the <code>Maybe</code> monad. The way to think of a computation <code>x &gt;&gt;= f</code> is that, if <code>x</code> is returns some value (i.e., it's <code>Just v</code>), then just proceed normally. If an exception is thrown by computing <code>x</code> (i.e., it's <code>Nothing</code>), then the whole computation <code>x &gt;&gt;= f</code></p>
+<pre><code class="language-haskell">data Maybe a = Nothing | Just a
+
+return :: a -&gt; Maybe a
+return v = Just v
+
+(&gt;&gt;=) :: Maybe a -&gt; (a -&gt; Maybe b) -&gt; Maybe b 
+(Just v) &gt;&gt;= f = f v
+Nothing &gt;&gt;= f  = Nothing
+</code></pre>
+<hr />
+<h1 id="3rd-interpreter-adding-a-register"><a class="header" href="#3rd-interpreter-adding-a-register">3rd Interpreter: Adding a Register</a></h1>
+<p>The code for this section is <a href="Register.hs">Register.hs</a>.</p>
+<pre><code class="language-haskell">module Register where
+
+import Control.Monad.State
+
+data Exp = Const Int | Neg Exp | Add Exp Exp
+         | X  -- new register X
+
+instance Show Exp where
+  show (Const i) = show i
+  show (Neg e)   = "-" ++ show e
+  show (Add e1 e2) = show e1 ++ " + " ++ show e2
+  show X           = "X"
+
+-- | Just a copy 
+eval2 :: Exp -&gt; Maybe Int
+eval2 (Const i)   = return i
+eval2 (Neg e)     = do
+                      v &lt;- eval2 e
+                      return (- v)
+eval2 (Add e1 e2) = do
+                      v1 &lt;- eval2 e1
+                      v2 &lt;- eval2 e2
+                      return (v1 + v2)
+
+eval2 X           = undefined -- How do we do handle this?
+</code></pre>
+<p>Here's how we handle this:</p>
+<ul>
+<li>Create a new monad from <code>Identity</code> with an <code>Int</code> register: <code>StateT Int Identity</code></li>
+<li>This new monad has two operations
+<ul>
+<li><code>get</code> that reads the current value of the register</li>
+<li><code>put</code> that updates the value of the register</li>
+</ul>
+</li>
+<li><code>StateT Int</code> is known as a <em>monad transformer</em></li>
+</ul>
+<p>The code below does just that</p>
+<pre><code class="language-haskell">readX :: StateT Int Identity Int
+readX = get
+
+eval3 :: Exp -&gt; StateT Int Identity Int
+eval3 (Const i)   = return i
+eval3 (Neg e)     = do
+                      v &lt;- eval3 e
+                      return (- v)
+eval3 (Add e1 e2) = do
+                      v1 &lt;- eval3 e1
+                      v2 &lt;- eval3 e2
+                      return (v1 + v2)
+
+eval3 X           = readX
+</code></pre>
+<hr />
+<h1 id="4th-errors--register"><a class="header" href="#4th-errors--register">4th: Errors + Register</a></h1>
+<p>The code for this is <a href="RegisterError.hs">RegisterError.hs</a>. In this example, we want to add both a possibly error-producing computation along with the register. This is done mostly through monadic means.</p>
+<pre><code class="language-haskell">module Register where
+
+import Control.Monad.State
+
+data Exp = Const Int | Neg Exp | Add Exp Exp
+         | Div Exp Exp  -- Both errors
+         | X            -- and a register X
+
+instance Show Exp where
+  show (Const i) = show i
+  show (Neg e)   = "-" ++ show e
+  show (Add e1 e2) = show e1 ++ " + " ++ show e2
+  show (Div e1 e2) = show e1 ++ " / " ++ show e2
+  show X           = "X"
+</code></pre>
+<p>Here's how we handle this:</p>
+<ul>
+<li>Create a new monad from <code>Maybe</code> with an <code>Int</code> register: <code>StateT Int Maybe</code></li>
+<li>This new monad has two operations
+<ul>
+<li><code>get</code> that reads the current value of the register</li>
+<li><code>put</code> that updates the value of the register</li>
+</ul>
+</li>
+<li><code>StateT Int</code> is known as a <em>monad transformer</em></li>
+</ul>
+<p>The code below does just that</p>
+<pre><code class="language-haskell">readX :: StateT Int Maybe Int
+readX = get
+
+eval3 :: Exp -&gt; StateT Int Maybe Int
+eval3 (Const i)   = return i
+eval3 (Neg e)     = do
+                      v &lt;- eval3 e
+                      return (- v)
+eval3 (Add e1 e2) = do
+                      v1 &lt;- eval3 e1
+                      v2 &lt;- eval3 e2
+                      return (v1 + v2)
+eval3 (Div e1 e2) = do
+                      v1 &lt;- eval3 e1
+                      v2 &lt;- eval3 e2
+                      if v2==0 then lift Nothing else return (v1 `div` v2)
+                                 -- N.b., this is new.
+
+eval3 X           = readX
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../../chapters/chapter0/haskell.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../../../chapters/chapter1/helloworlds.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../../chapters/chapter0/haskell.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../../../chapters/chapter1/helloworlds.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../../elasticlunr.min.js"></script>
+        <script src="../../../mark.min.js"></script>
+        <script src="../../../searcher.js"></script>
+
+        <script src="../../../clipboard.min.js"></script>
+        <script src="../../../highlight.js"></script>
+        <script src="../../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
