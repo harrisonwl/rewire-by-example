@@ -10,7 +10,7 @@ UNDER CONSTRUCTION!
    
    - [Monads in Haskell](./chapters/chapter0/monadwrangling/monadwrangling.md)
 
-- [Chapter 1: Hello Worlds in ReWire](./chapters/chapter1/helloworlds.md)
+- [Hello Worlds in ReWire](./chapters/chapter1/helloworlds.md)
 
    - [Simple Mealy](./chapters/chapter1/simplemealy.md)
 
@@ -18,13 +18,31 @@ UNDER CONSTRUCTION!
 
    - [Carry Save Adders](./chapters/chapter1/carrysaveadders.md)
 
+- [Cryptographic Hardware in ReWire](./chapters/salsa20/front.md)
 
-- [Chapter 2: Simple Processors](./chapters/chapter2/simpleprocs.md)
+   - [Reference Semantics](./chapters/salsa20/semantics.md)
+   
+      - [Introduction](./chapters/salsa20/introduction.md)
 
-   - [Tiny ISA](./chapters/chapter2/tinyisa.md)
+      - [Words](./chapters/salsa20/words.md)
+   
+      - [The quarterround function](./chapters/salsa20/quarterround.md)
+
+      - [The rowround function](./chapters/salsa20/rowround.md)
+
+      - [The columnround function](./chapters/salsa20/columnround.md)
+
+      - [The doubleround function](./chapters/salsa20/doubleround.md)
+
+      - [The littleendian function](./chapters/salsa20/littleendian.md)
 
 
-- [Cross Bar Switch](./crossbarswitch.md)
+<!-- - [Simple Processors](./chapters/chapter2/simpleprocs.md) -->
+
+<!--    - [Tiny ISA](./chapters/chapter2/tinyisa.md) -->
+
+
+<!-- - [Cross Bar Switch](./crossbarswitch.md) -->
 
    <!--  - [Simple Arithmetic](./chapters/chapter0/monadwrangling/FirstInterpreter.md) -->
    <!-- - [Identity is a Big Nothingburger](./chapters/chapter0/monadwrangling/IdentityBigNothing.md) -->

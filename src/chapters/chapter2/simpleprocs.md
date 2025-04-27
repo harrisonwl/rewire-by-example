@@ -1,5 +1,5 @@
-# Simple Processors
+# Simple Processor
 
-This chapter describes several simple processors.
+This chapter describes a very simple processor. 
 
 

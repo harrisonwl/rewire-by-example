@@ -1,7 +1,7 @@
 
 ## Tiny ISA
 
-We now describe a simple processor with a tiny instruction set (hence the name [TinyISA.hs](TinyISA.hs)).
+We now describe a simple processor with a tiny instruction set (hence the name [TinyISA.hs](TinyISA.hs)). TinyISA has four 8-bit registers, 6-bit addresses, and five instructions. 
 ```haskell
 type W6    = W 6
 type W8    = W 8
@@ -14,6 +14,10 @@ data Instr = NOP
            | BNZ Addr
 ```
 
+### Inputs, outputs, and register file.
+
+TinyISA has two inputs, represented by the record type `Ins`, with two fields for the instruction to execute (`instrIn`) and a `dataIn` for data read from memory. 
+The register file `RegFile` is a record type as well
 ```haskell
 data Ins     = Ins { instrIn :: Instr,
                      dataIn  :: W 8 }
@@ -22,7 +26,9 @@ data Out     = Out { weOut   :: Bit,
                      dataOut :: W 8 }
 data RegFile = RegFile { r0 :: W 8, r1 :: W 8, r2 :: W 8, r3 :: W 8,
                          pc :: Addr, inputs :: Ins, outputs :: Out }
+```
 
+```haskell
 type S   = StateT RegFile Identity
 type Dev = ReacT Ins Out S
 ```
