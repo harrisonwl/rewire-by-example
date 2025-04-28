@@ -2,7 +2,7 @@
 
 UNDER CONSTRUCTION!
 
-[ReWire by Example](./chapters/cover/rewire-by-example.md)
+[ReWire by Example](./rewire-by-example.md)
 
 - [Prerequisites](./chapters/chapter0/prequisites.md)
 
