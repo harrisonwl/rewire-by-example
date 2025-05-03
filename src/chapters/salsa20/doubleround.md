@@ -12,7 +12,7 @@ doubleround :: Hex (W 32) -> Hex (W 32)
 
 
 The `doubleround` function from page 4 of Bernstein's *Salsa20 Specification* is given as:
-<p align="center"><img src="./doubleround.jpg"  style="height:70%; width:70%" ></p>
+<p align="center"><img src="./doubleround.jpg"  style="height:65%; width:65%" ></p>
 
 #### Rendering in ReWire/Haskell
 
@@ -23,7 +23,7 @@ doubleround = rowround . columnround
 
 ### Examples
 
-<p align="center"><img src="./DRsanity.jpg"  style="height:70%; width:70%" ></p>
+<p align="center"><img src="./DRsanity.jpg"  style="height:65%; width:65%" ></p>
 
 ```haskell
 alltests :: [Bool]

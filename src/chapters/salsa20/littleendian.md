@@ -52,7 +52,7 @@ These functions are defined in `LittleEndian.hs` and are uninteresting.
 ### Examples
 
 
-<p align="center"><img src="./LEsanity.jpg"  style="height:70%; width:70%" ></p>
+<p align="center"><img src="./LEsanity.jpg"  style="height:50%; width:50%" ></p>
 
 ```haskell
 alltests :: [P.Bool]

@@ -13,7 +13,7 @@ quarterround :: (W 32 , W 32 , W 32 , W 32) -> (W 32 , W 32 , W 32 , W 32)
 ### Definition 
 The quarterround function from page 2 of
 the spec is given as:
-<p align="center"><img src="./quarterround.jpg"  style="height:65%; width:65%" ></p>
+<p align="center"><img src="./quarterround.jpg"  style="height:70%; width:70%" ></p>
 
 
 Rendering this function in Haskell is simple:
@@ -32,7 +32,7 @@ Note how closely the Haskell text mirrors the definition from the spec text. The
 ### Examples
 
 Bernstein provides examples that one can use to sanity-check definitions of `quarterround`; here they are:
-<p align="center"><img src="./QRsanity.jpg"  style="height:65%; width:65%" ></p>
+<p align="center"><img src="./QRsanity.jpg"  style="height:70%; width:70%" ></p>
 
 Because we have the function using Haskell/ReWire, we can just evaluate these tests automatically; here are the seven tests from the spec:
 ```haskell

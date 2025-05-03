@@ -35,7 +35,7 @@ columnround (X16 x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15)
 
 ## Examples
 
-<p align="center"><img src="./CRsanity.jpg"  style="height:70%; width:70%" ></p>
+<p align="center"><img src="./CRsanity.jpg"  style="height:65%; width:65%" ></p>
 
 ```haskell
 alltests :: [Bool]

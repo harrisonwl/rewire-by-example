@@ -36,6 +36,12 @@ UNDER CONSTRUCTION!
 
       - [The littleendian function](./chapters/salsa20/littleendian.md)
 
+      - [Salsa20 Hash function](./chapters/salsa20/hashfunction.md)
+
+      - [Salsa20 Expansion function](./chapters/salsa20/expansionfunction.md)
+
+      - [Salsa20 Encryption function](./chapters/salsa20/encryption.md)
+
 
 <!-- - [Simple Processors](./chapters/chapter2/simpleprocs.md) -->
 
