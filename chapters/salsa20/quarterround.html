@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>The quarterround function</title>
+        <title>The quarterround function - ReWire by Example</title>
 
 
         <!-- Custom HTML head -->
@@ -30,6 +30,8 @@
 
         <!-- Custom theme stylesheets -->
 
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
         <!-- Provide site root and default themes to javascript -->
         <script>
@@ -123,7 +125,7 @@
                         </button>
                     </div>
 
-                    <h1 class="menu-title"></h1>
+                    <h1 class="menu-title">ReWire by Example</h1>
 
                     <div class="right-buttons">
                         <a href="../../print.html" title="Print this book" aria-label="Print this book">
@@ -164,7 +166,7 @@
 <h3 id="definition"><a class="header" href="#definition">Definition</a></h3>
 <p>The quarterround function from page 2 of
 the spec is given as:</p>
-<p align="center"><img src="./quarterround.jpg"  style="height:65%; width:65%" ></p>
+<p align="center"><img src="./quarterround.jpg"  style="height:70%; width:70%" ></p>
 <p>Rendering this function in Haskell is simple:</p>
 <pre><code class="language-haskell">quarterround :: (W 32 , W 32 , W 32 , W 32) -&gt; (W 32 , W 32 , W 32 , W 32)
 quarterround (y0 , y1 , y2 , y3) = (z0 , z1 , z2 , z3)
@@ -178,7 +180,7 @@ quarterround (y0 , y1 , y2 , y3) = (z0 , z1 , z2 , z3)
 <p>Note how closely the Haskell text mirrors the definition from the spec text. The XOR operation (\(\oplus\)) is written as <code>^</code>, the left rotate \(\lll\) is written as <code>rotL</code>, etc.</p>
 <h3 id="examples"><a class="header" href="#examples">Examples</a></h3>
 <p>Bernstein provides examples that one can use to sanity-check definitions of <code>quarterround</code>; here they are:</p>
-<p align="center"><img src="./QRsanity.jpg"  style="height:65%; width:65%" ></p>
+<p align="center"><img src="./QRsanity.jpg"  style="height:70%; width:70%" ></p>
 <p>Because we have the function using Haskell/ReWire, we can just evaluate these tests automatically; here are the seven tests from the spec:</p>
 <pre><code class="language-haskell">alltests :: [Bool]
 alltests = [test1 , test2 , test3 , test4 , test5 , test6 , test7]

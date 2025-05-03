@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>The doubleround function</title>
+        <title>The doubleround function - ReWire by Example</title>
 
 
         <!-- Custom HTML head -->
@@ -30,6 +30,8 @@
 
         <!-- Custom theme stylesheets -->
 
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
         <!-- Provide site root and default themes to javascript -->
         <script>
@@ -123,7 +125,7 @@
                         </button>
                     </div>
 
-                    <h1 class="menu-title"></h1>
+                    <h1 class="menu-title">ReWire by Example</h1>
 
                     <div class="right-buttons">
                         <a href="../../print.html" title="Print this book" aria-label="Print this book">
@@ -162,13 +164,13 @@
 </code></pre>
 <h3 id="definition"><a class="header" href="#definition">Definition</a></h3>
 <p>The <code>doubleround</code> function from page 4 of Bernstein's <em>Salsa20 Specification</em> is given as:</p>
-<p align="center"><img src="./doubleround.jpg"  style="height:70%; width:70%" ></p>
+<p align="center"><img src="./doubleround.jpg"  style="height:65%; width:65%" ></p>
 <h4 id="rendering-in-rewirehaskell"><a class="header" href="#rendering-in-rewirehaskell">Rendering in ReWire/Haskell</a></h4>
 <pre><code class="language-haskell">doubleround :: Hex (W 32) -&gt; Hex (W 32)
 doubleround = rowround . columnround
 </code></pre>
 <h3 id="examples"><a class="header" href="#examples">Examples</a></h3>
-<p align="center"><img src="./DRsanity.jpg"  style="height:70%; width:70%" ></p>
+<p align="center"><img src="./DRsanity.jpg"  style="height:65%; width:65%" ></p>
 <pre><code class="language-haskell">alltests :: [Bool]
 alltests = [test1 , test2]
 

@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title></title>
+        <title>ReWire by Example</title>
         <meta name="robots" content="noindex">
 
 
@@ -31,6 +31,8 @@
 
         <!-- Custom theme stylesheets -->
 
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
         <!-- Provide site root and default themes to javascript -->
         <script>
@@ -124,7 +126,7 @@
                         </button>
                     </div>
 
-                    <h1 class="menu-title"></h1>
+                    <h1 class="menu-title">ReWire by Example</h1>
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
@@ -715,9 +717,8 @@ type-check it, and run test cases.</p>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="reference-semantics"><a class="header" href="#reference-semantics">Reference Semantics</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
-<p>This is the introduction.</p>
-<p>Salsa20.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="words"><a class="header" href="#words">Words</a></h1>
+<p>In</p>
 <div style="break-before: page; page-break-before: always;"></div><h2 id="the-quarter-round-function"><a class="header" href="#the-quarter-round-function">The Quarter Round Function</a></h2>
 <p>Looking at the pseudocode functions defined in the spec, it is clear that they are, indeed, <em>pure functions</em> in the sense of Haskell. Hence, it is quite straightforward to transliterate these functions into Haskell/ReWire and this section gives the first such transliteration. An advantage of writing in Haskell rather than pseudocode is that definitions may are type-checked by GHC, providing a quick means of gaining assurance and/or finding stupid bugs.</p>
 <h3 id="inputs-and-outputs"><a class="header" href="#inputs-and-outputs">Inputs and Outputs</a></h3>
@@ -727,7 +728,7 @@ type-check it, and run test cases.</p>
 <h3 id="definition"><a class="header" href="#definition">Definition</a></h3>
 <p>The quarterround function from page 2 of
 the spec is given as:</p>
-<p align="center"><img src="chapters/salsa20/./quarterround.jpg"  style="height:65%; width:65%" ></p>
+<p align="center"><img src="chapters/salsa20/./quarterround.jpg"  style="height:70%; width:70%" ></p>
 <p>Rendering this function in Haskell is simple:</p>
 <pre><code class="language-haskell">quarterround :: (W 32 , W 32 , W 32 , W 32) -&gt; (W 32 , W 32 , W 32 , W 32)
 quarterround (y0 , y1 , y2 , y3) = (z0 , z1 , z2 , z3)
@@ -741,7 +742,7 @@ quarterround (y0 , y1 , y2 , y3) = (z0 , z1 , z2 , z3)
 <p>Note how closely the Haskell text mirrors the definition from the spec text. The XOR operation (\(\oplus\)) is written as <code>^</code>, the left rotate \(\lll\) is written as <code>rotL</code>, etc.</p>
 <h3 id="examples"><a class="header" href="#examples">Examples</a></h3>
 <p>Bernstein provides examples that one can use to sanity-check definitions of <code>quarterround</code>; here they are:</p>
-<p align="center"><img src="chapters/salsa20/./QRsanity.jpg"  style="height:65%; width:65%" ></p>
+<p align="center"><img src="chapters/salsa20/./QRsanity.jpg"  style="height:70%; width:70%" ></p>
 <p>Because we have the function using Haskell/ReWire, we can just evaluate these tests automatically; here are the seven tests from the spec:</p>
 <pre><code class="language-haskell">alltests :: [Bool]
 alltests = [test1 , test2 , test3 , test4 , test5 , test6 , test7]
@@ -850,7 +851,7 @@ columnround (X16 x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15)
         (y15,  y3,  y7, y11) = quarterround (x15, x3, x7, x11)
 </code></pre>
 <h2 id="examples-2"><a class="header" href="#examples-2">Examples</a></h2>
-<p align="center"><img src="chapters/salsa20/./CRsanity.jpg"  style="height:70%; width:70%" ></p>
+<p align="center"><img src="chapters/salsa20/./CRsanity.jpg"  style="height:65%; width:65%" ></p>
 <pre><code class="language-haskell">alltests :: [Bool]
 alltests = [test1 , test2]
 
@@ -888,13 +889,13 @@ test2 = columnround (x16
 </code></pre>
 <h3 id="definition-3"><a class="header" href="#definition-3">Definition</a></h3>
 <p>The <code>doubleround</code> function from page 4 of Bernstein's <em>Salsa20 Specification</em> is given as:</p>
-<p align="center"><img src="chapters/salsa20/./doubleround.jpg"  style="height:70%; width:70%" ></p>
+<p align="center"><img src="chapters/salsa20/./doubleround.jpg"  style="height:65%; width:65%" ></p>
 <h4 id="rendering-in-rewirehaskell-2"><a class="header" href="#rendering-in-rewirehaskell-2">Rendering in ReWire/Haskell</a></h4>
 <pre><code class="language-haskell">doubleround :: Hex (W 32) -&gt; Hex (W 32)
 doubleround = rowround . columnround
 </code></pre>
 <h3 id="examples-3"><a class="header" href="#examples-3">Examples</a></h3>
-<p align="center"><img src="chapters/salsa20/./DRsanity.jpg"  style="height:70%; width:70%" ></p>
+<p align="center"><img src="chapters/salsa20/./DRsanity.jpg"  style="height:65%; width:65%" ></p>
 <pre><code class="language-haskell">alltests :: [Bool]
 alltests = [test1 , test2]
 
@@ -964,7 +965,7 @@ slicetest = (slice0 x , slice1 x , slice2 x , slice3 x) P.== (lit 0xde , lit 0xa
 </code></pre>
 <p>These functions are defined in <code>LittleEndian.hs</code> and are uninteresting.</p>
 <h3 id="examples-4"><a class="header" href="#examples-4">Examples</a></h3>
-<p align="center"><img src="chapters/salsa20/./LEsanity.jpg"  style="height:70%; width:70%" ></p>
+<p align="center"><img src="chapters/salsa20/./LEsanity.jpg"  style="height:50%; width:50%" ></p>
 <pre><code class="language-haskell">alltests :: [P.Bool]
 alltests = [test1 , test2 , test3] P.++ invertible_tests
 
@@ -987,6 +988,9 @@ True
 λ&gt; alltests
 [True,True,True,True,True,True]
 </code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="salsa20-hash-function"><a class="header" href="#salsa20-hash-function">Salsa20 Hash function</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="salsa20-expansion-function"><a class="header" href="#salsa20-expansion-function">Salsa20 Expansion function</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="salsa20-encryption-function"><a class="header" href="#salsa20-encryption-function">Salsa20 Encryption function</a></h1>
 
                     </main>
 
@@ -1025,7 +1029,9 @@ True
 
         <script>
         window.addEventListener('load', function() {
-            window.setTimeout(window.print, 100);
+            MathJax.Hub.Register.StartupHook('End', function() {
+                window.setTimeout(window.print, 100);
+            });
         });
         </script>
 

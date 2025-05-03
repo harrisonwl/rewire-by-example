@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>The littleendian function</title>
+        <title>The littleendian function - ReWire by Example</title>
 
 
         <!-- Custom HTML head -->
@@ -30,6 +30,8 @@
 
         <!-- Custom theme stylesheets -->
 
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
         <!-- Provide site root and default themes to javascript -->
         <script>
@@ -123,7 +125,7 @@
                         </button>
                     </div>
 
-                    <h1 class="menu-title"></h1>
+                    <h1 class="menu-title">ReWire by Example</h1>
 
                     <div class="right-buttons">
                         <a href="../../print.html" title="Print this book" aria-label="Print this book">
@@ -189,7 +191,7 @@ slicetest = (slice0 x , slice1 x , slice2 x , slice3 x) P.== (lit 0xde , lit 0xa
 </code></pre>
 <p>These functions are defined in <code>LittleEndian.hs</code> and are uninteresting.</p>
 <h3 id="examples"><a class="header" href="#examples">Examples</a></h3>
-<p align="center"><img src="./LEsanity.jpg"  style="height:70%; width:70%" ></p>
+<p align="center"><img src="./LEsanity.jpg"  style="height:50%; width:50%" ></p>
 <pre><code class="language-haskell">alltests :: [P.Bool]
 alltests = [test1 , test2 , test3] P.++ invertible_tests
 
@@ -221,6 +223,9 @@ True
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
+                            <a rel="next prefetch" href="../../chapters/salsa20/hashfunction.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -232,6 +237,9 @@ True
                         <i class="fa fa-angle-left"></i>
                     </a>
 
+                    <a rel="next prefetch" href="../../chapters/salsa20/hashfunction.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>
