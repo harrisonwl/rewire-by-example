@@ -158,7 +158,35 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="words"><a class="header" href="#words">Words</a></h1>
-<p>In</p>
+<p>A <em>word</em> in the context of Bernstein's Salsa20 specification is a bit vector of size 32. Representing bit vectors in ReWire is done via the built-in type constructor for words, <code>W</code>. It is size-indexed so that, for example, 32-bit words are represented by <code>W 32</code>. There are a host of operators defined for words parameterized by size. For example, the type of addition on words has type (checking its type in the GHCi interpreter):</p>
+<pre><code class="language-haskell">λ&gt; :type (+)
+(+) :: KnownNat n =&gt; W n -&gt; W n -&gt; W n
+</code></pre>
+<p>This means that, for any natural number <code>n</code>, <code>(+)</code> takes two <code>(W n)</code> and returns a <code>(W n)</code>.</p>
+<p>Most bit-vector operations in Verilog or VHDL have a corresponding operation in ReWire.</p>
+<h4 id="the-basic-usage-tldr"><a class="header" href="#the-basic-usage-tldr">The Basic Usage TL;DR</a></h4>
+<p>The first lines of code for the Salsa20 <code>quarterround</code> function are below and illustrate how to load the built-in bit-vector types and operations in ReWire.</p>
+<pre><code class="language-haskell">{-# LANGUAGE DataKinds #-}                    -- 1
+module QuarterRound(quarterround) where
+
+import Prelude hiding ((+) , (^))             -- 2
+import ReWire                                 -- 3
+import ReWire.Bits (lit , rotL , (^) , (+))   -- 4
+</code></pre>
+<p>To use the built-in bit vector type, one must simply include <code>import ReWire</code> (line <code>3</code>) and also the language directive (<code>1</code>). To use specific operations, one can include them from <code>ReWire.Bits</code> (line <code>4</code>) and some of these operations have the same name as Haskell Prelude operations, so one can exclude these as in line <code>2</code>.</p>
+<h4 id="some-additional-type-constructors-for-salsa20"><a class="header" href="#some-additional-type-constructors-for-salsa20">Some additional type constructors for Salsa20</a></h4>
+<p>Some additional type constructors used in this specification are included below. We could use Haskell built-in tuple types for these, but it is useful for various technical reasons to define our own larger vector types instead (e.g., it makes pretty-printing values as we wish easier). It's not important to understand the precise details, however.</p>
+<pre><code class="language-haskell">data X16 a  = X16 a a a a a a a a a a a a a a a a 
+
+type Quad a = (a , a , a , a)
+type Oct a  = (a , a , a , a , a , a , a , a)
+type Hex a  = X16 a
+    
+data X64 a  = X64 a a a a a a a a a a a a a a a a
+                  a a a a a a a a a a a a a a a a
+                  a a a a a a a a a a a a a a a a
+                  a a a a a a a a a a a a a a a a 
+</code></pre>
 
                     </main>
 
