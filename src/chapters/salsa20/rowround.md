@@ -1,5 +1,7 @@
 ## The `rowround` Function
 
+The definitions below can be found in [RowRound.hs](https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/RowRound.hs) and the testing code can be found in [Test_RowRound.hs](https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Test_RowRound.hs).
+
 ### Inputs and Outputs
 
 The `rowround` function takes a 16-word sequence as input and produces a 16-word sequence as output, meaning that the function will have type:

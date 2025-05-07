@@ -1,7 +1,8 @@
 ## The Quarter Round Function
 
+The definitions below can be found in [QuarterRound.hs](https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/QuarterRound.hs) and the testing code can be found in [Test_QuarterRound.hs](https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Test_QuarterRound.hs).
 
-Looking at the pseudocode functions defined in the spec, it is clear that they are, indeed, *pure functions* in the sense of Haskell. Hence, it is quite straightforward to transliterate these functions into Haskell/ReWire and this section gives the first such transliteration. An advantage of writing in Haskell rather than pseudocode is that definitions may are type-checked by GHC, providing a quick means of gaining assurance and/or finding stupid bugs.
+Looking at the pseudocode functions defined in the spec, it is clear that they are, indeed, *pure functions* in the same sense as Haskell. Hence, it is quite straightforward to transliterate these functions into Haskell/ReWire and this section gives the first such transliteration. An advantage of writing in Haskell rather than pseudocode is that definitions may are type-checked by GHC, providing a quick means of gaining assurance and/or finding stupid bugs.
 
 ### Inputs and Outputs
 

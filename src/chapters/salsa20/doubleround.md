@@ -1,5 +1,6 @@
 ## The `doubleround` function
 
+The definitions below can be found in [DoubleRound.hs](https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/DoubleRound.hs) and the testing code can be found in [Test_DoubleRound.hs](https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Test_DoubleRound.hs).
 
 ### Inputs and Outputs
 

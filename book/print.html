@@ -716,6 +716,7 @@ $
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="salsa20-case-study"><a class="header" href="#salsa20-case-study">Salsa20 Case Study</a></h1>
 <p>This document presents a case study in constructing verified cryptographic hardware in ReWire. In it, I follow the Daniel Bernstein's Salsa20 specification: <a href="https://cr.yp.to/snuffle/spec.pdf">https://cr.yp.to/snuffle/spec.pdf</a>. Throughout this tutorial, I'll refer to this document (i.e., the PDF I just linked to) as either the <em>Salsa20 specification</em> or simply the "<em>spec</em>". Page and section numbers will refer to that document.</p>
+<p>The source code for this example can be found here <a href="https://github.com/harrisonwl/rwcrypto">https://github.com/harrisonwl/rwcrypto</a> under <code>src/salsa20</code>. The original version of the ReWire design here was presented at FPT 2015 (linked to below). ReWire's syntax has evolved since then, but the case study here follows that paper.</p>
 <p>Generally speaking, when you're going to prove the correctness of a hardware design (or anything else fo that matter really), you need to have:</p>
 <ol>
 <li>a rigorous standard that constitutes a definition of what <em>to be correct</em> means;</li>
@@ -727,15 +728,25 @@ reference semantics is discussed in the first subsection. The reference semantic
 a Haskell/ReWire rendering of the pseudocode functions given in the text of Bernstein's
 specification. Our reference semantics is also executable -- e.g., you can load it into GHCi,
 type-check it, and run test cases.</p>
+<p>The second subsection describes (2.); that is, the actual ReWire code that can be both compiled to Verilog and reasoned about with formal tools. The first implementation we present is designed for simplicity rather than performance. The third subsection describes (3.) at a very high, somewhat informal level. The purpose of this entire tutorial is to focus on ReWire programming.</p>
 <h4 id="recent-relevant-publications"><a class="header" href="#recent-relevant-publications">Recent Relevant Publications</a></h4>
 <p>A more technical presentation can be found in these recent publications:</p>
 <ul>
 <li><em>Temporal Staging for Correct-by-Construction Cryptographic Hardware.</em>, Yakir Forman and Bill Harrison. Proceedings of the 2024 Rapid Systems Prototyping (RSP24). <a href="https://harrisonwl.github.io/assets/papers/rsp24.pdf">pdf</a></li>
 <li><em>Formalized High Level Synthesis with Applications to Cryptographic Hardware.</em>, Bill Harrison, Ian Blumenfeld, Eric Bond, Chris Hathhorn, Paul Li, May Torrence, and Jared Ziegler. Proceedings of the 2023 NASA Formal Methods Symposium (NFM23). <a href="https://harrisonwl.github.io/assets/papers/nfm23.pdf">pdf</a></li>
+<li><em>Provably Correct Development of Reconfigurable Designs via Equational Reasoning.</em>, Ian Graves, Adam Procter, Bill Harrison, and Gerry Allwein. Proceedings of the 2015 International Conference on Field-Programmable Technology (FPT), <a href="https://harrisonwl.github.io/assets/papers/fpt15.pdf">pdf</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="reference-semantics"><a class="header" href="#reference-semantics">Reference Semantics</a></h1>
+<p>This section introduces the reference semantics for Salsa20 written in Haskell/ReWire. The development follows Bernstein's specification closely, including a section here corresponding to each one in his specification. The result is an executable, type-checked version of Salsa20 in Haskell/ReWire.</p>
+<h2 id="why-do-you-keep-saying-haskellrewire"><a class="header" href="#why-do-you-keep-saying-haskellrewire">Why do you keep saying <em>Haskell/ReWire</em>?</a></h2>
+<p>Recall that ReWire is a domain-specific language embedded in Haskell---i.e., every ReWire design is a legal Haskell program but the converse does not hold. When I say <em>Haskell/ReWire</em>, I mean a Haskell program that makes use of ReWire constructs (e.g., bit vectors) but that, for one reason or another, is not legal ReWire. For example, ReWire does not support Haskell's class system and requires that data structures be finite in nature.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<p>The reference semantics culminates in the definition of a Salsa20 encryption function of the following type:</p>
+<pre><code class="language-haskell">encrypt :: Hex (W 8) -&gt; Hex (W 8) -&gt; Oct (W 8) -&gt; W 64 -&gt; W 8 -&gt; W 8
+</code></pre>
+<p>What exactly this means will be apparent as you read the reference semantics subsection, but it is simply a Haskell transliteration of the function defined in Section 10 of Bernstein's specification; along the way, I recommend that you keep a copy of his spec handy throughout. At first, you will find that our definitions correspond very closely to his. Towards the end of his spec, I think you will find our reference semantics much easier to understand.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="words"><a class="header" href="#words">Words</a></h1>
+<p>These definitions below can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Basic.hs">Basic.hs</a>.</p>
 <p>A <em>word</em> in the context of Bernstein's Salsa20 specification is a bit vector of size 32. Representing bit vectors in ReWire is done via the built-in type constructor for words, <code>W</code>. It is size-indexed so that, for example, 32-bit words are represented by <code>W 32</code>. There are a host of operators defined for words parameterized by size. For example, the type of addition on words has type (checking its type in the GHCi interpreter):</p>
 <pre><code class="language-haskell">λ&gt; :type (+)
 (+) :: KnownNat n =&gt; W n -&gt; W n -&gt; W n
@@ -765,8 +776,10 @@ data X64 a  = X64 a a a a a a a a a a a a a a a a
                   a a a a a a a a a a a a a a a a
                   a a a a a a a a a a a a a a a a 
 </code></pre>
+<p>These definitions can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Basic.hs">Basic.hs</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h2 id="the-quarter-round-function"><a class="header" href="#the-quarter-round-function">The Quarter Round Function</a></h2>
-<p>Looking at the pseudocode functions defined in the spec, it is clear that they are, indeed, <em>pure functions</em> in the sense of Haskell. Hence, it is quite straightforward to transliterate these functions into Haskell/ReWire and this section gives the first such transliteration. An advantage of writing in Haskell rather than pseudocode is that definitions may are type-checked by GHC, providing a quick means of gaining assurance and/or finding stupid bugs.</p>
+<p>The definitions below can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/QuarterRound.hs">QuarterRound.hs</a> and the testing code can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Test_QuarterRound.hs">Test_QuarterRound.hs</a>.</p>
+<p>Looking at the pseudocode functions defined in the spec, it is clear that they are, indeed, <em>pure functions</em> in the same sense as Haskell. Hence, it is quite straightforward to transliterate these functions into Haskell/ReWire and this section gives the first such transliteration. An advantage of writing in Haskell rather than pseudocode is that definitions may are type-checked by GHC, providing a quick means of gaining assurance and/or finding stupid bugs.</p>
 <h3 id="inputs-and-outputs"><a class="header" href="#inputs-and-outputs">Inputs and Outputs</a></h3>
 <p>The <code>quarterround</code> function takes a 4-word sequence as input and produces a 4-word sequence as output. We represent these 4-word sequences as a 4-tuple in Haskell and each word as a <code>W 32</code>. That means that the type of the function will be:</p>
 <pre><code class="language-haskell">quarterround :: (W 32 , W 32 , W 32 , W 32) -&gt; (W 32 , W 32 , W 32 , W 32)
@@ -821,6 +834,7 @@ test7 = quarterround (lit 0xd3917c5b , lit 0x55f1c407 , lit 0x52a58a7a , lit 0x8
 [True,True,True,True,True,True,True]
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h2 id="the-rowround-function"><a class="header" href="#the-rowround-function">The <code>rowround</code> Function</a></h2>
+<p>The definitions below can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/RowRound.hs">RowRound.hs</a> and the testing code can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Test_RowRound.hs">Test_RowRound.hs</a>.</p>
 <h3 id="inputs-and-outputs-1"><a class="header" href="#inputs-and-outputs-1">Inputs and Outputs</a></h3>
 <p>The <code>rowround</code> function takes a 16-word sequence as input and produces a 16-word sequence as output, meaning that the function will have type:</p>
 <pre><code class="language-haskell">rowround :: X16 (W 32) -&gt; X16 (W 32)
@@ -874,6 +888,7 @@ test2 = rowround (x16
 [True,True]
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h2 id="the-columnround-function"><a class="header" href="#the-columnround-function">The <code>columnround</code> function</a></h2>
+<p>The definitions below can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/ColumnRound.hs">ColumnRound.hs</a> and the testing code can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Test_ColumnRound.hs">Test_ColumnRound.hs</a>.</p>
 <h3 id="inputs-and-outputs-2"><a class="header" href="#inputs-and-outputs-2">Inputs and Outputs</a></h3>
 <p>If <code>x</code> is a 16-word sequence then <code>columnround(x)</code> is a 16-word sequence. Or, to put it in Haskell terms, the type of <code>columnround</code> is</p>
 <pre><code class="language-haskell">columnround :: Hex (W 32) -&gt; Hex (W 32)
@@ -929,6 +944,7 @@ test2 = columnround (x16
 [True,True]
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h2 id="the-doubleround-function"><a class="header" href="#the-doubleround-function">The <code>doubleround</code> function</a></h2>
+<p>The definitions below can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/DoubleRound.hs">DoubleRound.hs</a> and the testing code can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Test_DoubleRound.hs">Test_DoubleRound.hs</a>.</p>
 <h3 id="inputs-and-outputs-3"><a class="header" href="#inputs-and-outputs-3">Inputs and Outputs</a></h3>
 <p>To quote Bernstein: <em>If <code>x</code> is a 16-word sequence then <code>doubleround(x)</code> is a 16-word sequence.</em> So, its Haskell type is given as:</p>
 <pre><code class="language-haskell">doubleround :: Hex (W 32) -&gt; Hex (W 32)
@@ -978,6 +994,7 @@ o2 = x16
 [True,True]
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h2 id="the-littleendian-function"><a class="header" href="#the-littleendian-function">The littleendian function</a></h2>
+<p>The definitions below can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/LittleEndian.hs">LittleEndian.hs</a> and the testing code can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Test_LittleEndian.hs">Test_LittleEndian.hs</a>.</p>
 <h3 id="inputs-and-outputs-4"><a class="header" href="#inputs-and-outputs-4">Inputs and Outputs</a></h3>
 <p>To quote Bernstein: <em>If <code>b</code> is a 4-byte sequence then <code>littleendian(b)</code> is a word</em>, and, hence, its Haskell type is:</p>
 <pre><code class="language-haskell">littleendian :: Quad (W 8) -&gt; W 32     -- i.e., (W 8, W 8, W 8, W 8) -&gt; W 32

@@ -1,5 +1,7 @@
 ## The `columnround` function
 
+The definitions below can be found in [ColumnRound.hs](https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/ColumnRound.hs) and the testing code can be found in [Test_ColumnRound.hs](https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Test_ColumnRound.hs).
+
 ### Inputs and Outputs
 
 If `x` is a 16-word sequence then `columnround(x)` is a 16-word sequence. Or, to put it in Haskell terms, the type of `columnround` is

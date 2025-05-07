@@ -1,5 +1,6 @@
 ## The littleendian function
 
+The definitions below can be found in [LittleEndian.hs](https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/LittleEndian.hs) and the testing code can be found in [Test_LittleEndian.hs](https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Test_LittleEndian.hs).
 
 ### Inputs and Outputs
 
