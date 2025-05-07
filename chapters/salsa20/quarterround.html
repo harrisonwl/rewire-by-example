@@ -158,7 +158,8 @@
                 <div id="content" class="content">
                     <main>
                         <h2 id="the-quarter-round-function"><a class="header" href="#the-quarter-round-function">The Quarter Round Function</a></h2>
-<p>Looking at the pseudocode functions defined in the spec, it is clear that they are, indeed, <em>pure functions</em> in the sense of Haskell. Hence, it is quite straightforward to transliterate these functions into Haskell/ReWire and this section gives the first such transliteration. An advantage of writing in Haskell rather than pseudocode is that definitions may are type-checked by GHC, providing a quick means of gaining assurance and/or finding stupid bugs.</p>
+<p>The definitions below can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/QuarterRound.hs">QuarterRound.hs</a> and the testing code can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Test_QuarterRound.hs">Test_QuarterRound.hs</a>.</p>
+<p>Looking at the pseudocode functions defined in the spec, it is clear that they are, indeed, <em>pure functions</em> in the same sense as Haskell. Hence, it is quite straightforward to transliterate these functions into Haskell/ReWire and this section gives the first such transliteration. An advantage of writing in Haskell rather than pseudocode is that definitions may are type-checked by GHC, providing a quick means of gaining assurance and/or finding stupid bugs.</p>
 <h3 id="inputs-and-outputs"><a class="header" href="#inputs-and-outputs">Inputs and Outputs</a></h3>
 <p>The <code>quarterround</code> function takes a 4-word sequence as input and produces a 4-word sequence as output. We represent these 4-word sequences as a 4-tuple in Haskell and each word as a <code>W 32</code>. That means that the type of the function will be:</p>
 <pre><code class="language-haskell">quarterround :: (W 32 , W 32 , W 32 , W 32) -&gt; (W 32 , W 32 , W 32 , W 32)

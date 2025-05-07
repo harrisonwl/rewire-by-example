@@ -158,6 +158,7 @@
                 <div id="content" class="content">
                     <main>
                         <h2 id="the-doubleround-function"><a class="header" href="#the-doubleround-function">The <code>doubleround</code> function</a></h2>
+<p>The definitions below can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/DoubleRound.hs">DoubleRound.hs</a> and the testing code can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Test_DoubleRound.hs">Test_DoubleRound.hs</a>.</p>
 <h3 id="inputs-and-outputs"><a class="header" href="#inputs-and-outputs">Inputs and Outputs</a></h3>
 <p>To quote Bernstein: <em>If <code>x</code> is a 16-word sequence then <code>doubleround(x)</code> is a 16-word sequence.</em> So, its Haskell type is given as:</p>
 <pre><code class="language-haskell">doubleround :: Hex (W 32) -&gt; Hex (W 32)

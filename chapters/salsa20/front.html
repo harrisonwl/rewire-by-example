@@ -159,6 +159,7 @@
                     <main>
                         <h1 id="salsa20-case-study"><a class="header" href="#salsa20-case-study">Salsa20 Case Study</a></h1>
 <p>This document presents a case study in constructing verified cryptographic hardware in ReWire. In it, I follow the Daniel Bernstein's Salsa20 specification: <a href="https://cr.yp.to/snuffle/spec.pdf">https://cr.yp.to/snuffle/spec.pdf</a>. Throughout this tutorial, I'll refer to this document (i.e., the PDF I just linked to) as either the <em>Salsa20 specification</em> or simply the "<em>spec</em>". Page and section numbers will refer to that document.</p>
+<p>The source code for this example can be found here <a href="https://github.com/harrisonwl/rwcrypto">https://github.com/harrisonwl/rwcrypto</a> under <code>src/salsa20</code>. The original version of the ReWire design here was presented at FPT 2015 (linked to below). ReWire's syntax has evolved since then, but the case study here follows that paper.</p>
 <p>Generally speaking, when you're going to prove the correctness of a hardware design (or anything else fo that matter really), you need to have:</p>
 <ol>
 <li>a rigorous standard that constitutes a definition of what <em>to be correct</em> means;</li>
@@ -170,11 +171,13 @@ reference semantics is discussed in the first subsection. The reference semantic
 a Haskell/ReWire rendering of the pseudocode functions given in the text of Bernstein's
 specification. Our reference semantics is also executable -- e.g., you can load it into GHCi,
 type-check it, and run test cases.</p>
+<p>The second subsection describes (2.); that is, the actual ReWire code that can be both compiled to Verilog and reasoned about with formal tools. The first implementation we present is designed for simplicity rather than performance. The third subsection describes (3.) at a very high, somewhat informal level. The purpose of this entire tutorial is to focus on ReWire programming.</p>
 <h4 id="recent-relevant-publications"><a class="header" href="#recent-relevant-publications">Recent Relevant Publications</a></h4>
 <p>A more technical presentation can be found in these recent publications:</p>
 <ul>
 <li><em>Temporal Staging for Correct-by-Construction Cryptographic Hardware.</em>, Yakir Forman and Bill Harrison. Proceedings of the 2024 Rapid Systems Prototyping (RSP24). <a href="https://harrisonwl.github.io/assets/papers/rsp24.pdf">pdf</a></li>
 <li><em>Formalized High Level Synthesis with Applications to Cryptographic Hardware.</em>, Bill Harrison, Ian Blumenfeld, Eric Bond, Chris Hathhorn, Paul Li, May Torrence, and Jared Ziegler. Proceedings of the 2023 NASA Formal Methods Symposium (NFM23). <a href="https://harrisonwl.github.io/assets/papers/nfm23.pdf">pdf</a></li>
+<li><em>Provably Correct Development of Reconfigurable Designs via Equational Reasoning.</em>, Ian Graves, Adam Procter, Bill Harrison, and Gerry Allwein. Proceedings of the 2015 International Conference on Field-Programmable Technology (FPT), <a href="https://harrisonwl.github.io/assets/papers/fpt15.pdf">pdf</a></li>
 </ul>
 
                     </main>
