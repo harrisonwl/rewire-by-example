@@ -1,5 +1,7 @@
 ## The Salsa20 Hash function
 
+The definitions below can be found in [HashSalsa20.hs](https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/HashSalsa20.hs) and the testing code can be found in [Test_HashSalsa20.hs](https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Test_HashSalsa20.hs).
+
 ### Inputs and Outputs
 
 <!-- <p align="center"><img src="./hashfunction.jpg"  style="height:65%; width:65%" ></p> -->
