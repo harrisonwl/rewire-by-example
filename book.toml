@@ -2,4 +2,5 @@
 title = "ReWire by Example"
 [output.html]
 mathjax-support = true
-
+[output.html.fold]
+enable = true
