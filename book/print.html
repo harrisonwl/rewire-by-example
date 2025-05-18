@@ -749,7 +749,13 @@ You greet your nuclear child
 Am I the monster?
 </code></pre>
 <h2 id="why-do-you-keep-saying-haskellrewire"><a class="header" href="#why-do-you-keep-saying-haskellrewire">Why do you keep saying <em>Haskell/ReWire</em>?</a></h2>
-<p>ReWire is a domain-specific language embedded in Haskell---i.e., every ReWire design is a legal Haskell program but the converse does not hold. When I say <em>Haskell/ReWire</em>, I mean a Haskell program that makes use of ReWire constructs (e.g., bit vectors) but that, for one reason or another, is not legal ReWire. For example, ReWire does not support Haskell's class system and requires that data structures be finite in nature.</p>
+<p>ReWire is a domain-specific language embedded in Haskell---i.e., every ReWire design is a legal Haskell program but the converse does not hold. When I say <em>Haskell/ReWire</em>, I mean a Haskell program that makes use of ReWire constructs (e.g., bit vectors) but that, for one reason or another, is not legal ReWire. A frequently used Haskell feature that is <em>not</em> inherited by ReWire currently is the type class system. More fundamental is the restrictions on recursion. However, it is often helpful while developing and testing ReWire designs to have access to Haskell's full power.</p>
+<h4 id="aside-on-rewires-limits-on-recursion"><a class="header" href="#aside-on-rewires-limits-on-recursion">Aside on ReWire's Limits on Recursion</a></h4>
+<p>Functional recursion is limited to functions with codomains typed in <code>ReacT</code>. E.g., recall the carry-save adder example from the previous chapter:</p>
+<pre><code class="language-haskell">csa :: (W 8, W 8, W 8) -&gt; ReacT (W 8, W 8, W 8) (W 8, W 8) Identity ()
+</code></pre>
+<p>Similarly, data recursion (e.g., lists) is not allowed in ReWire because hardware data structures are necessarily finite.</p>
+<p>Arbitrary recursion for functions and data requires unbounded storage like heaps and stacks to implement and that is incompatible with hardware's fixed, finite storage footprint.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
 <p>The reference semantics culminates in the definition of a Salsa20 encryption function of the following type:</p>
 <pre><code class="language-haskell">encrypt :: Hex (W 8) -&gt; Hex (W 8) -&gt; Oct (W 8) -&gt; W 64 -&gt; W 8 -&gt; W 8
