@@ -1310,6 +1310,15 @@ expandk k@(X16 k1 k2 k3 k4 k5 k6 k7 k8 k9 k10 k11 k12 k13 k14 k15 k16)
 <h3 id="remarks-on-section-10--a-quick-demo"><a class="header" href="#remarks-on-section-10--a-quick-demo">Remarks on Section 10 &amp; A Quick Demo</a></h3>
 <h3 id="inputs-and-outputs-7"><a class="header" href="#inputs-and-outputs-7">Inputs and Outputs</a></h3>
 <h3 id="definition-6"><a class="header" href="#definition-6">Definition</a></h3>
+<pre><code class="language-haskell">encrypt :: Hex (W 8) -&gt; Hex (W 8) -&gt; Oct (W 8) -&gt; W 64 -&gt; W 8 -&gt;  W 8
+encrypt k0 k1 v i mi = mi ^ ((salsa20_k0k1 (k0 , k1) (splice v (factor64 i))) `pi64` (mod64 i))
+</code></pre>
+<pre><code class="language-haskell">-- |
+-- | This is factor function tweeked so that it takes (W 64) as input instead of Integer. 
+-- |
+factor64 :: W 64 -&gt; (W 8 , W 8 , W 8 , W 8 , W 8 , W 8 , W 8 , W 8 )
+mod64    :: W 64 -&gt; W 6
+</code></pre>
 
                     </main>
 
