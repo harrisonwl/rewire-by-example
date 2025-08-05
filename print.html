@@ -39,6 +39,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc.js"></script>
@@ -95,10 +96,13 @@
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
+                sidebar_toggle.checked = false;
             }
-            sidebar_toggle.checked = sidebar === 'visible';
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
@@ -149,7 +153,12 @@
 
                 <div id="search-wrapper" class="hidden">
                     <form id="searchbar-outer" class="searchbar-outer">
-                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
                     </form>
                     <div id="searchresults-outer" class="searchresults-outer hidden">
                         <div id="searchresults-header" class="searchresults-header"></div>
@@ -1300,7 +1309,10 @@ expandk k@(X16 k1 k2 k3 k4 k5 k6 k7 k8 k9 k10 k11 k12 k13 k14 k15 k16)
                v1 v2 v3 v4
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h2 id="salsa20-encryption-function"><a class="header" href="#salsa20-encryption-function">Salsa20 Encryption function</a></h2>
+<p>The definitions below can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Encrypt.hs">Encrypt.hs</a> and the testing code can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Test_Encrypt.hs">Test_Encrypt.hs</a>.</p>
 <h3 id="remarks-on-section-10--a-quick-demo"><a class="header" href="#remarks-on-section-10--a-quick-demo">Remarks on Section 10 &amp; A Quick Demo</a></h3>
+<p>This section defines the Salsa20 encrypt function from Section 10 of Bernstein. In the FIPS document, the function is (very confusingly IMHO) called \(Salsa20_{k}(v){\oplus}m\). The snippet of the FIPS document that is most relevant here is:</p>
+<p align="center"><img src="chapters/salsa20/./salsa20encryption.jpg"  style="height:70%; width:70%" ></p>
 <h3 id="inputs-and-outputs-7"><a class="header" href="#inputs-and-outputs-7">Inputs and Outputs</a></h3>
 <h3 id="definition-6"><a class="header" href="#definition-6">Definition</a></h3>
 <pre><code class="language-haskell">encrypt :: Hex (W 8) -&gt; Hex (W 8) -&gt; Oct (W 8) -&gt; W 64 -&gt; W 8 -&gt;  W 8
@@ -1312,6 +1324,7 @@ encrypt k0 k1 v i mi = mi ^ ((salsa20_k0k1 (k0 , k1) (splice v (factor64 i))) `p
 factor64 :: W 64 -&gt; (W 8 , W 8 , W 8 , W 8 , W 8 , W 8 , W 8 , W 8 )
 mod64    :: W 64 -&gt; W 6
 </code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="pipelining-in-rewire"><a class="header" href="#pipelining-in-rewire">Pipelining in ReWire</a></h1>
 
                     </main>
 
@@ -1355,6 +1368,7 @@ mod64    :: W 64 -&gt; W 6
             });
         });
         </script>
+
 
     </div>
     </body>
