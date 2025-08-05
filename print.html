@@ -1324,7 +1324,52 @@ encrypt k0 k1 v i mi = mi ^ ((salsa20_k0k1 (k0 , k1) (splice v (factor64 i))) `p
 factor64 :: W 64 -&gt; (W 8 , W 8 , W 8 , W 8 , W 8 , W 8 , W 8 , W 8 )
 mod64    :: W 64 -&gt; W 6
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="pipelining-in-rewire"><a class="header" href="#pipelining-in-rewire">Pipelining in ReWire</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="pipelining"><a class="header" href="#pipelining">Pipelining</a></h1>
+<p>As an example, I'll build several pipelined versions of a part of the Salsa20 crypto spec. In the Salsa20 hash function (<a href="chapters/pipelining/../salsa20/hashfunction.html">Section 3.1.8</a>), there is a place where the <code>doubleround</code> function is composed ten times:</p>
+<pre><code class="language-haskell">dr10 :: Hex (W 32) -&gt; Hex (W 32)
+dr10 = doubleround . doubleround . doubleround . doubleround . doubleround .
+          doubleround . doubleround . doubleround . doubleround . doubleround 
+</code></pre>
+<p>We will use this as an opportunity for pipelining.</p>
+<h2 id="naive-approach"><a class="header" href="#naive-approach">Naive Approach</a></h2>
+<p>We can write perfectly valid ReWire code for in the same style as the first carry-save adder from (<a href="chapters/pipelining/../chapter1/carrysaveadders.html">Section 2.3</a>). That is, as a simple loop that takes an input, applies <code>dr10</code>, and <code>signal</code>s the output:</p>
+<pre><code class="language-haskell">type HxW32 = Hex (W 32)
+
+dr10 :: HxW32 -&gt; HxW32
+dr10 = doubleround . doubleround . doubleround . doubleround . doubleround .
+       doubleround . doubleround . doubleround . doubleround . doubleround 
+
+loop :: Maybe HxW32 -&gt; ReacT (Maybe HxW32) (Maybe HxW32) Identity ()
+loop (Just hxw32) = signal (Just (dr10 hxw32)) &gt;&gt;= loop
+loop Nothing      = signal Nothing &gt;&gt;= loop
+
+start :: ReacT (Maybe HxW32) (Maybe HxW32) Identity ()
+start = loop Nothing
+</code></pre>
+<p>The full code is available here: <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/pipeline/Naive_DR10.hs">Naive_DR10.hs</a>. If the <code>loop</code> function is passed a valid input (i.e., <code>(Just hxw32)</code>), then <code>dr10</code> is applied to it. In each cycle, <code>dr10 hxw32</code> is calculated.</p>
+<p><em>Why is this naive?</em> If you look at the code for <code>doubleround</code>, there are a lot of operations going on in <code>dr10</code>. Pure functions like these are compiled to combinational logic, and, the combinational logic for ten <code>doubleround</code>s is substantial. It would be better to pipeline calls to <code>doubleround</code> to avoid this.</p>
+<p>There's another way that this is naive in that inputs and outputs include <code>Hex (W 32)</code> which is \(16 \times 32 = 512\) bits. This means that, on an FGPA, one would need 1024 input and output ports and that is (I believe) beyond what's currently available. We'll come back to this issue later on.</p>
+<h2 id="the-plan"><a class="header" href="#the-plan">The Plan</a></h2>
+<ul>
+<li>Using the <code>doubleround</code> function, I'll demonstrate 2- and 5-stage pipelines of <code>dr10</code>.</li>
+<li>I.e., ReWire versions of:</li>
+</ul>
+<pre><code class="language-haskell">	pipe2 = [doubleround . doubleround . doubleround . doubleround . doubleround] .
+               [doubleround . doubleround . doubleround . doubleround . doubleround]
+	pipe5 = [doubleround . doubleround] . [doubleround . doubleround] . [doubleround .
+               doubleround] . [doubleround . doubleround] . [doubleround . doubleround]
+</code></pre>
+<pre><code class="language-haskell">λ&gt; :t ins
+ins :: [W 8]
+λ&gt; pretty ins
+0x01 : 0x02 : 0x03 : 0x04 : 0x05 : 0x06 : 0x07 : 0x08 : 0x09 : 0x0A : 0x0B : 0x0C : 0x0D : 0x0E : 0x0F : []
+λ&gt; 
+λ&gt; pretty $ map (three . two . one) ins
+0x07 : 0x08 : 0x09 : 0x0A : 0x0B : 0x0C : 0x0D : 0x0E : 0x0F : 0x10 : 0x11 : 0x12 : 0x13 : 0x14 : 0x15 : []
+λ&gt; pretty $ runP start (Stall , DC) (map Arg ins)
+(Stall,DC) :&gt; (Arg 0x01,DC) :&gt; (Arg 0x02,DC) :&gt; (Arg 0x03,DC) :&gt; (Arg 0x04,Val 0x07) :&gt; (Arg 0x05,Val 0x08) :&gt; (Arg 0x06,Val 0x09) :&gt; (Arg 0x07,Val 0x0A) :&gt; (Arg 0x08,Val 0x0B) :&gt; (Arg 0x09,Val 0x0C) :&gt; (Arg 0x0A,Val 0x0D) :&gt; (Arg 0x0B,Val 0x0E) :&gt; (Arg 0x0C,Val 0x0F) :&gt; (Arg 0x0D,Val 0x10) :&gt; (Arg 0x0E,Val 0x11) :&gt; (Arg 0x0F,Val 0x12) :+&gt; Nothing
+λ&gt; 
+</code></pre>
 
                     </main>
 
