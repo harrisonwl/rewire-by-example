@@ -42,6 +42,7 @@ UNDER CONSTRUCTION!
 
       - [Salsa20 Encryption function](./chapters/salsa20/encryption.md)
 
+- [Pipelining in ReWire](./chapters/pipelining/pipelining.md)
 
 <!-- - [Simple Processors](./chapters/chapter2/simpleprocs.md) -->
 
