@@ -1,13 +1,89 @@
 # Pipelining
 
-As an example, I'll build several pipelined versions of a part of the Salsa20 crypto spec. In the Salsa20 hash function ([Section 3.1.8](../salsa20/hashfunction.md)), there is a place where the `doubleround` function is composed ten times:
+Let's say you have three functions, `f`, `g`, and `h`. Obviously, you can compose them (`h . g . f` in Haskell).  It's a fairly common situation that one wants to compose them *temporally*---i.e., to pipeline them.
+The idea is that, for each clock tick, there's one input `i`, and `h (g (f i))` is calculated over the next three ticks:
+
+| Input | `f` | `g` | `h` | Output | 
+| :-----------: | :------------: | :------------: | :------------: | :------------: |
+| `i0` | `f i0` |  | | |
+| `i1` | `f i1` | `g (f i0)` | | |
+| `i2` | `f i2` | `g (f i1)` | `h (g (f i0))` | |
+| `i3` | `f i3` | `g (f i2)` | `h (g (f i1))` | `h (g (f i0))` |
+| \\(\vdots\\) | \\(\vdots\\)  | \\(\vdots\\)  | \\(\vdots\\) | \\(\vdots\\) |
+
+Pipelining is a common hardware design technique for splitting large computations into smaller computations over time. ReWire makes such pipelining both easy to express and formally verify.
+
+In the Salsa20 hash function ([Section 3.1.8](../salsa20/hashfunction.md)), there is a place where the `doubleround` function is composed ten times:
 ```haskell
 dr10 :: Hex (W 32) -> Hex (W 32)
 dr10 = doubleround . doubleround . doubleround . doubleround . doubleround .
           doubleround . doubleround . doubleround . doubleround . doubleround 
 ```
+The `doubleround` function has a lot of arithmetic operations contained in it and its tenfold composition `dr10`, when unrolled into combinational logic, has many, many such operations. So, it's a good opportunity for pipelining.
+
+
+
+## A Hello World Example
+
+As a simple example, consider the following three functions:
+```haskell
+one , two , three :: W 8 -> W 8
+one x   = x + lit 1
+two x   = x + lit 2
+three x = x + lit 3
+```
+
+Composing these functions (`three . two . one`) produces a function that adds 6 to its argument.
+Say we want to pipeline this composition so that, `one` is applied in the first cycle, `two` is applied to that result in the second cycle, and `three` is applied in the third cycle. 
+For a given input `i`, `i + 6` is produced after the third cycle completes.
+Graphically, this is:
+
+<img src="images/onetwothree.png"  style="height:30%; width:30%" >
+
+Here is the ReWire code for pipelining `one`, `two`, and `three` so that it behaves as the table above. We will explain each function below the code.
+```haskell
+out3 :: (a , b , c) -> c
+out3 (_ , _ , x) = x
+
+conn3 :: (W 8 , W 8 , W 8) -> W 8 -> (W 8 ,  W 8 , W 8)
+conn3 (o1 , o2 , _) ix = (ix , o1 , o2)
+
+times3 :: (W 8 , W 8 , W 8) -> (W 8 ,  W 8 , W 8)
+times3 (i1 , i2 , i3) = (one i1 , two i2 , three i3)
+
+pipeline :: Monad m => (ii -> oi) -> (oi -> ox) -> (oi -> ix -> ii) -> oi -> ix -> ReacT ix ox m ()
+pipeline f out conn oi ix = do
+                            let ii = conn oi ix
+                            let o = f ii
+                            ix' <- signal (out o)
+                            pipeline f out conn o ix'
+
+nostall :: W 8 -> ReacT (W 8) (W 8) Identity ()
+nostall = pipeline times3 out3 conn3 (lit 0 , lit 0 , lit 0)
+
+start :: ReacT (W 8) (W 8) Identity ()
+start = nostall (lit 99)
+```
+
+The main engine for all this is `refold`:
+```haskell
+refold :: Monad m => 
+          (ii -> oi) -> (oi -> ox) -> (oi -> ix -> ii) -> oi -> ix -> ReacT ix ox m ()
+refold f out conn oi ix = do
+                            let ii = conn oi ix
+                            let o = f ii
+                            ix' <- signal (out o)
+                            refold f out conn o ix'
+```
+While `refold` looks complicated, it's really pretty simple to explain. Its argument, `f : ii -> oi`,
+
+
+
 
 We will use this as an opportunity for pipelining.
+
+
+
 
 ## Naive Approach
 
