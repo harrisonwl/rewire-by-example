@@ -1325,11 +1325,68 @@ factor64 :: W 64 -&gt; (W 8 , W 8 , W 8 , W 8 , W 8 , W 8 , W 8 , W 8 )
 mod64    :: W 64 -&gt; W 6
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="pipelining"><a class="header" href="#pipelining">Pipelining</a></h1>
-<p>As an example, I'll build several pipelined versions of a part of the Salsa20 crypto spec. In the Salsa20 hash function (<a href="chapters/pipelining/../salsa20/hashfunction.html">Section 3.1.8</a>), there is a place where the <code>doubleround</code> function is composed ten times:</p>
+<p>Let's say you have three functions, <code>f</code>, <code>g</code>, and <code>h</code>. Obviously, you can compose them (<code>h . g . f</code> in Haskell).  It's a fairly common situation that one wants to compose them <em>temporally</em>---i.e., to pipeline them.
+The idea is that, for each clock tick, there's one input <code>i</code>, and <code>h (g (f i))</code> is calculated over the next three ticks:</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: center">Input</th><th style="text-align: center"><code>f</code></th><th style="text-align: center"><code>g</code></th><th style="text-align: center"><code>h</code></th><th style="text-align: center">Output</th></tr></thead><tbody>
+<tr><td style="text-align: center"><code>i0</code></td><td style="text-align: center"><code>f i0</code></td><td style="text-align: center"></td><td style="text-align: center"></td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: center"><code>i1</code></td><td style="text-align: center"><code>f i1</code></td><td style="text-align: center"><code>g (f i0)</code></td><td style="text-align: center"></td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: center"><code>i2</code></td><td style="text-align: center"><code>f i2</code></td><td style="text-align: center"><code>g (f i1)</code></td><td style="text-align: center"><code>h (g (f i0))</code></td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: center"><code>i3</code></td><td style="text-align: center"><code>f i3</code></td><td style="text-align: center"><code>g (f i2)</code></td><td style="text-align: center"><code>h (g (f i1))</code></td><td style="text-align: center"><code>h (g (f i0))</code></td></tr>
+<tr><td style="text-align: center">\(\vdots\)</td><td style="text-align: center">\(\vdots\)</td><td style="text-align: center">\(\vdots\)</td><td style="text-align: center">\(\vdots\)</td><td style="text-align: center">\(\vdots\)</td></tr>
+</tbody></table>
+</div>
+<p>Pipelining is a common hardware design technique for splitting large computations into smaller computations over time. ReWire makes such pipelining both easy to express and formally verify.</p>
+<p>In the Salsa20 hash function (<a href="chapters/pipelining/../salsa20/hashfunction.html">Section 3.1.8</a>), there is a place where the <code>doubleround</code> function is composed ten times:</p>
 <pre><code class="language-haskell">dr10 :: Hex (W 32) -&gt; Hex (W 32)
 dr10 = doubleround . doubleround . doubleround . doubleround . doubleround .
           doubleround . doubleround . doubleround . doubleround . doubleround 
 </code></pre>
+<p>The <code>doubleround</code> function has a lot of arithmetic operations contained in it and its tenfold composition <code>dr10</code>, when unrolled into combinational logic, has many, many such operations. So, it's a good opportunity for pipelining.</p>
+<h2 id="a-hello-world-example"><a class="header" href="#a-hello-world-example">A Hello World Example</a></h2>
+<p>As a simple example, consider the following three functions:</p>
+<pre><code class="language-haskell">one , two , three :: W 8 -&gt; W 8
+one x   = x + lit 1
+two x   = x + lit 2
+three x = x + lit 3
+</code></pre>
+<p>Composing these functions (<code>three . two . one</code>) produces a function that adds 6 to its argument.
+Say we want to pipeline this composition so that, <code>one</code> is applied in the first cycle, <code>two</code> is applied to that result in the second cycle, and <code>three</code> is applied in the third cycle.
+For a given input <code>i</code>, <code>i + 6</code> is produced after the third cycle completes.
+Graphically, this is:</p>
+<img src="chapters/pipelining/images/onetwothree.png"  style="height:30%; width:30%" >
+<p>Here is the ReWire code for pipelining <code>one</code>, <code>two</code>, and <code>three</code> so that it behaves as the table above. We will explain each function below the code.</p>
+<pre><code class="language-haskell">out3 :: (a , b , c) -&gt; c
+out3 (_ , _ , x) = x
+
+conn3 :: (W 8 , W 8 , W 8) -&gt; W 8 -&gt; (W 8 ,  W 8 , W 8)
+conn3 (o1 , o2 , _) ix = (ix , o1 , o2)
+
+times3 :: (W 8 , W 8 , W 8) -&gt; (W 8 ,  W 8 , W 8)
+times3 (i1 , i2 , i3) = (one i1 , two i2 , three i3)
+
+pipeline :: Monad m =&gt; (ii -&gt; oi) -&gt; (oi -&gt; ox) -&gt; (oi -&gt; ix -&gt; ii) -&gt; oi -&gt; ix -&gt; ReacT ix ox m ()
+pipeline f out conn oi ix = do
+                            let ii = conn oi ix
+                            let o = f ii
+                            ix' &lt;- signal (out o)
+                            pipeline f out conn o ix'
+
+nostall :: W 8 -&gt; ReacT (W 8) (W 8) Identity ()
+nostall = pipeline times3 out3 conn3 (lit 0 , lit 0 , lit 0)
+
+start :: ReacT (W 8) (W 8) Identity ()
+start = nostall (lit 99)
+</code></pre>
+<p>The main engine for all this is <code>refold</code>:</p>
+<pre><code class="language-haskell">refold :: Monad m =&gt; 
+          (ii -&gt; oi) -&gt; (oi -&gt; ox) -&gt; (oi -&gt; ix -&gt; ii) -&gt; oi -&gt; ix -&gt; ReacT ix ox m ()
+refold f out conn oi ix = do
+                            let ii = conn oi ix
+                            let o = f ii
+                            ix' &lt;- signal (out o)
+                            refold f out conn o ix'
+</code></pre>
+<p>While <code>refold</code> looks complicated, it's really pretty simple to explain. Its argument, <code>f : ii -&gt; oi</code>,</p>
 <p>We will use this as an opportunity for pipelining.</p>
 <h2 id="naive-approach"><a class="header" href="#naive-approach">Naive Approach</a></h2>
 <p>We can write perfectly valid ReWire code for in the same style as the first carry-save adder from (<a href="chapters/pipelining/../chapter1/carrysaveadders.html">Section 2.3</a>). That is, as a simple loop that takes an input, applies <code>dr10</code>, and <code>signal</code>s the output:</p>
