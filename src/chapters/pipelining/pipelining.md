@@ -40,16 +40,21 @@ Graphically, this is:
 
 <img src="images/onetwothree.png"  style="height:30%; width:30%" >
 
-Here is the ReWire code for pipelining `one`, `two`, and `three` so that it behaves as the table above. We will explain each function below the code.
+Here is the ReWire code for pipelining `one`, `two`, and `three` so that it behaves as the table above. We will explain each function below.
+On each cycle, each function  `one`, `two`, and `three` take an input and produce an output.
+```haskell
+times3 :: (W 8 , W 8 , W 8) -> (W 8 ,  W 8 , W 8)
+times3 (i1 , i2 , i3) = (one i1 , two i2 , three i3)
+```
+The output for the pipelined device is the third output produced by `three`:
 ```haskell
 out3 :: (a , b , c) -> c
 out3 (_ , _ , x) = x
-
+```
+Given the current outputs, `(o1 , o2 , _)` and a new input to the pipelined device, we "shift right":
+```
 conn3 :: (W 8 , W 8 , W 8) -> W 8 -> (W 8 ,  W 8 , W 8)
 conn3 (o1 , o2 , _) ix = (ix , o1 , o2)
-
-times3 :: (W 8 , W 8 , W 8) -> (W 8 ,  W 8 , W 8)
-times3 (i1 , i2 , i3) = (one i1 , two i2 , three i3)
 
 pipeline :: Monad m => (ii -> oi) -> (oi -> ox) -> (oi -> ix -> ii) -> oi -> ix -> ReacT ix ox m ()
 pipeline f out conn oi ix = do
@@ -65,18 +70,30 @@ start :: ReacT (W 8) (W 8) Identity ()
 start = nostall (lit 99)
 ```
 
-The main engine for all this is `refold`:
+The main engine for all this is `pipeline`:
 ```haskell
-refold :: Monad m => 
+pipeline :: Monad m => 
           (ii -> oi) -> (oi -> ox) -> (oi -> ix -> ii) -> oi -> ix -> ReacT ix ox m ()
-refold f out conn oi ix = do
-                            let ii = conn oi ix
-                            let o = f ii
-                            ix' <- signal (out o)
-                            refold f out conn o ix'
+pipeline f out conn oi ix = do
+                              let ii = conn oi ix
+                              let o = f ii
+                              ix' <- signal (out o)
+                              pipeline f out conn o ix'
 ```
-While `refold` looks complicated, it's really pretty simple to explain. Its argument, `f : ii -> oi`,
+While `pipeline` looks complicated, it's really pretty simple to explain. Its argument, `f : ii -> oi`,
 
+
+Running this pipelined version in GHCi, for example for inputs `[0x1..0xF]`, one would expect input/output pairs like:
+```haskell
+	(0x65,0x65) :> 
+	(0x01,0x03) :> /* 1 input */
+	(0x02,0x05) :> /* 2 input */
+	(0x03,0x69) :> /* 3 input */
+	(0x04,0x07) :> /* 7 = 1 + 6 output */	
+	(0x05,0x08) :> /* 8 = 2 + 6 output */
+	(0x06,0x09) :> /* 9 = 3 + 6 output */
+	   ...
+```
 
 
 
