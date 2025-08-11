@@ -207,15 +207,18 @@ Say we want to pipeline this composition so that, <code>one</code> is applied in
 For a given input <code>i</code>, <code>i + 6</code> is produced after the third cycle completes.
 Graphically, this is:</p>
 <img src="images/onetwothree.png"  style="height:30%; width:30%" >
-<p>Here is the ReWire code for pipelining <code>one</code>, <code>two</code>, and <code>three</code> so that it behaves as the table above. We will explain each function below the code.</p>
+<p>Here is the ReWire code for pipelining <code>one</code>, <code>two</code>, and <code>three</code> so that it behaves as the table above. We will explain each function below.
+On each cycle, each function  <code>one</code>, <code>two</code>, and <code>three</code> take an input and produce an output.</p>
+<pre><code class="language-haskell">times3 :: (W 8 , W 8 , W 8) -&gt; (W 8 ,  W 8 , W 8)
+times3 (i1 , i2 , i3) = (one i1 , two i2 , three i3)
+</code></pre>
+<p>The output for the pipelined device is the third output produced by <code>three</code>:</p>
 <pre><code class="language-haskell">out3 :: (a , b , c) -&gt; c
 out3 (_ , _ , x) = x
-
-conn3 :: (W 8 , W 8 , W 8) -&gt; W 8 -&gt; (W 8 ,  W 8 , W 8)
+</code></pre>
+<p>Given the current outputs, <code>(o1 , o2 , _)</code> and a new input to the pipelined device, we "shift right":</p>
+<pre><code>conn3 :: (W 8 , W 8 , W 8) -&gt; W 8 -&gt; (W 8 ,  W 8 , W 8)
 conn3 (o1 , o2 , _) ix = (ix , o1 , o2)
-
-times3 :: (W 8 , W 8 , W 8) -&gt; (W 8 ,  W 8 , W 8)
-times3 (i1 , i2 , i3) = (one i1 , two i2 , three i3)
 
 pipeline :: Monad m =&gt; (ii -&gt; oi) -&gt; (oi -&gt; ox) -&gt; (oi -&gt; ix -&gt; ii) -&gt; oi -&gt; ix -&gt; ReacT ix ox m ()
 pipeline f out conn oi ix = do
@@ -230,16 +233,26 @@ nostall = pipeline times3 out3 conn3 (lit 0 , lit 0 , lit 0)
 start :: ReacT (W 8) (W 8) Identity ()
 start = nostall (lit 99)
 </code></pre>
-<p>The main engine for all this is <code>refold</code>:</p>
-<pre><code class="language-haskell">refold :: Monad m =&gt; 
+<p>The main engine for all this is <code>pipeline</code>:</p>
+<pre><code class="language-haskell">pipeline :: Monad m =&gt; 
           (ii -&gt; oi) -&gt; (oi -&gt; ox) -&gt; (oi -&gt; ix -&gt; ii) -&gt; oi -&gt; ix -&gt; ReacT ix ox m ()
-refold f out conn oi ix = do
-                            let ii = conn oi ix
-                            let o = f ii
-                            ix' &lt;- signal (out o)
-                            refold f out conn o ix'
+pipeline f out conn oi ix = do
+                              let ii = conn oi ix
+                              let o = f ii
+                              ix' &lt;- signal (out o)
+                              pipeline f out conn o ix'
 </code></pre>
-<p>While <code>refold</code> looks complicated, it's really pretty simple to explain. Its argument, <code>f : ii -&gt; oi</code>,</p>
+<p>While <code>pipeline</code> looks complicated, it's really pretty simple to explain. Its argument, <code>f : ii -&gt; oi</code>,</p>
+<p>Running this pipelined version in GHCi, for example for inputs <code>[0x1..0xF]</code>, one would expect input/output pairs like:</p>
+<pre><code class="language-haskell">	(0x65,0x65) :&gt; 
+	(0x01,0x03) :&gt; /* 1 input */
+	(0x02,0x05) :&gt; /* 2 input */
+	(0x03,0x69) :&gt; /* 3 input */
+	(0x04,0x07) :&gt; /* 7 = 1 + 6 output */	
+	(0x05,0x08) :&gt; /* 8 = 2 + 6 output */
+	(0x06,0x09) :&gt; /* 9 = 3 + 6 output */
+	   ...
+</code></pre>
 <p>We will use this as an opportunity for pipelining.</p>
 <h2 id="naive-approach"><a class="header" href="#naive-approach">Naive Approach</a></h2>
 <p>We can write perfectly valid ReWire code for in the same style as the first carry-save adder from (<a href="../chapter1/carrysaveadders.html">Section 2.3</a>). That is, as a simple loop that takes an input, applies <code>dr10</code>, and <code>signal</code>s the output:</p>
