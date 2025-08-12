@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Pipelining in ReWire - ReWire by Example</title>
+        <title>One, Two, Three,... Stall - ReWire by Example</title>
 
 
         <!-- Custom HTML head -->
@@ -177,38 +177,80 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="pipelining"><a class="header" href="#pipelining">Pipelining</a></h1>
-<p>Let's say you have three functions, <code>f</code>, <code>g</code>, and <code>h</code>. Obviously, you can compose them (<code>h . g . f</code> in Haskell).  It's a fairly common situation that one wants to compose them <em>temporally</em>---i.e., to pipeline them.
-The idea is that, for each clock tick, there's one input <code>i</code>, and <code>h (g (f i))</code> is calculated over the next three ticks:</p>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: center">Input</th><th style="text-align: center"><code>f</code></th><th style="text-align: center"><code>g</code></th><th style="text-align: center"><code>h</code></th><th style="text-align: center">Output</th></tr></thead><tbody>
-<tr><td style="text-align: center"><code>i0</code></td><td style="text-align: center"><code>f i0</code></td><td style="text-align: center"></td><td style="text-align: center"></td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: center"><code>i1</code></td><td style="text-align: center"><code>f i1</code></td><td style="text-align: center"><code>g (f i0)</code></td><td style="text-align: center"></td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: center"><code>i2</code></td><td style="text-align: center"><code>f i2</code></td><td style="text-align: center"><code>g (f i1)</code></td><td style="text-align: center"><code>h (g (f i0))</code></td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: center"><code>i3</code></td><td style="text-align: center"><code>f i3</code></td><td style="text-align: center"><code>g (f i2)</code></td><td style="text-align: center"><code>h (g (f i1))</code></td><td style="text-align: center"><code>h (g (f i0))</code></td></tr>
-<tr><td style="text-align: center">\(\vdots\)</td><td style="text-align: center">\(\vdots\)</td><td style="text-align: center">\(\vdots\)</td><td style="text-align: center">\(\vdots\)</td><td style="text-align: center">\(\vdots\)</td></tr>
-</tbody></table>
-</div>
-<p>Pipelining is a common hardware design technique for splitting large computations into smaller computations over time. ReWire makes such pipelining both easy to express and formally verify.</p>
-<p>In the Salsa20 hash function (<a href="../salsa20/hashfunction.html">Section 3.1.8</a>), there is a place where the <code>doubleround</code> function is composed ten times:</p>
-<pre><code class="language-haskell">dr10 :: Hex (W 32) -&gt; Hex (W 32)
-dr10 = doubleround . doubleround . doubleround . doubleround . doubleround .
-          doubleround . doubleround . doubleround . doubleround . doubleround 
+                        <h2 id="a-hello-world-example-with-stalling"><a class="header" href="#a-hello-world-example-with-stalling">A Hello World Example with Stalling</a></h2>
+<p><em>Stalling</em> is the delaying the execution of a pipelined architecture to wait for some condition. In a pipelined processor, this may be due to a data hazard or resource conflict. In our simple example, let's suppose that valid inputs may not always be available.</p>
+<p>So, if an input isn't available, call is <code>Stall</code>. If a valid output isn't produced, then call it
+<code>DC</code> for <em>don't care</em>.</p>
+<pre><code class="language-haskell">data Inp a = Stall | Arg a deriving Show
+data Out a = DC    | Val a deriving Show 
 </code></pre>
-<p>The <code>doubleround</code> function has a lot of arithmetic operations contained in it and its tenfold composition <code>dr10</code>, when unrolled into combinational logic, has many, many such operations. So, it's a good opportunity for pipelining.
-This is a great opportunity for pipelining.</p>
-<p>First, we will illustrate how pipelines are defined in ReWire, and then apply that same structuring technique to <code>doubleround</code>.</p>
+<p>Then, we'll lift <code>one</code>, <code>two</code>, and <code>three</code> to <code>io_one</code>, <code>io_two</code>, and <code>io_three</code>, respectively, and define <code>times3</code> as before.</p>
+<pre><code class="language-haskell">io_one , io_two , io_three :: Inp (W 8) -&gt; Out (W 8)
+io_one Stall     = DC
+io_one (Arg a)   = Val (one a)
+io_two Stall     = DC
+io_two (Arg a)   = Val (two a)
+io_three Stall   = DC
+io_three (Arg a) = Val (three a)
+
+times3 :: (Inp (W 8), Inp (W 8), Inp (W 8)) -&gt; (Out (W 8), Out (W 8), Out (W 8))
+times3 (i1 , i2 , i3) = (io_one i1 , io_two i2 , io_three i3)
+</code></pre>
+<p>It is in the connection function that delaying of execution is manifest.</p>
+<pre><code class="language-haskell">conn3 :: (Out a, Out a, Out a) -&gt; Inp a -&gt; (Inp a, Inp a, Inp a)
+conn3 (DC , DC , _) ix         = (ix , Stall , Stall)
+conn3 (Val x1 , Val x2 , _) ix = (ix , Arg x1 , Arg x2)
+conn3 (Val x1 , DC , _) ix     = (ix , Arg x1 , Stall)
+conn3 (DC , Val x2 , _) ix     = (ix , Stall , Arg x2)
+</code></pre>
+<p>The <code>pipeline</code> function from the previous section is identical and the remainder of the definition is equivalent.</p>
+<pre><code class="language-haskell">withstall :: Inp (W 8) -&gt; ReacT (Inp (W 8)) (Out (W 8)) Identity ()
+withstall = pipeline times3 out3 conn3 (DC , DC , DC)
+
+start :: ReacT (Inp (W 8)) (Out (W 8)) Identity ()
+start = withstall Stall
+</code></pre>
+<p>As examples, consider the following two input lists:</p>
+<pre><code class="language-haskell">λ&gt; pretty ins
+Arg 0x01 : Arg 0x02 : Arg 0x03 : Arg 0x04 : Arg 0x05 : Arg 0x06 : Arg 0x07 : Arg 0x08 : Arg 0x09 : Arg 0x0A : Arg 0x0B : Arg 0x0C : Arg 0x0D : Arg 0x0E : Arg 0x0F : []
+λ&gt; pretty ins'
+Arg 0x01 : Stall : Arg 0x02 : Stall : Stall : Arg 0x03 : Stall : Stall : Stall : []
+</code></pre>
+<p>The first list <code>ins</code> is identical to that of the previous section and produces the same output (modulo the <code>Arg</code>s and <code>Val</code>s):</p>
+<pre><code class="language-haskell">λ&gt; pretty exS
+   (Stall,DC) :&gt; (Arg 0x01,DC) :&gt; (Arg 0x02,DC) :&gt; (Arg 0x03,DC) :&gt; (Arg 0x04,Val 0x07) :&gt; 
+      (Arg 0x05,Val 0x08) :&gt; (Arg 0x06,Val 0x09) :&gt; (Arg 0x07,Val 0x0A) :&gt; (Arg 0x08,Val 0x0B) :&gt; 
+	      (Arg 0x09,Val 0x0C) :&gt; (Arg 0x0A,Val 0x0D) :&gt; (Arg 0x0B,Val 0x0E) :&gt; (Arg 0x0C,Val 0x0F) :&gt; 
+		      (Arg 0x0D,Val 0x10) :&gt; (Arg 0x0E,Val 0x11) :&gt; (Arg 0x0F,Val 0x12) :+&gt; Nothing
+</code></pre>
+<p>The second input stream, <code>ins'</code>, has <code>Stall</code>s inserted to demonstrate the stalling of the <code>withstall</code> device.</p>
+<pre><code class="language-haskell">λ&gt; pretty exS'
+   (Stall,DC) :&gt; (Arg 0x01,DC)       :&gt; 
+                 (Stall,DC)          :&gt; 
+				 (Arg 0x02,DC)       :&gt; 
+				 (Stall,Val 0x07)    :&gt; 
+				 (Stall,DC)          :&gt; 
+				 (Arg 0x03,Val 0x08) :&gt; 
+				 (Stall,DC)          :&gt; 
+				 (Stall,DC)          :&gt; 
+				 (Stall,Val 0x09)    :+&gt; Nothing
+λ&gt; 
+</code></pre>
+<p>Notice that, as before, a valid input (e.g., <code>Arg 0x01</code>) produces its output three cycles later (e.g., <code>Val 0x07</code>, resp.). But a <code>Stall</code> input begets a <code>DC</code> output three cycles later.</p>
+<p>There are two versions of the code for this example:</p>
+<ul>
+<li><a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/pipelining/WithStallPipe123.hs">Haskell/ReWire version</a>. This is executable in GHCi.</li>
+<li><a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/pipelining/RW_WithStallPipe123.hs">ReWire version</a>. This is compilable by the ReWire compiler.</li>
+</ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../../chapters/salsa20/encryption.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../../chapters/pipelining/onetwothree.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../../chapters/pipelining/onetwothree.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -216,13 +258,10 @@ This is a great opportunity for pipelining.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../../chapters/salsa20/encryption.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../../chapters/pipelining/onetwothree.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../../chapters/pipelining/onetwothree.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
-                    </a>
             </nav>
 
         </div>
