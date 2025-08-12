@@ -44,6 +44,10 @@ UNDER CONSTRUCTION!
 
 - [Pipelining in ReWire](./chapters/pipelining/pipelining.md)
 
+   - [Hello World Example](./chapters/pipelining/onetwothree.md)
+   - [One, Two, Three,... Stall](./chapters/pipelining/stalling123.md)
+
+
 <!-- - [Simple Processors](./chapters/chapter2/simpleprocs.md) -->
 
 <!--    - [Tiny ISA](./chapters/chapter2/tinyisa.md) -->
