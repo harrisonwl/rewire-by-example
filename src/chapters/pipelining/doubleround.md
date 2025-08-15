@@ -18,7 +18,7 @@ loop Nothing      = signal Nothing >>= loop
 start :: ReacT (Maybe HxW32) (Maybe HxW32) Identity ()
 start = loop Nothing
 ```
-The full code is available here: [Naive_DR10.hs](https://github.com/harrisonwl/rwcrypto/blob/main/src/pipeline/Naive_DR10.hs). If the `loop` function is passed a valid input (i.e., `(Just hxw32)`), then `dr10` is applied to it. In each cycle, `dr10 hxw32` is calculated.
+The full code is available here: [Naive_DR10.hs](https://github.com/harrisonwl/rwcrypto/blob/main/src/pipeline/double/Naive_DR10.hs). If the `loop` function is passed a valid input (i.e., `(Just hxw32)`), then `dr10` is applied to it. In each cycle, `dr10 hxw32` is calculated.
 
 *Why is this naive?* If you look at the code for `doubleround`, there are a lot of operations going on in `dr10`. Pure functions like these are compiled to combinational logic, and, the combinational logic for ten `doubleround`s is substantial. It would be better to pipeline calls to `doubleround` to avoid this.
 

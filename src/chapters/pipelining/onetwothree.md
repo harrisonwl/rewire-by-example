@@ -70,5 +70,5 @@ Running this pipelined version in GHCi, for example for inputs `[0x1..0xF]`, one
 ```
 
 There are two versions of the code for this example:
-  - [Haskell/ReWire version](https://github.com/harrisonwl/rwcrypto/blob/main/src/pipelining/NoStallPipe123.hs). This is executable in GHCi.
-  - [ReWire version](https://github.com/harrisonwl/rwcrypto/blob/main/src/pipelining/RW_NoStallPipe123.hs). This is compilable by the ReWire compiler.
+  - [Haskell/ReWire version](https://github.com/harrisonwl/rwcrypto/blob/main/src/pipelining/123/NoStallPipe123.hs). This is executable in GHCi.
+  - [ReWire version](https://github.com/harrisonwl/rwcrypto/blob/main/src/pipelining/123/RW_NoStallPipe123.hs). This is compilable by the ReWire compiler.
