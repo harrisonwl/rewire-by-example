@@ -76,6 +76,6 @@ The second input stream, `ins'`, has `Stall`s inserted to demonstrate the stalli
 Notice that, as before, a valid input (e.g., `Arg 0x01`) produces its output three cycles later (e.g., `Val 0x07`, resp.). But a `Stall` input begets a `DC` output three cycles later.
 
 There are two versions of the code for this example:
-  - [Haskell/ReWire version](https://github.com/harrisonwl/rwcrypto/blob/main/src/pipelining/WithStallPipe123.hs). This is executable in GHCi.
-  - [ReWire version](https://github.com/harrisonwl/rwcrypto/blob/main/src/pipelining/RW_WithStallPipe123.hs). This is compilable by the ReWire compiler.
+  - [Haskell/ReWire version](https://github.com/harrisonwl/rwcrypto/blob/main/src/pipelining/123/WithStallPipe123.hs). This is executable in GHCi.
+  - [ReWire version](https://github.com/harrisonwl/rwcrypto/blob/main/src/pipelining/123/RW_WithStallPipe123.hs). This is compilable by the ReWire compiler.
 
