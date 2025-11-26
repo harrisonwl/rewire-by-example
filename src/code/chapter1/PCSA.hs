@@ -4,7 +4,7 @@ import ReWire
 import ReWire.Bits
 
 -- | RWC will complain in this is imported
-import ReWire.Interactive 
+-- import ReWire.Interactive 
 
 type W8 = W 8
 
@@ -17,7 +17,8 @@ f a b c = ( ((a .&. b) .|. (a .&. c) .|. (b .&. c) ) <<. lit 1 , (a ^ b) ^ c )
 
 data Ans a = DC | Val a
 
-pcsa :: Re W8 () (Ans (W8, W8)) ()
+-- pcsa :: Re W8 () (Ans (W8, W8)) ()
+pcsa :: ReacT W8 (Ans (W8 , W8)) Identity ()
 pcsa = do
           a <- signal DC
           b <- signal DC
@@ -25,9 +26,11 @@ pcsa = do
           signal (Val (f a b c))
           pcsa
   
-start :: Re W8 () (Ans (W8 , W8)) ()
+-- start :: Re W8 () (Ans (W8 , W8)) ()
+start :: ReacT W8 (Ans (W8 , W8)) Identity ()
 start = pcsa 
 
+{-
 snapshot0 :: (W8 , () , Ans (W8 , W8))
 snapshot0 = ( lit 0 , () , DC )
       
@@ -37,4 +40,4 @@ inputs = lit 40 : lit 25 : lit 20 : lit 0 : []
 instance Pretty a => Pretty (Ans a) where
   pp DC      = "DC"
   pp (Val a) = "Val " Prelude.++ pp a
-
+-}

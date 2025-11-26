@@ -46,6 +46,7 @@ UNDER CONSTRUCTION!
 
    - [Hello World Example](./chapters/pipelining/onetwothree.md)
    - [One, Two, Three,... Stall](./chapters/pipelining/stalling123.md)
+   - [Pipelined Doubleround](./chapters/pipelining/doubleround.md)
 
 
 <!-- - [Simple Processors](./chapters/chapter2/simpleprocs.md) -->
