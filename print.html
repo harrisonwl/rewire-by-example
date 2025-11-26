@@ -13,21 +13,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="highlight-css" href="highlight.css">
-        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
-        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
 
@@ -39,10 +38,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex.js";
+            window.path_to_searchindex_js = "searchindex-0ed34fe9.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc.js"></script>
+        <script src="toc-4b9b0ed5.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -56,7 +55,7 @@
             </div>
         </div>
     </div>
-    <div id="body-container">
+    <div id="mdbook-body-container">
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script>
             try {
@@ -85,12 +84,12 @@
             html.classList.add("js");
         </script>
 
-        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
             let sidebar = null;
-            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
@@ -105,39 +104,39 @@
             }
         </script>
 
-        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
                 <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
             </noscript>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
             </div>
         </nav>
 
-        <div id="page-wrapper" class="page-wrapper">
+        <div id="mdbook-page-wrapper" class="page-wrapper">
 
             <div class="page">
-                <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                            <i class="fa fa-bars"></i>
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
                         </label>
-                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                            <i class="fa fa-paint-brush"></i>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
                         </button>
-                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
                         </ul>
-                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
-                            <i class="fa fa-search"></i>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
                         </button>
                     </div>
 
@@ -145,81 +144,85 @@
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
-                            <i id="print-button" class="fa fa-print"></i>
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
                         </a>
 
                     </div>
                 </div>
 
-                <div id="search-wrapper" class="hidden">
-                    <form id="searchbar-outer" class="searchbar-outer">
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
                         <div class="search-wrapper">
-                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
                             <div class="spinner-wrapper">
-                                <i class="fa fa-spinner fa-spin"></i>
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
                             </div>
                         </div>
                     </form>
-                    <div id="searchresults-outer" class="searchresults-outer hidden">
-                        <div id="searchresults-header" class="searchresults-header"></div>
-                        <ul id="searchresults">
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
                         </ul>
                     </div>
                 </div>
 
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
                 <script>
-                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
-                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
-                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
                         link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
                     });
                 </script>
 
-                <div id="content" class="content">
+                <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="rewire-by-example"><a class="header" href="#rewire-by-example">ReWire by Example</a></h1>
 <p>The ReWire functional high-level synthesis language (see below) is a functional language for designing, verifying, and implementing high assurance hardware.</p>
 <ul>
 <li>A hardware design in ReWire is also a Haskell program, and development of ReWire designs benefits from immediate feedback from its strong, static type system.</li>
-<li>As with Rust, ReWire's type system enforces invariants and guarantees at compile-time, thereby eliminating whole classes of bugs statically in a lightweight, automated manner.</li>
-<li>ReWire's type system can be extended by embedding designs into assurance tools (like Coq) to capture broad of automated checks and proof tools.</li>
+<li>As with Rust, ReWire’s type system enforces invariants and guarantees at compile-time, thereby eliminating whole classes of bugs statically in a lightweight, automated manner.</li>
+<li>ReWire’s type system can be extended by embedding designs into assurance tools (like Coq) to capture broad of automated checks and proof tools.</li>
 <li>ReWire designs can be compiled into Verilog and thereby interoperate with synthesis tools.</li>
 </ul>
-<p align="center"><img src="./ReWireUses.jpg"  style="height:50%; width:50%" ></p>
+<p align="center"><img src="ReWireUses.jpg" style="height:50%; width:50%"></p>
+
 <p>ReWire is not a replacement for commodity hardware design languages like Verilog but rather it is a value-add for hardware design, implementation, and verification that interoperates with them.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-0-before-you-start"><a class="header" href="#chapter-0-before-you-start">Chapter 0: Before You Start</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="chapter-0-before-you-start"><a class="header" href="#chapter-0-before-you-start">Chapter 0: Before You Start</a></h1>
 <p>These are the tutorial notes for the ReWire language.</p>
 <h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
 <h3 id="haskell"><a class="header" href="#haskell">Haskell</a></h3>
-<p>There's no way of learning ReWire without knowing basic Haskell. I'm a Mac guy so I would use <code>homebrew</code> as in</p>
+<p>There’s no way of learning ReWire without knowing basic Haskell. I’m a Mac guy so I would use <code>homebrew</code> as in</p>
 <ul>
 <li><code>brew install ghc</code>. This will install the Glasgow Haskell Compiler.</li>
 <li><code>brew install stack</code>. Stack is a tool for installing haskell packages. It really makes things easy (well, easier).</li>
 </ul>
 <h3 id="installing-rewire"><a class="header" href="#installing-rewire">Installing ReWire</a></h3>
-<p>ReWire is freely available. Here is the repository where you find the most recent version: <a href="https://github.com/twosixlabs/ReWire">ReWire source</a>. Follow the directions -- <code>stack</code> makes it easy.</p>
+<p>ReWire is freely available. Here is the repository where you find the most recent version: <a href="https://github.com/twosixlabs/ReWire">ReWire source</a>. Follow the directions – <code>stack</code> makes it easy.</p>
 <ul>
 <li>This installation will build the ReWire compiler <code>rwc</code> and</li>
 <li>Install libraries (aka <code>ReWire-user</code>) that allow you to program in ReWire with the Haskell interpreter <code>ghci</code>.</li>
 </ul>
 <h3 id="monads-in-haskell"><a class="header" href="#monads-in-haskell">Monads in Haskell</a></h3>
-<p>You have to be comfortable with the basics of "monad wrangling". You don't need to understand them in any great depth, but understanding the following ought to do:</p>
+<p>You have to be comfortable with the basics of “monad wrangling”. You don’t need to understand them in any great depth, but understanding the following ought to do:</p>
 <ol>
 <li>The <code>Identity</code> monad;</li>
 <li>the state monad; and</li>
 <li>the <code>Maybe</code> monad.</li>
 </ol>
-<p>Understanding the basic usage of the <code>StateT</code> monad transformer is important. It's a shame that they are known as "transformer" instead of "constructor", because all a monad transformer is is a way to construct monads in a canonical fashion.</p>
-<p>Monads are a concept from Category Theory. I love Category Theory, really I do. But I'd <strong>strongly</strong> recommend avoiding categorical treatments of monads if this is your first time with this material. Rather, check out Graham Hutton or Miran Lipovaca's texts as they're both excellent.</p>
+<p>Understanding the basic usage of the <code>StateT</code> monad transformer is important. It’s a shame that they are known as “transformer” instead of “constructor”, because all a monad transformer is is a way to construct monads in a canonical fashion.</p>
+<p>Monads are a concept from Category Theory. I love Category Theory, really I do. But I’d <strong>strongly</strong> recommend avoiding categorical treatments of monads if this is your first time with this material. Rather, check out Graham Hutton or Miran Lipovaca’s texts as they’re both excellent.</p>
 <h4 id="reactive-resumption-monads"><a class="header" href="#reactive-resumption-monads">Reactive Resumption Monads</a></h4>
-<p>These are a particular family of monads that can be used to precisely describe synchronous concurrency (e.g., like clocked computations in hardware). They sound scary, but they're not. Check out the following papers of mine for the basics if you want. I suspect a lot of readers will just look at its usage in ReWire and get them well enough.</p>
+<p>These are a particular family of monads that can be used to precisely describe synchronous concurrency (e.g., like clocked computations in hardware). They sound scary, but they’re not. Check out the following papers of mine for the basics if you want. I suspect a lot of readers will just look at its usage in ReWire and get them well enough.</p>
 <ol>
 <li><a href="https://bibbase.org/network/publication/harrison-theessenceofmultitasking-2006">Essence of Multitasking</a> and</li>
 <li><a href="https://bibbase.org/network/publication/harrison-procter-cheapbutfunctionalthreads-2015">Cheap (But Functional) Threads</a>.</li>
 </ol>
 <p>These monads are implemented in the Hackage package <a href="https://hackage.haskell.org/package/monad-resumption">monad-resumption</a>.</p>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="haskell-1"><a class="header" href="#haskell-1">Haskell</a></h2>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="haskell-2"><a href="#haskell-2" class="header">Haskell</a></h1>
+<h2 id="haskell-1"><a class="header" href="#haskell-1">Haskell</a></h2>
 <p>Here are some good sources:</p>
 <ul>
 <li><strong>Programming in Haskell</strong> by Graham Hutton.
@@ -228,17 +231,18 @@ This is an excellent, step-by-step introduction to Haskell. Graham also has a lo
 Highly amusing and informative; available <a href="https://learnyouahaskell.com/">here</a>.</li>
 <li><strong>A Gentle Introduction to Haskell</strong> by Hudak, Peterson, and Fasal.
 Available at <a href="http://www.haskell.org/tutorial/">http://www.haskell.org/tutorial/</a>.</li>
-<li><strong>Real World Haskell</strong> by Bryan O'Sullivan.
+<li><strong>Real World Haskell</strong> by Bryan O’Sullivan.
 Also available online (I believe).</li>
 <li>Google.</li>
-<li><strong>Haskell for Grownups</strong>. These are some slides (<a href="chapters/chapter0/HaskellForGrownups.pdf">HaskellForGrownups.pdf</a>) I've presented here and there over the years as a quick intro to Haskell and what all the fuss is about.</li>
+<li><strong>Haskell for Grownups</strong>. These are some slides (<a href="chapters/chapter0/HaskellForGrownups.pdf">HaskellForGrownups.pdf</a>) I’ve presented here and there over the years as a quick intro to Haskell and what all the fuss is about.</li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="monad-wrangling-101"><a class="header" href="#monad-wrangling-101">Monad Wrangling 101</a></h1>
-<p>ReWire is a monadic language, meaning that it is organized in terms of various monads (which ones, we'll get to shortly). There are about a zillion tutorials on monads out there, and most of them are just <em>terrible</em>. This is a shame since the idea of a monad itself is really beautiful and, if you know how to use them correctly, they're a really important part of functional programming practice. And, furthermore, they are a really important part of programming language semantics, too, and consequently an important part of formal methods properly understood.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="monad-wrangling-101"><a class="header" href="#monad-wrangling-101">Monad Wrangling 101</a></h1>
+<p>ReWire is a monadic language, meaning that it is organized in terms of various monads (which ones, we’ll get to shortly). There are about a zillion tutorials on monads out there, and most of them are just <em>terrible</em>. This is a shame since the idea of a monad itself is really beautiful and, if you know how to use them correctly, they’re a really important part of functional programming practice. And, furthermore, they are a really important part of programming language semantics, too, and consequently an important part of formal methods properly understood.</p>
 <p>What this section does is introduce the monad idea through a sequence of simple language interpreters. As we add features to the language, we have to change the monad we use to define the new interpreter. We will see four interpreters whose core is a language of simple arithmetic expressions.</p>
 <p>To see all of the monads discussed in this tutorial defined in one convenient Haskell file, download this:
 <a href="chapters/chapter0/monadwrangling/MonadWrangling.hs">MonadWrangling.hs</a>. These monad and monad transformer definitions are in the style of earlier versions of GHC, which were immensely easier to understand than the current mess.</p>
-<hr />
+<hr>
 <h2 id="simple-arithmetic-expressions"><a class="header" href="#simple-arithmetic-expressions">Simple Arithmetic Expressions</a></h2>
 <p>The first interpreter, found in <a href="chapters/chapter0/monadwrangling/Arith.hs">Arith.hs</a>, defines a language <code>Exp</code> that has integer constants, negation, and addition. These correspond to the constructors <code>Const</code>, <code>Neg</code>, and <code>Add</code> of the <code>Exp</code> data type. The interpreter <code>eval0</code> does not use a monad and should be fairly self-explanatory.</p>
 <pre><code class="language-haskell">module Arith where
@@ -259,16 +263,16 @@ c = Const 99
 n = Neg c
 a = Add c n
 </code></pre>
-<p>Loading this into GHCi gives you what you'd expect:</p>
+<p>Loading this into GHCi gives you what you’d expect:</p>
 <pre><code>λ&gt; a
 99 + -99
 λ&gt; eval0 a
 0
 </code></pre>
-<hr />
+<hr>
 <h2 id="the-identity-monad-is-a-big-nothingburger"><a class="header" href="#the-identity-monad-is-a-big-nothingburger">The <code>Identity</code> Monad is a Big Nothingburger</a></h2>
-<p>We introduce now the <code>Identity</code> monad, which doesn't really give you anything at all. I introduce it first because it uses Haskell's built-in monad syntax, and it's useful to meet that syntax first when the monad is just a big nothing. The code for this section is found in <a href="chapters/chapter0/monadwrangling/IdentityMonad.hs">IdentityMonad.hs</a> and <a href="chapters/chapter0/monadwrangling/IdentityMonadDo.hs">IdentityMonadDo.hs</a>.</p>
-<p>First, here's the new interpreter <code>eval1</code>. The salient point is that <code>eval0</code> and <code>eval1</code> are doing the same thing, but what's all this <code>return</code> and <code>&gt;&gt;=</code> business? (They're explained below if you want to skip ahead.)</p>
+<p>We introduce now the <code>Identity</code> monad, which doesn’t really give you anything at all. I introduce it first because it uses Haskell’s built-in monad syntax, and it’s useful to meet that syntax first when the monad is just a big nothing. The code for this section is found in <a href="chapters/chapter0/monadwrangling/IdentityMonad.hs">IdentityMonad.hs</a> and <a href="chapters/chapter0/monadwrangling/IdentityMonadDo.hs">IdentityMonadDo.hs</a>.</p>
+<p>First, here’s the new interpreter <code>eval1</code>. The salient point is that <code>eval0</code> and <code>eval1</code> are doing the same thing, but what’s all this <code>return</code> and <code>&gt;&gt;=</code> business? (They’re explained below if you want to skip ahead.)</p>
 <pre><code class="language-haskell">module IdentityMonad where
 
 import Control.Monad.Identity -- this is new.
@@ -289,14 +293,14 @@ c = Const 99
 n = Neg c
 a = Add c n
 </code></pre>
-<p>The <code>Identity</code> monad has the following definition (it's actually a simplification).</p>
+<p>The <code>Identity</code> monad has the following definition (it’s actually a simplification).</p>
 <pre><code class="language-haskell">data Identity a = Identity a -- apologies for overloading the constructors.
 return :: a -&gt; Identity a
 return v = Identity v
 (&gt;&gt;=) :: Identity a -&gt; (a -&gt; Identity b) -&gt; Identity b
 (Identity v) &gt;&gt;= f = f v
 </code></pre>
-<p>So, <code>return</code> just injects its argument into <code>Identity</code>. The operation <code>&gt;&gt;=</code> (a.k.a., "bind") boils down to a backwards apply. It's just a whole lot of applying and pattern-matching on the <code>Identity</code> constructor, signifying nothing. When you load all this into GHCi, you get just what you'd expect:</p>
+<p>So, <code>return</code> just injects its argument into <code>Identity</code>. The operation <code>&gt;&gt;=</code> (a.k.a., “bind”) boils down to a backwards apply. It’s just a whole lot of applying and pattern-matching on the <code>Identity</code> constructor, signifying nothing. When you load all this into GHCi, you get just what you’d expect:</p>
 <pre><code>λ&gt; a
 99 + -99
 λ&gt; eval1 a
@@ -307,7 +311,7 @@ Identity 0
 <p>As people say, <code>eval1</code> and <code>eval0</code> are morally equivalent, in the sense that, if you were so inclined, you could <em>prove</em> the equality <code>eval1 a = Identity (eval0 a)</code> holds for any <code>a</code>.</p>
 <h3 id="monadic-syntactic-sugar-or-saccharine"><a class="header" href="#monadic-syntactic-sugar-or-saccharine">Monadic Syntactic Sugar or Saccharine?</a></h3>
 <p>Haskell overloads its monad syntax, so when we see the <code>&gt;&gt;=</code> and <code>return</code> again, they will be typed in different monads than <code>Identity</code>. Overloading is great for some uses, because it removes clutter. I find for formal methods it can be kind of confusing. So, reader beware!</p>
-<p>There is also another shorthand for <code>&gt;&gt;=</code> that is frequently used called <code>do</code> notation; it's defined as:</p>
+<p>There is also another shorthand for <code>&gt;&gt;=</code> that is frequently used called <code>do</code> notation; it’s defined as:</p>
 <pre><code class="language-haskell">   x &gt;&gt;= f = do
                v &lt;- x
 		       f v
@@ -318,7 +322,7 @@ Identity 0
                       return (- v)
 </code></pre>
 <p>The code <code>IdentityMonadDo.hs</code> just reformulates the code in <code>IdentityMonad.hs</code> using <code>do</code> notation.</p>
-<hr />
+<hr>
 <h2 id="2nd-interpreter-errors-and-maybe"><a class="header" href="#2nd-interpreter-errors-and-maybe">2nd Interpreter: Errors and Maybe</a></h2>
 <p>The code for this section is found in <a href="chapters/chapter0/monadwrangling/Errors.hs">Errors.hs</a>. This new interpreter adds a new arithmetic operation <code>Div</code>. I pasted in the <code>eval0</code> with a new case for <code>Div</code>.</p>
 <pre><code class="language-haskell">module Errors where
@@ -344,15 +348,15 @@ a    = Add c (Neg c)
           c = Const 99
 uhoh = Div (Const 1) (Const 0)              -- new
 </code></pre>
-<p>Note that, when you run the <code>Div</code>-extended version of <code>eval0</code>, things don't always end well:</p>
+<p>Note that, when you run the <code>Div</code>-extended version of <code>eval0</code>, things don’t always end well:</p>
 <pre><code class="language-haskell">λ&gt; uhoh
 1 / 0
 λ&gt; eval0 uhoh
 *** Exception: divide by zero
 λ&gt; 
 </code></pre>
-<h3 id="why-cant-we-just-check-for-0"><a class="header" href="#why-cant-we-just-check-for-0">Why can't we just check for 0?</a></h3>
-<p>Think about it this way, what should I replace <code>????</code> with below? There's no way of handling that exceptional case and it crashes the program.</p>
+<h3 id="why-cant-we-just-check-for-0"><a class="header" href="#why-cant-we-just-check-for-0">Why can’t we just check for 0?</a></h3>
+<p>Think about it this way, what should I replace <code>????</code> with below? There’s no way of handling that exceptional case and it crashes the program.</p>
 <pre><code class="language-haskell">eval0 (Div e1 e2) = if v2 == 0 then ???? else eval0 e1 `div` v2 
    where
       v2 = eval0 e2
@@ -360,7 +364,7 @@ uhoh = Div (Const 1) (Const 0)              -- new
 <p>But with the <code>Maybe</code> monad, we can use its <code>Nothing</code> constructor for this erroneous case; recall the definition of the <code>Maybe</code> data type:</p>
 <pre><code class="language-haskell">data Maybe a = Nothing | Just a
 </code></pre>
-<p>Here's the definition of <code>eval2</code> whhich is typed in the <code>Maybe</code> monad:</p>
+<p>Here’s the definition of <code>eval2</code> whhich is typed in the <code>Maybe</code> monad:</p>
 <pre><code class="language-haskell">eval2 :: Exp -&gt; Maybe Int     -- N.b., the new type
 eval2 (Const i)   = return i
 eval2 (Neg e)     = do
@@ -381,7 +385,7 @@ eval2 (Div e1 e2) = do
 Nothing
 </code></pre>
 <h3 id="maybe-under-the-hood"><a class="header" href="#maybe-under-the-hood">Maybe Under the Hood</a></h3>
-<p>Below is the definition of the <code>Maybe</code> monad. The way to think of a computation <code>x &gt;&gt;= f</code> is that, if <code>x</code> is returns some value (i.e., it's <code>Just v</code>), then just proceed normally. If an exception is thrown by computing <code>x</code> (i.e., it's <code>Nothing</code>), then the whole computation <code>x &gt;&gt;= f</code></p>
+<p>Below is the definition of the <code>Maybe</code> monad. The way to think of a computation <code>x &gt;&gt;= f</code> is that, if <code>x</code> is returns some value (i.e., it’s <code>Just v</code>), then just proceed normally. If an exception is thrown by computing <code>x</code> (i.e., it’s <code>Nothing</code>), then the whole computation <code>x &gt;&gt;= f</code></p>
 <pre><code class="language-haskell">data Maybe a = Nothing | Just a
 
 return :: a -&gt; Maybe a
@@ -391,7 +395,7 @@ return v = Just v
 (Just v) &gt;&gt;= f = f v
 Nothing &gt;&gt;= f  = Nothing
 </code></pre>
-<hr />
+<hr>
 <h1 id="3rd-interpreter-adding-a-register"><a class="header" href="#3rd-interpreter-adding-a-register">3rd Interpreter: Adding a Register</a></h1>
 <p>The code for this section is <a href="chapters/chapter0/monadwrangling/Register.hs">Register.hs</a>.</p>
 <pre><code class="language-haskell">module Register where
@@ -420,7 +424,7 @@ eval2 (Add e1 e2) = do
 
 eval2 X           = undefined -- How do we do handle this?
 </code></pre>
-<p>Here's how we handle this:</p>
+<p>Here’s how we handle this:</p>
 <ul>
 <li>Create a new monad from <code>Identity</code> with an <code>Int</code> register: <code>StateT Int Identity</code></li>
 <li>This new monad has two operations
@@ -447,7 +451,7 @@ eval3 (Add e1 e2) = do
 
 eval3 X           = readX
 </code></pre>
-<hr />
+<hr>
 <h1 id="4th-errors--register"><a class="header" href="#4th-errors--register">4th: Errors + Register</a></h1>
 <p>The code for this is <a href="chapters/chapter0/monadwrangling/RegisterError.hs">RegisterError.hs</a>. In this example, we want to add both a possibly error-producing computation along with the register. This is done mostly through monadic means.</p>
 <pre><code class="language-haskell">module Register where
@@ -465,7 +469,7 @@ instance Show Exp where
   show (Div e1 e2) = show e1 ++ " / " ++ show e2
   show X           = "X"
 </code></pre>
-<p>Here's how we handle this:</p>
+<p>Here’s how we handle this:</p>
 <ul>
 <li>Create a new monad from <code>Maybe</code> with an <code>Int</code> register: <code>StateT Int Maybe</code></li>
 <li>This new monad has two operations
@@ -497,23 +501,26 @@ eval3 (Div e1 e2) = do
 
 eval3 X           = readX
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="hello-worlds"><a class="header" href="#hello-worlds">Hello Worlds</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="hello-worlds"><a class="header" href="#hello-worlds">Hello Worlds</a></h1>
 <p>This first chapter introduces ReWire and collects the simplest possible examples.</p>
 <h2 id="what-is-rewire"><a class="header" href="#what-is-rewire">What is ReWire?</a></h2>
 <p>ReWire is a domain-specific language embedded in the Haskell functional programming language (<a href="https://haskell.org">https://haskell.org</a>). <em>Every</em> ReWire program is a Haskell program that can be executed just as any other Haskell program. This fact is simple and also very powerful, because it means that development of a hardware design can proceed <em>incrementally</em>, one function at a time, with the resulting new code being type-checked and/or tested. Once a developer is satisfied with their ReWire design, they can compile it automatically into synthesizable HDLs (hardware definition languages) like Verilog, VHDL, and FIRRTL.</p>
-<img src="chapters/chapter1/images/ReWireInColor.png"  style="height:60%; width:60%" >
+<img src="chapters/chapter1/images/ReWireInColor.png" style="height:60%; width:60%">
 <h3 id="mealy-machines-and-rewire-types"><a class="header" href="#mealy-machines-and-rewire-types">Mealy Machines and ReWire types</a></h3>
-<p>There's a mental model of digital circuitry used by hardware designers known as a Mealy machine. The flavor favored by hardware designers is portrayed below, which will seem odd to those of us who first heard of them from a class in theoretical computer science (e.g., <a href="https://en.wikipedia.org/wiki/Mealy_machine">https://en.wikipedia.org/wiki/Mealy_machine</a>). Mealy machines are finite state machines combined with a clock that on each clock "tick" consume an input of type <code>i</code>, update a store of type <code>s</code>, and produce an output of type <code>o</code>.</p>
-<img src="chapters/chapter1/images/beautifullestmealy.png"  style="height:50%; width:50%" >
+<p>There’s a mental model of digital circuitry used by hardware designers known as a Mealy machine. The flavor favored by hardware designers is portrayed below, which will seem odd to those of us who first heard of them from a class in theoretical computer science (e.g., <a href="https://en.wikipedia.org/wiki/Mealy_machine">https://en.wikipedia.org/wiki/Mealy_machine</a>). Mealy machines are finite state machines combined with a clock that on each clock “tick” consume an input of type <code>i</code>, update a store of type <code>s</code>, and produce an output of type <code>o</code>.</p>
+<img src="chapters/chapter1/images/beautifullestmealy.png" style="height:50%; width:50%">
 <p>In ReWire, there is a type corresponding to the Mealy machine above, the monadic type:</p>
 <p><code>ReacT i o (StateT s Identity) ()</code></p>
 <p>And, because it occurs so frequently, we refer to it as a <em>device type</em> some times. Things of this type are those that can be compiled to hardware.</p>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="simple-mealy"><a class="header" href="#simple-mealy">Simple Mealy</a></h2>
-<p>The "theoretical computer science" picture of a Mealy machine is seen below:</p>
-<img src="chapters/chapter1/images/Mealy.png"  style="height:17%; width:17%" >
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="simple-mealy-1"><a href="#simple-mealy-1" class="header">Simple Mealy</a></h1>
+<h2 id="simple-mealy"><a class="header" href="#simple-mealy">Simple Mealy</a></h2>
+<p>The “theoretical computer science” picture of a Mealy machine is seen below:</p>
+<img src="chapters/chapter1/images/Mealy.png" style="height:17%; width:17%">
 <p>Here <code>si</code> is the start state, and there are two other states, <code>s0</code> and <code>s1</code>. There is also an alphabet consisting of <code>0</code> and <code>1</code>. On the transitions, a red digit denotes an input and a blue digit denotes an output, so, in the machine is currently in state <code>si</code> and receives a <code>1</code> as input, it outputs a <code>0</code> and proceeds to state <code>s1</code>.</p>
 <p>The ReWire code described in the section is found here, <a href="chapters/chapter1/SimpleMealy.hs">SimpleMealy.hs</a>, and what follows is a line-by-line description.</p>
-<p>First thing is to import a library with ReWire definitions, etc. What's <code>DataKinds</code>? Don't worry about it for now. Collected in a comment is a tabular form of the state transitions.</p>
+<p>First thing is to import a library with ReWire definitions, etc. What’s <code>DataKinds</code>? Don’t worry about it for now. Collected in a comment is a tabular form of the state transitions.</p>
 <pre><code class="language-haskell">{-# LANGUAGE DataKinds #-}
 import ReWire
 
@@ -526,7 +533,7 @@ import ReWire
 --    s1             0       1          s0
 --    s1             1       0          s1
 </code></pre>
-<p>Next, let's define the alphabet:</p>
+<p>Next, let’s define the alphabet:</p>
 <pre><code class="language-haskell">data Alphabet = Zero | One
 </code></pre>
 <p><code>Alphabet</code> defines both the inputs and outputs of this Mealy machine.</p>
@@ -542,7 +549,7 @@ s0 One  = signal One  &gt;&gt;= s1
 s1 Zero = signal One  &gt;&gt;= s0
 s1 One  = signal Zero &gt;&gt;= s1
 </code></pre>
-<p>We'll return to the types of <code>si</code>, <code>s0</code>, and <code>s1</code> momentarily.</p>
+<p>We’ll return to the types of <code>si</code>, <code>s0</code>, and <code>s1</code> momentarily.</p>
 <p>Finally, we need to designate a start state, just as with any state machine definition.</p>
 <pre><code class="language-haskell">start :: ReacT Alphabet Alphabet Identity ()
 start = signal Zero &gt;&gt;= si
@@ -554,9 +561,11 @@ start = signal Zero &gt;&gt;= si
 <li>The output alphabet is <code>Alphabet</code>, so <code>o</code> is also <code>Alphabet</code>.</li>
 <li>We are not using internal storage like registers, so monad <code>m</code> can be just <code>Identity</code>.</li>
 </ul>
-<p>Finally, why <code>()</code> for return type <code>a</code>? Here, we have a choice, but it doesn't matter in the least what we pick. Because <code>start</code> never, ever, terminates under any circumstances, it won't ever return any value, so we may as well pick <code>()</code>.</p>
-<p>This non-termination requirement on <code>start</code> is important and makes complete sense if you think about it. Hardware <strong>never</strong> terminates (unless it's unplugged).</p>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="the-obligatory-fibonacci-example"><a class="header" href="#the-obligatory-fibonacci-example">The Obligatory Fibonacci Example</a></h2>
+<p>Finally, why <code>()</code> for return type <code>a</code>? Here, we have a choice, but it doesn’t matter in the least what we pick. Because <code>start</code> never, ever, terminates under any circumstances, it won’t ever return any value, so we may as well pick <code>()</code>.</p>
+<p>This non-termination requirement on <code>start</code> is important and makes complete sense if you think about it. Hardware <strong>never</strong> terminates (unless it’s unplugged).</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="fibonacci-of-course"><a href="#fibonacci-of-course" class="header">Fibonacci, of course</a></h1>
+<h2 id="the-obligatory-fibonacci-example"><a class="header" href="#the-obligatory-fibonacci-example">The Obligatory Fibonacci Example</a></h2>
 <p>The following Haskell code (the file is called <a href="chapters/chapter1/Fib.hs">Fib.hs</a>) creates an infinite list of <code>Int</code>s in a conventional manner using the <code>fibgen</code> function.</p>
 <pre><code class="language-haskell">module Fibonacci where
 
@@ -572,7 +581,7 @@ take 10 fibs
 [0,1,1,2,3,5,8,13,21,34]
 </code></pre>
 <h3 id="making-hardware-out-of-this"><a class="header" href="#making-hardware-out-of-this">Making Hardware Out of This.</a></h3>
-<p>In the ReWire code below, <code>fibdev</code> plays the same role as <code>fibgen</code> above. For the moment, just ignore the monadic type, <code>ReacT Bit (W 8) Identity ()</code>. (I'll explain its significance shortly.) Instead of using Haskell's <code>Int</code> type, we will compute over eight bit words (i.e., <code>W 8</code>). There is also a definition of <code>start</code>, which is a special symbol that unsurprisingly specifies how to start the device.</p>
+<p>In the ReWire code below, <code>fibdev</code> plays the same role as <code>fibgen</code> above. For the moment, just ignore the monadic type, <code>ReacT Bit (W 8) Identity ()</code>. (I’ll explain its significance shortly.) Instead of using Haskell’s <code>Int</code> type, we will compute over eight bit words (i.e., <code>W 8</code>). There is also a definition of <code>start</code>, which is a special symbol that unsurprisingly specifies how to start the device.</p>
 <p>What <code>fibdev</code> does is, given two words <code>n</code> and <code>m</code>, it puts <code>n</code> on the output port using <code>signal</code> and accepts a new input <code>b</code> off of the input port. If bit <code>b</code> is <code>1</code>, then it continues on. However, if <code>b</code> is <code>0</code>, then it calls itself on <code>m</code> and <code>m + n</code> just like <code>fibgen</code> above.</p>
 <pre><code class="language-haskell">{-# LANGUAGE DataKinds #-}
 import Prelude hiding ((+))
@@ -597,14 +606,16 @@ fibdev n m = do b &lt;- signal n
 </ul>
 </li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="carry-save-addition"><a class="header" href="#carry-save-addition">Carry Save Addition</a></h2>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="carry-save-adders"><a href="#carry-save-adders" class="header">Carry Save Adders</a></h1>
+<h2 id="carry-save-addition"><a class="header" href="#carry-save-addition">Carry Save Addition</a></h2>
 <p>There are three carry-save adders in the tutorial, <a href="chapters/chapter1/CSA.hs">CSA.hs</a>, <a href="chapters/chapter1/SCSA.hs">SCSA.hs</a>, and <a href="chapters/chapter1/PCSA.hs">PCSA.hs</a>, and the first of these is explained in detail below.</p>
 <p>Carry save addition (<a href="https://en.wikipedia.org/wiki/Carry-save_adder">https://en.wikipedia.org/wiki/Carry-save_adder</a>) is defined as function <code>f</code>:</p>
 <pre><code class="language-haskell">f :: W 8 -&gt; W 8 -&gt; W 8 -&gt; (W 8, W 8)
 f a b c = ( ((a .&amp;. b) .|. (a .&amp;. c) .|. (b .&amp;. c) ) &lt;&lt;. lit 1 , (a ^ b) ^ c )
 </code></pre>
-<p>Here, I define <code>f</code> using ReWire's built-in word constructor, picking <code>W 8</code> for the sake of concreteness.
-I'll define a few constants for convenience in a running example.</p>
+<p>Here, I define <code>f</code> using ReWire’s built-in word constructor, picking <code>W 8</code> for the sake of concreteness.
+I’ll define a few constants for convenience in a running example.</p>
 <pre><code class="language-haskell">_40 , _25 , _20 , _41 , _0 :: W 8
 _40 = lit 40
 _25 = lit 25
@@ -618,7 +629,7 @@ f :: W 8 -&gt; W 8 -&gt; W 8 -&gt; (W 8, W 8)
 λ&gt; f _40 _25 _20
 (Vector [False,False,True,True,False,False,False,False],Vector [False,False,True,False,False,True,False,True])
 </code></pre>
-<p>What's this mess? <code>W 8</code> values are represented internally using Haskell's <code>Data.Vector</code> library and, well, it ain't pretty. There is a ReWire library you can import to make all this more palatable called <code>ReWire.Interactive</code>:</p>
+<p>What’s this mess? <code>W 8</code> values are represented internally using Haskell’s <code>Data.Vector</code> library and, well, it ain’t pretty. There is a ReWire library you can import to make all this more palatable called <code>ReWire.Interactive</code>:</p>
 <pre><code class="language-haskell">λ&gt; pretty (f _40 _25 _20)
 (48,37)
 λ&gt; pretty (f _41 _25 _20)
@@ -641,7 +652,7 @@ start :: ReacT (W 8, W 8, W 8) (W 8, W 8) Identity ()
 start = csa (_0, _0, _0)
 </code></pre>
 <p>First, <code>csa</code> consumes its three inputs <code>a</code>, <code>b</code>, and <code>c</code> as a tuple. Then, it computes the carry save addition on these and puts the result on the output port, <code>signal (f a b c)</code>. Finally, it obtains the next inputs, <code>abc'</code> and continues.</p>
-<p><em>What does the type of <code>csa</code> mean?</em> It's worth contemplating the type of <code>csa</code>'s codomain, which is <code>ReacT (W 8, W 8, W 8) (W 8, W 8) Identity ()</code>.</p>
+<p><em>What does the type of <code>csa</code> mean?</em> It’s worth contemplating the type of <code>csa</code>’s codomain, which is <code>ReacT (W 8, W 8, W 8) (W 8, W 8) Identity ()</code>.</p>
 <ul>
 <li>The input type is <code>(W 8, W 8, W 8)</code>, meaning that every it takes three <code>W 8</code>s each clock cycle;</li>
 <li>The output type is <code>(W 8, W 8)</code>, meaning that every it produces two <code>W 8</code>s each clock cycle; and</li>
@@ -661,7 +672,7 @@ pretty :: Pretty a =&gt; a -&gt; IO ()
 </code></pre>
 <p>(<strong>WARNING:</strong> <code>ReWire.Interactive</code> is currently in <em>super-king-kong-major-hacky</em> form right now.)</p>
 <h4 id="compiling-it-with-rwc"><a class="header" href="#compiling-it-with-rwc">Compiling it with RWC</a></h4>
-<p>First, here's the entire file as it stands:</p>
+<p>First, here’s the entire file as it stands:</p>
 <pre><code class="language-haskell">{-# LANGUAGE DataKinds #-}
 import Prelude hiding ((^))
 import ReWire
@@ -701,7 +712,7 @@ inputs = (_40 , _25 , _20)
        : (_41 , _25 , _20)
        : (_40 , _25 , _20)  : []
 </code></pre>
-<p><em>Pro-tip.</em> Because ReWire doesn't know about things likes lists, <code>ReWire.Interactive</code> and the definition of <code>inputs</code> need to be commented out <em>before</em> compiling with <code>rwc</code>. Otherwise, you will receive a non-informative error message like this:</p>
+<p><em>Pro-tip.</em> Because ReWire doesn’t know about things likes lists, <code>ReWire.Interactive</code> and the definition of <code>inputs</code> need to be commented out <em>before</em> compiling with <code>rwc</code>. Otherwise, you will receive a non-informative error message like this:</p>
 <pre><code class="language-haskell">$ rwc CSA.hs --verilog
 Control/Monad/Identity.hs:
 Error: File not found in load-path
@@ -716,10 +727,11 @@ $ ls -l CSA.*
 -rw-r--r--  1 william.harrison  staff  2159 Jun 13 09:04 CSA.v
 $ 
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="salsa20-case-study"><a class="header" href="#salsa20-case-study">Salsa20 Case Study</a></h1>
-<p>This document presents a case study in constructing verified cryptographic hardware in ReWire. In it, I follow the Daniel Bernstein's Salsa20 specification: <a href="https://cr.yp.to/snuffle/spec.pdf">https://cr.yp.to/snuffle/spec.pdf</a>. Throughout this tutorial, I'll refer to this document (i.e., the PDF I just linked to) as either the <em>Salsa20 specification</em> or simply the "<em>spec</em>". Page and section numbers will refer to that document.</p>
-<p>The source code for this example can be found here <a href="https://github.com/harrisonwl/rwcrypto">https://github.com/harrisonwl/rwcrypto</a> under <code>src/salsa20</code>. The original version of the ReWire design here was presented at FPT 2015 (linked to below). ReWire's syntax has evolved since then, but the case study here follows that paper.</p>
-<p>Generally speaking, when you're going to prove the correctness of a hardware design (or anything else fo that matter really), you need to have:</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="salsa20-case-study"><a class="header" href="#salsa20-case-study">Salsa20 Case Study</a></h1>
+<p>This document presents a case study in constructing verified cryptographic hardware in ReWire. In it, I follow the Daniel Bernstein’s Salsa20 specification: <a href="https://cr.yp.to/snuffle/spec.pdf">https://cr.yp.to/snuffle/spec.pdf</a>. Throughout this tutorial, I’ll refer to this document (i.e., the PDF I just linked to) as either the <em>Salsa20 specification</em> or simply the “<em>spec</em>”. Page and section numbers will refer to that document.</p>
+<p>The source code for this example can be found here <a href="https://github.com/harrisonwl/rwcrypto">https://github.com/harrisonwl/rwcrypto</a> under <code>src/salsa20</code>. The original version of the ReWire design here was presented at FPT 2015 (linked to below). ReWire’s syntax has evolved since then, but the case study here follows that paper.</p>
+<p>Generally speaking, when you’re going to prove the correctness of a hardware design (or anything else fo that matter really), you need to have:</p>
 <ol>
 <li>a rigorous standard that constitutes a definition of what <em>to be correct</em> means;</li>
 <li>a precise definition of what the implementation and/or design does; and</li>
@@ -727,8 +739,8 @@ $
 </ol>
 <p>The standard in (1.) we will call the <em>reference semantics</em> and, for the Salsa20 case study, the
 reference semantics is discussed in the first subsection. The reference semantics is effectively
-a Haskell/ReWire rendering of the pseudocode functions given in the text of Bernstein's
-specification. Our reference semantics is also executable -- e.g., you can load it into GHCi,
+a Haskell/ReWire rendering of the pseudocode functions given in the text of Bernstein’s
+specification. Our reference semantics is also executable – e.g., you can load it into GHCi,
 type-check it, and run test cases.</p>
 <p>The second subsection describes (2.); that is, the actual ReWire code that can be both compiled to Verilog and reasoned about with formal tools. The first implementation we present is designed for simplicity rather than performance. The third subsection describes (3.) at a very high, somewhat informal level. The purpose of this entire tutorial is to focus on ReWire programming.</p>
 <h4 id="recent-relevant-publications"><a class="header" href="#recent-relevant-publications">Recent Relevant Publications</a></h4>
@@ -738,8 +750,9 @@ type-check it, and run test cases.</p>
 <li><em>Formalized High Level Synthesis with Applications to Cryptographic Hardware.</em>, Bill Harrison, Ian Blumenfeld, Eric Bond, Chris Hathhorn, Paul Li, May Torrence, and Jared Ziegler. Proceedings of the 2023 NASA Formal Methods Symposium (NFM23). <a href="https://harrisonwl.github.io/assets/papers/nfm23.pdf">pdf</a></li>
 <li><em>Provably Correct Development of Reconfigurable Designs via Equational Reasoning.</em>, Ian Graves, Adam Procter, Bill Harrison, and Gerry Allwein. Proceedings of the 2015 International Conference on Field-Programmable Technology (FPT), <a href="https://harrisonwl.github.io/assets/papers/fpt15.pdf">pdf</a></li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="reference-semantics"><a class="header" href="#reference-semantics">Reference Semantics</a></h1>
-<p>This section introduces the reference semantics for Salsa20 written in Haskell/ReWire. The development follows Bernstein's specification closely, including a section here corresponding to each one in his specification. The result is an executable, type-checked version of Salsa20 in Haskell/ReWire.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="reference-semantics"><a class="header" href="#reference-semantics">Reference Semantics</a></h1>
+<p>This section introduces the reference semantics for Salsa20 written in Haskell/ReWire. The development follows Bernstein’s specification closely, including a section here corresponding to each one in his specification. The result is an executable, type-checked version of Salsa20 in Haskell/ReWire.</p>
 <p>With this Salsa20 reference semantics, we can define a test function (<code>encryptS20 :: String -&gt; String</code> below) that encrypts a message with the same key. Running <code>encryptS20</code> twice on the same plaintext message should, and does, return the original plaintext. For example, consider the following GHCi output where we first print the message and then run the test function on it twice:</p>
 <pre><code>λ&gt; putStrLn godzilla_haiku
 With artillery
@@ -751,21 +764,23 @@ You greet your nuclear child
 Am I the monster?
 </code></pre>
 <h2 id="why-do-you-keep-saying-haskellrewire"><a class="header" href="#why-do-you-keep-saying-haskellrewire">Why do you keep saying <em>Haskell/ReWire</em>?</a></h2>
-<p>ReWire is a domain-specific language embedded in Haskell---i.e., every ReWire design is a legal Haskell program but the converse does not hold. When I say <em>Haskell/ReWire</em>, I mean a Haskell program that makes use of ReWire constructs (e.g., bit vectors) but that, for one reason or another, is not legal ReWire. A frequently used Haskell feature that is <em>not</em> inherited by ReWire currently is the type class system. More fundamental is the restrictions on recursion. However, it is often helpful while developing and testing ReWire designs to have access to Haskell's full power.</p>
-<h4 id="aside-on-rewires-limits-on-recursion"><a class="header" href="#aside-on-rewires-limits-on-recursion">Aside on ReWire's Limits on Recursion</a></h4>
+<p>ReWire is a domain-specific language embedded in Haskell—i.e., every ReWire design is a legal Haskell program but the converse does not hold. When I say <em>Haskell/ReWire</em>, I mean a Haskell program that makes use of ReWire constructs (e.g., bit vectors) but that, for one reason or another, is not legal ReWire. A frequently used Haskell feature that is <em>not</em> inherited by ReWire currently is the type class system. More fundamental is the restrictions on recursion. However, it is often helpful while developing and testing ReWire designs to have access to Haskell’s full power.</p>
+<h4 id="aside-on-rewires-limits-on-recursion"><a class="header" href="#aside-on-rewires-limits-on-recursion">Aside on ReWire’s Limits on Recursion</a></h4>
 <p>Functional recursion is limited to functions with codomains typed in <code>ReacT</code>. E.g., recall the carry-save adder example from the previous chapter:</p>
 <pre><code class="language-haskell">csa :: (W 8, W 8, W 8) -&gt; ReacT (W 8, W 8, W 8) (W 8, W 8) Identity ()
 </code></pre>
 <p>Similarly, data recursion (e.g., lists) is not allowed in ReWire because hardware data structures are necessarily finite.</p>
-<p>Arbitrary recursion for functions and data requires unbounded storage like heaps and stacks to implement and that is incompatible with hardware's fixed, finite storage footprint.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<p>Arbitrary recursion for functions and data requires unbounded storage like heaps and stacks to implement and that is incompatible with hardware’s fixed, finite storage footprint.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
 <p>The reference semantics culminates in the definition of a Salsa20 encryption function of the following type:</p>
 <pre><code class="language-haskell">encrypt :: Hex (W 8) -&gt; Hex (W 8) -&gt; Oct (W 8) -&gt; W 64 -&gt; W 8 -&gt; W 8
 </code></pre>
-<p>What exactly this means will be apparent as you read the reference semantics subsection, but it is simply a Haskell transliteration of the function defined in Section 10 of Bernstein's specification; along the way, I recommend that you keep a copy of his spec handy throughout. At first, you will find that our definitions correspond very closely to his. Towards the end of his spec, I think you will find our reference semantics much easier to understand.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="words"><a class="header" href="#words">Words</a></h1>
+<p>What exactly this means will be apparent as you read the reference semantics subsection, but it is simply a Haskell transliteration of the function defined in Section 10 of Bernstein’s specification; along the way, I recommend that you keep a copy of his spec handy throughout. At first, you will find that our definitions correspond very closely to his. Towards the end of his spec, I think you will find our reference semantics much easier to understand.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="words"><a class="header" href="#words">Words</a></h1>
 <p>These definitions below can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Basic.hs">Basic.hs</a>.</p>
-<p>A <em>word</em> in the context of Bernstein's Salsa20 specification is a bit vector of size 32. Representing bit vectors in ReWire is done via the built-in type constructor for words, <code>W</code>. It is size-indexed so that, for example, 32-bit words are represented by <code>W 32</code>. There are a host of operators defined for words parameterized by size. For example, the type of addition on words has type (checking its type in the GHCi interpreter):</p>
+<p>A <em>word</em> in the context of Bernstein’s Salsa20 specification is a bit vector of size 32. Representing bit vectors in ReWire is done via the built-in type constructor for words, <code>W</code>. It is size-indexed so that, for example, 32-bit words are represented by <code>W 32</code>. There are a host of operators defined for words parameterized by size. For example, the type of addition on words has type (checking its type in the GHCi interpreter):</p>
 <pre><code class="language-haskell">λ&gt; :type (+)
 (+) :: KnownNat n =&gt; W n -&gt; W n -&gt; W n
 </code></pre>
@@ -782,7 +797,7 @@ import ReWire.Bits (lit , rotL , (^) , (+))   -- 4
 </code></pre>
 <p>To use the built-in bit vector type, one must simply include <code>import ReWire</code> (line <code>3</code>) and also the language directive (<code>1</code>). To use specific operations, one can include them from <code>ReWire.Bits</code> (line <code>4</code>) and some of these operations have the same name as Haskell Prelude operations, so one can exclude these as in line <code>2</code>.</p>
 <h4 id="some-additional-type-constructors-for-salsa20"><a class="header" href="#some-additional-type-constructors-for-salsa20">Some additional type constructors for Salsa20</a></h4>
-<p>Some additional type constructors used in this specification are included below. We could use Haskell built-in tuple types for these, but it is useful for various technical reasons to define our own larger vector types instead (e.g., it makes pretty-printing values as we wish easier). It's not important to understand the precise details, however.</p>
+<p>Some additional type constructors used in this specification are included below. We could use Haskell built-in tuple types for these, but it is useful for various technical reasons to define our own larger vector types instead (e.g., it makes pretty-printing values as we wish easier). It’s not important to understand the precise details, however.</p>
 <pre><code class="language-haskell">data X16 a  = X16 a a a a a a a a a a a a a a a a 
 
 type Quad a = (a , a , a , a)
@@ -795,7 +810,9 @@ data X64 a  = X64 a a a a a a a a a a a a a a a a
                   a a a a a a a a a a a a a a a a 
 </code></pre>
 <p>These definitions can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Basic.hs">Basic.hs</a>.</p>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="the-quarter-round-function"><a class="header" href="#the-quarter-round-function">The Quarter Round Function</a></h2>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="the-quarterround-function"><a href="#the-quarterround-function" class="header">The quarterround function</a></h1>
+<h2 id="the-quarter-round-function"><a class="header" href="#the-quarter-round-function">The Quarter Round Function</a></h2>
 <p>The definitions below can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/QuarterRound.hs">QuarterRound.hs</a> and the testing code can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Test_QuarterRound.hs">Test_QuarterRound.hs</a>.</p>
 <p>Looking at the pseudocode functions defined in the spec, it is clear that they are, indeed, <em>pure functions</em> in the same sense as Haskell. Hence, it is quite straightforward to transliterate these functions into Haskell/ReWire and this section gives the first such transliteration. An advantage of writing in Haskell rather than pseudocode is that definitions may are type-checked by GHC, providing a quick means of gaining assurance and/or finding stupid bugs.</p>
 <h3 id="inputs-and-outputs"><a class="header" href="#inputs-and-outputs">Inputs and Outputs</a></h3>
@@ -805,7 +822,8 @@ data X64 a  = X64 a a a a a a a a a a a a a a a a
 <h3 id="definition"><a class="header" href="#definition">Definition</a></h3>
 <p>The quarterround function from page 2 of
 the spec is given as:</p>
-<p align="center"><img src="chapters/salsa20/./quarterround.jpg"  style="height:70%; width:70%" ></p>
+<p align="center"><img src="chapters/salsa20/quarterround.jpg" style="height:70%; width:70%"></p>
+
 <p>Rendering this function in Haskell is simple:</p>
 <pre><code class="language-haskell">quarterround :: (W 32 , W 32 , W 32 , W 32) -&gt; (W 32 , W 32 , W 32 , W 32)
 quarterround (y0 , y1 , y2 , y3) = (z0 , z1 , z2 , z3)
@@ -819,7 +837,8 @@ quarterround (y0 , y1 , y2 , y3) = (z0 , z1 , z2 , z3)
 <p>Note how closely the Haskell text mirrors the definition from the spec text. The XOR operation (\(\oplus\)) is written as <code>^</code>, the left rotate \(\lll\) is written as <code>rotL</code>, etc.</p>
 <h3 id="examples"><a class="header" href="#examples">Examples</a></h3>
 <p>Bernstein provides examples that one can use to sanity-check definitions of <code>quarterround</code>; here they are:</p>
-<p align="center"><img src="chapters/salsa20/./QRsanity.jpg"  style="height:70%; width:70%" ></p>
+<p align="center"><img src="chapters/salsa20/QRsanity.jpg" style="height:70%; width:70%"></p>
+
 <p>Because we have the function using Haskell/ReWire, we can just evaluate these tests automatically; here are the seven tests from the spec:</p>
 <pre><code class="language-haskell">alltests :: [Bool]
 alltests = [test1 , test2 , test3 , test4 , test5 , test6 , test7]
@@ -851,7 +870,9 @@ test7 = quarterround (lit 0xd3917c5b , lit 0x55f1c407 , lit 0x52a58a7a , lit 0x8
 <pre><code class="language-haskell">λ&gt; alltests
 [True,True,True,True,True,True,True]
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="the-rowround-function"><a class="header" href="#the-rowround-function">The <code>rowround</code> Function</a></h2>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="the-rowround-function-1"><a href="#the-rowround-function-1" class="header">The rowround function</a></h1>
+<h2 id="the-rowround-function"><a class="header" href="#the-rowround-function">The <code>rowround</code> Function</a></h2>
 <p>The definitions below can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/RowRound.hs">RowRound.hs</a> and the testing code can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Test_RowRound.hs">Test_RowRound.hs</a>.</p>
 <h3 id="inputs-and-outputs-1"><a class="header" href="#inputs-and-outputs-1">Inputs and Outputs</a></h3>
 <p>The <code>rowround</code> function takes a 16-word sequence as input and produces a 16-word sequence as output, meaning that the function will have type:</p>
@@ -860,9 +881,10 @@ test7 = quarterround (lit 0xd3917c5b , lit 0x55f1c407 , lit 0x52a58a7a , lit 0x8
 <p>where <code>X16</code> is a vector type defined by:</p>
 <pre><code class="language-haskell">data X16 a = X16 a a a a a a a a a a a a a a a a
 </code></pre>
-<p>We could have instead used either Haskell's built-in tuple or vector types defined by ReWire. But the advantage of the <em>roll-your-own</em> vector type <code>X16</code> as we do is that it makes both pattern-matching and displaying values at the GHCi prompt. Exactly how and why is not important for understanding this reference semantics for Salsa20, but a Haskell aficionado will undoubtedly notice this choice.</p>
+<p>We could have instead used either Haskell’s built-in tuple or vector types defined by ReWire. But the advantage of the <em>roll-your-own</em> vector type <code>X16</code> as we do is that it makes both pattern-matching and displaying values at the GHCi prompt. Exactly how and why is not important for understanding this reference semantics for Salsa20, but a Haskell aficionado will undoubtedly notice this choice.</p>
 <h3 id="definition-1"><a class="header" href="#definition-1">Definition</a></h3>
-<p align="center"><img src="chapters/salsa20/./rowround.jpg"  style="height:70%; width:70%" ></p>
+<p align="center"><img src="chapters/salsa20/rowround.jpg" style="height:70%; width:70%"></p>
+
 <h2 id="rendering-in-rewirehaskell"><a class="header" href="#rendering-in-rewirehaskell">Rendering in ReWire/Haskell</a></h2>
 <p>Rendered in Haskell, it is:</p>
 <pre><code class="language-haskell">rowround :: X16 (W 32) -&gt; X16 (W 32)
@@ -875,7 +897,8 @@ rowround (X16 y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15)
        (z15, z12, z13, z14) = quarterround (y15, y12, y13, y14)
 </code></pre>
 <h2 id="examples-1"><a class="header" href="#examples-1">Examples</a></h2>
-<p align="center"><img src="chapters/salsa20/./RRsanity.jpg"  style="height:70%; width:70%" ></p>
+<p align="center"><img src="chapters/salsa20/RRsanity.jpg" style="height:70%; width:70%"></p>
+
 <pre><code class="language-haskell">alltests :: [Bool]
 alltests = [test1 , test2]
 
@@ -905,19 +928,22 @@ test2 = rowround (x16
 <pre><code class="language-haskell">λ&gt; alltests
 [True,True]
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="the-columnround-function"><a class="header" href="#the-columnround-function">The <code>columnround</code> function</a></h2>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="the-columnround-function-1"><a href="#the-columnround-function-1" class="header">The columnround function</a></h1>
+<h2 id="the-columnround-function"><a class="header" href="#the-columnround-function">The <code>columnround</code> function</a></h2>
 <p>The definitions below can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/ColumnRound.hs">ColumnRound.hs</a> and the testing code can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Test_ColumnRound.hs">Test_ColumnRound.hs</a>.</p>
 <h3 id="inputs-and-outputs-2"><a class="header" href="#inputs-and-outputs-2">Inputs and Outputs</a></h3>
 <p>If <code>x</code> is a 16-word sequence then <code>columnround(x)</code> is a 16-word sequence. Or, to put it in Haskell terms, the type of <code>columnround</code> is</p>
 <pre><code class="language-haskell">columnround :: Hex (W 32) -&gt; Hex (W 32)
 </code></pre>
-<p>Here, we're assuming:</p>
+<p>Here, we’re assuming:</p>
 <pre><code class="language-haskell">type Hex a = X16 a
 </code></pre>
 <p>and that words are <code>W 32</code>.</p>
 <h3 id="definition-2"><a class="header" href="#definition-2">Definition</a></h3>
-<p>The <code>columnround</code> function from page 4 of Bernstein's <em>Salsa20 Specification</em> is given as:</p>
-<p align="center"><img src="chapters/salsa20/./columnround.jpg"  style="height:70%; width:70%" ></p>
+<p>The <code>columnround</code> function from page 4 of Bernstein’s <em>Salsa20 Specification</em> is given as:</p>
+<p align="center"><img src="chapters/salsa20/columnround.jpg" style="height:70%; width:70%"></p>
+
 <h2 id="rendering-in-rewirehaskell-1"><a class="header" href="#rendering-in-rewirehaskell-1">Rendering in ReWire/Haskell</a></h2>
 <pre><code class="language-haskell">columnround :: Hex (W 32) -&gt; Hex (W 32)
 columnround (X16 x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15)
@@ -930,7 +956,8 @@ columnround (X16 x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15)
         (y15,  y3,  y7, y11) = quarterround (x15, x3, x7, x11)
 </code></pre>
 <h2 id="examples-2"><a class="header" href="#examples-2">Examples</a></h2>
-<p align="center"><img src="chapters/salsa20/./CRsanity.jpg"  style="height:65%; width:65%" ></p>
+<p align="center"><img src="chapters/salsa20/CRsanity.jpg" style="height:65%; width:65%"></p>
+
 <pre><code class="language-haskell">alltests :: [Bool]
 alltests = [test1 , test2]
 
@@ -961,21 +988,25 @@ test2 = columnround (x16
 <pre><code class="language-haskell">λ&gt; alltests
 [True,True]
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="the-doubleround-function"><a class="header" href="#the-doubleround-function">The <code>doubleround</code> function</a></h2>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="the-doubleround-function-1"><a href="#the-doubleround-function-1" class="header">The doubleround function</a></h1>
+<h2 id="the-doubleround-function"><a class="header" href="#the-doubleround-function">The <code>doubleround</code> function</a></h2>
 <p>The definitions below can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/DoubleRound.hs">DoubleRound.hs</a> and the testing code can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Test_DoubleRound.hs">Test_DoubleRound.hs</a>.</p>
 <h3 id="inputs-and-outputs-3"><a class="header" href="#inputs-and-outputs-3">Inputs and Outputs</a></h3>
 <p>To quote Bernstein: <em>If <code>x</code> is a 16-word sequence then <code>doubleround(x)</code> is a 16-word sequence.</em> So, its Haskell type is given as:</p>
 <pre><code class="language-haskell">doubleround :: Hex (W 32) -&gt; Hex (W 32)
 </code></pre>
 <h3 id="definition-3"><a class="header" href="#definition-3">Definition</a></h3>
-<p>The <code>doubleround</code> function from page 4 of Bernstein's <em>Salsa20 Specification</em> is given as:</p>
-<p align="center"><img src="chapters/salsa20/./doubleround.jpg"  style="height:65%; width:65%" ></p>
+<p>The <code>doubleround</code> function from page 4 of Bernstein’s <em>Salsa20 Specification</em> is given as:</p>
+<p align="center"><img src="chapters/salsa20/doubleround.jpg" style="height:65%; width:65%"></p>
+
 <h4 id="rendering-in-rewirehaskell-2"><a class="header" href="#rendering-in-rewirehaskell-2">Rendering in ReWire/Haskell</a></h4>
 <pre><code class="language-haskell">doubleround :: Hex (W 32) -&gt; Hex (W 32)
 doubleround = rowround . columnround
 </code></pre>
 <h3 id="examples-3"><a class="header" href="#examples-3">Examples</a></h3>
-<p align="center"><img src="chapters/salsa20/./DRsanity.jpg"  style="height:65%; width:65%" ></p>
+<p align="center"><img src="chapters/salsa20/DRsanity.jpg" style="height:65%; width:65%"></p>
+
 <pre><code class="language-haskell">alltests :: [Bool]
 alltests = [test1 , test2]
 
@@ -1011,7 +1042,9 @@ o2 = x16
 <pre><code class="language-haskell">λ&gt; alltests
 [True,True]
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="the-littleendian-function"><a class="header" href="#the-littleendian-function">The littleendian function</a></h2>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="the-littleendian-function-1"><a href="#the-littleendian-function-1" class="header">The littleendian function</a></h1>
+<h2 id="the-littleendian-function"><a class="header" href="#the-littleendian-function">The littleendian function</a></h2>
 <p>The definitions below can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/LittleEndian.hs">LittleEndian.hs</a> and the testing code can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Test_LittleEndian.hs">Test_LittleEndian.hs</a>.</p>
 <h3 id="inputs-and-outputs-4"><a class="header" href="#inputs-and-outputs-4">Inputs and Outputs</a></h3>
 <p>To quote Bernstein: <em>If <code>b</code> is a 4-byte sequence then <code>littleendian(b)</code> is a word</em>, and, hence, its Haskell type is:</p>
@@ -1021,7 +1054,8 @@ o2 = x16
 <pre><code class="language-haskell">inv_littleendian :: W 32 -&gt; Quad (W 8)
 </code></pre>
 <h3 id="definition-4"><a class="header" href="#definition-4">Definition</a></h3>
-<p align="center"><img src="chapters/salsa20/./littleendian.jpg"  style="height:70%; width:70%" ></p>
+<p align="center"><img src="chapters/salsa20/littleendian.jpg" style="height:70%; width:70%"></p>
+
 <h4 id="rendering-in-rewirehaskell-3"><a class="header" href="#rendering-in-rewirehaskell-3">Rendering in ReWire/Haskell</a></h4>
 <p>Note that the <code>(++)</code> operator below is vector concatenation (rather than list append from the Haskell prelude). So, in the definition of <code>littleendian</code> below, four <code>(W 8)</code> bit vectors (i.e., <code>b3</code>, <code>b2</code>, <code>b1</code>, and <code>b0</code>) are concatenated to make a single <code>(W 32)</code>.</p>
 <pre><code class="language-haskell">revbytes :: Quad (W 8) -&gt; Quad (W 8) 
@@ -1046,7 +1080,8 @@ slicetest = (slice0 x , slice1 x , slice2 x , slice3 x) P.== (lit 0xde , lit 0xa
 </code></pre>
 <p>These functions are defined in <code>LittleEndian.hs</code> and are uninteresting.</p>
 <h3 id="examples-4"><a class="header" href="#examples-4">Examples</a></h3>
-<p align="center"><img src="chapters/salsa20/./LEsanity.jpg"  style="height:50%; width:50%" ></p>
+<p align="center"><img src="chapters/salsa20/LEsanity.jpg" style="height:50%; width:50%"></p>
+
 <pre><code class="language-haskell">alltests :: [P.Bool]
 alltests = [test1 , test2 , test3] P.++ invertible_tests
 
@@ -1069,20 +1104,23 @@ True
 λ&gt; alltests
 [True,True,True,True,True,True]
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="the-salsa20-hash-function"><a class="header" href="#the-salsa20-hash-function">The Salsa20 Hash function</a></h2>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="salsa20-hash-function"><a href="#salsa20-hash-function" class="header">Salsa20 Hash function</a></h1>
+<h2 id="the-salsa20-hash-function"><a class="header" href="#the-salsa20-hash-function">The Salsa20 Hash function</a></h2>
 <p>The definitions below can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/HashSalsa20.hs">HashSalsa20.hs</a> and the testing code can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Test_HashSalsa20.hs">Test_HashSalsa20.hs</a>.</p>
 <h3 id="inputs-and-outputs-5"><a class="header" href="#inputs-and-outputs-5">Inputs and Outputs</a></h3>
-<!-- <p align="center"><img src="chapters/salsa20/./hashfunction.jpg"  style="height:65%; width:65%" ></p> -->
+<!-- <p align="center"><img src="./hashfunction.jpg"  style="height:65%; width:65%" ></p> -->
 <p>If \(x\) is a 64-byte sequence, then \(\mbox{Salsa20}(x)\) is also a 64-byte sequence. Rendered in Haskell/ReWire types, we define a function with the following type:</p>
 <pre><code class="language-haskell">hash_salsa20 :: X64 (W 8) -&gt; X64 (W 8)
 </code></pre>
 <h3 id="definition-5"><a class="header" href="#definition-5">Definition</a></h3>
-<p>Bernstein's definition of the hash function, \(\mbox{Salsa20}\), is more involved than previous functions. It involves three steps.</p>
+<p>Bernstein’s definition of the hash function, \(\mbox{Salsa20}\), is more involved than previous functions. It involves three steps.</p>
 <ol>
 <li>For 64-byte input sequence \(x = (x[0],\ldots,x[63])\),
 define 16-byte sequence, \((x_0,\ldots,x_{15})\) as:</li>
 </ol>
-<p align="center"><img src="chapters/salsa20/./hashfunction1.jpg"  style="height:45%; width:45%" ></p>
+<p align="center"><img src="chapters/salsa20/hashfunction1.jpg" style="height:45%; width:45%"></p>
+
 <ol start="2">
 <li>
 <p>Define \((z_0,\ldots,z_{15}) = \mbox{doubleround}^{10}(x_0,\ldots,x_{15})\)</p>
@@ -1091,7 +1129,8 @@ define 16-byte sequence, \((x_0,\ldots,x_{15})\) as:</li>
 <p>Define \(\mbox{Salsa20}(x)\), as the concatenation of the following:</p>
 </li>
 </ol>
-<p align="center"><img src="chapters/salsa20/./hashfunction2.jpg"  style="height:30%; width:30%" ></p>
+<p align="center"><img src="chapters/salsa20/hashfunction2.jpg" style="height:30%; width:30%"></p>
+
 <h4 id="rendering-in-rewirehaskell-4"><a class="header" href="#rendering-in-rewirehaskell-4">Rendering in ReWire/Haskell</a></h4>
 <p>Steps 1.-3. above are rendered in ReWire/Haskell as:</p>
 <pre><code class="language-haskell">hash_salsa20 :: X64 (W 8) -&gt; X64 (W 8)
@@ -1150,8 +1189,9 @@ hash_salsa20 (X64   x_0  x_1  x_2  x_3  x_4  x_5  x_6  x_7  x_8  x_9 x_10 x_11 x
      (af0 , af1 , af2 , af3) = inv_littleendian (z15 + x15)
 </code></pre>
 <h3 id="examples-5"><a class="header" href="#examples-5">Examples</a></h3>
-<p>Bernstein's specification provides several sanity checks:</p>
-<p align="center"><img src="chapters/salsa20/./hashfunctionsanity.jpg"  style="height:65%; width:65%" ></p>
+<p>Bernstein’s specification provides several sanity checks:</p>
+<p align="center"><img src="chapters/salsa20/hashfunctionsanity.jpg" style="height:65%; width:65%"></p>
+
 <p>And these sanity checks are rendered in ReWire/Haskell as follows (each returns <code>True</code>):</p>
 <pre><code class="language-haskell">test1 :: Bool
 test1 = hash_salsa20 i1 == i1
@@ -1198,14 +1238,16 @@ o3 = x64 179 19 48 202 219 236 232 135 111 155 110 18 24 232 95 158 26 110 170 1
 test3 :: Bool
 test3 = hash_salsa20 i3 == o3
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="salsa20-expansion-function"><a class="header" href="#salsa20-expansion-function">Salsa20 Expansion function</a></h2>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="salsa20-expansion-function-1"><a href="#salsa20-expansion-function-1" class="header">Salsa20 Expansion function</a></h1>
+<h2 id="salsa20-expansion-function"><a class="header" href="#salsa20-expansion-function">Salsa20 Expansion function</a></h2>
 <p>The definitions below can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Expansion.hs">Expansion.hs</a> and the testing code can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Test_Expansion.hs">Test_Expansion.hs</a>.</p>
 <h3 id="inputs-and-outputs-6"><a class="header" href="#inputs-and-outputs-6">Inputs and Outputs</a></h3>
 <p>To quote Bernstein, <em>If k is a 32-byte or 16-byte sequence and n is a 16-byte sequence then <code>Salsa20k(n)</code> is a 64-byte sequence.</em> Really, this means that there are two expansion functions, to which we will give the following types:</p>
 <pre><code class="language-haskell">salsa20_k0k1 :: (Hex (W 8), Hex (W 8)) -&gt; Hex (W 8) -&gt; X64 (W 8)
 salsa20_k :: Hex (W 8) -&gt; Hex (W 8) -&gt; X64 (W 8)
 </code></pre>
-<p>Just to unpack this, if <em>k</em> is a 32-byte sequence, then <em>k</em> can be split into two 16-byte sequences, <em>k0</em> and <em>k1</em>. So, the first argument's type in <code>salsa20_k0k1</code> is <code>(Hex (W 8), Hex (W 8))</code>. If <em>k</em> is a 16-byte sequence, then that explains the type of the first argument to <code>salsa20_k</code>. I didn't invent this naming scheme, so don't blame me.</p>
+<p>Just to unpack this, if <em>k</em> is a 32-byte sequence, then <em>k</em> can be split into two 16-byte sequences, <em>k0</em> and <em>k1</em>. So, the first argument’s type in <code>salsa20_k0k1</code> is <code>(Hex (W 8), Hex (W 8))</code>. If <em>k</em> is a 16-byte sequence, then that explains the type of the first argument to <code>salsa20_k</code>. I didn’t invent this naming scheme, so don’t blame me.</p>
 <p>Quoting Bernstein again, ** \(\)</p>
 <h3 id="defining-salsa20_k0k1"><a class="header" href="#defining-salsa20_k0k1">Defining <code>salsa20_k0k1</code></a></h3>
 <p>Bernstein first defines several 4-tuples of constants, each of which is implicitly assumed to be a single byte:
@@ -1308,11 +1350,14 @@ expandk k@(X16 k1 k2 k3 k4 k5 k6 k7 k8 k9 k10 k11 k12 k13 k14 k15 k16)
                --- tau3
                v1 v2 v3 v4
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="salsa20-encryption-function"><a class="header" href="#salsa20-encryption-function">Salsa20 Encryption function</a></h2>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="salsa20-encryption-function-1"><a href="#salsa20-encryption-function-1" class="header">Salsa20 Encryption function</a></h1>
+<h2 id="salsa20-encryption-function"><a class="header" href="#salsa20-encryption-function">Salsa20 Encryption function</a></h2>
 <p>The definitions below can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Encrypt.hs">Encrypt.hs</a> and the testing code can be found in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/salsa20/Test_Encrypt.hs">Test_Encrypt.hs</a>.</p>
 <h3 id="remarks-on-section-10--a-quick-demo"><a class="header" href="#remarks-on-section-10--a-quick-demo">Remarks on Section 10 &amp; A Quick Demo</a></h3>
 <p>This section defines the Salsa20 encrypt function from Section 10 of Bernstein. In the FIPS document, the function is (very confusingly IMHO) called \(Salsa20_{k}(v){\oplus}m\). The snippet of the FIPS document that is most relevant here is:</p>
-<p align="center"><img src="chapters/salsa20/./salsa20encryption.jpg"  style="height:70%; width:70%" ></p>
+<p align="center"><img src="chapters/salsa20/salsa20encryption.jpg" style="height:70%; width:70%"></p>
+
 <h3 id="inputs-and-outputs-7"><a class="header" href="#inputs-and-outputs-7">Inputs and Outputs</a></h3>
 <h3 id="definition-6"><a class="header" href="#definition-6">Definition</a></h3>
 <pre><code class="language-haskell">encrypt :: Hex (W 8) -&gt; Hex (W 8) -&gt; Oct (W 8) -&gt; W 64 -&gt; W 8 -&gt;  W 8
@@ -1324,27 +1369,36 @@ encrypt k0 k1 v i mi = mi ^ ((salsa20_k0k1 (k0 , k1) (splice v (factor64 i))) `p
 factor64 :: W 64 -&gt; (W 8 , W 8 , W 8 , W 8 , W 8 , W 8 , W 8 , W 8 )
 mod64    :: W 64 -&gt; W 6
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="pipelining"><a class="header" href="#pipelining">Pipelining</a></h1>
-<p>Let's say you have three functions, <code>f</code>, <code>g</code>, and <code>h</code>. Obviously, you can compose them (<code>h . g . f</code> in Haskell).  It's a fairly common situation that one wants to compose them <em>temporally</em>---i.e., to pipeline them.
-The idea is that, for each clock tick, there's one input <code>i</code>, and <code>h (g (f i))</code> is calculated over the next three ticks:</p>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: center">Input</th><th style="text-align: center"><code>f</code></th><th style="text-align: center"><code>g</code></th><th style="text-align: center"><code>h</code></th><th style="text-align: center">Output</th></tr></thead><tbody>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="pipelining"><a class="header" href="#pipelining">Pipelining</a></h1>
+<p>Let’s say you have three functions, <code>f</code>, <code>g</code>, and <code>h</code>. Obviously, you can compose them (<code>h . g . f</code> in Haskell).  It’s a fairly common situation that one wants to compose them <em>temporally</em>—i.e., to pipeline them.
+The idea is that, for each clock tick, there’s one input <code>i</code>, and <code>h (g (f i))</code> is calculated over the next three ticks:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: center">Input</th><th style="text-align: center"><code>f</code></th><th style="text-align: center"><code>g</code></th><th style="text-align: center"><code>h</code></th><th style="text-align: center">Output</th></tr>
+</thead>
+<tbody>
 <tr><td style="text-align: center"><code>i0</code></td><td style="text-align: center"><code>f i0</code></td><td style="text-align: center"></td><td style="text-align: center"></td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: center"><code>i1</code></td><td style="text-align: center"><code>f i1</code></td><td style="text-align: center"><code>g (f i0)</code></td><td style="text-align: center"></td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: center"><code>i2</code></td><td style="text-align: center"><code>f i2</code></td><td style="text-align: center"><code>g (f i1)</code></td><td style="text-align: center"><code>h (g (f i0))</code></td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: center"><code>i3</code></td><td style="text-align: center"><code>f i3</code></td><td style="text-align: center"><code>g (f i2)</code></td><td style="text-align: center"><code>h (g (f i1))</code></td><td style="text-align: center"><code>h (g (f i0))</code></td></tr>
 <tr><td style="text-align: center">\(\vdots\)</td><td style="text-align: center">\(\vdots\)</td><td style="text-align: center">\(\vdots\)</td><td style="text-align: center">\(\vdots\)</td><td style="text-align: center">\(\vdots\)</td></tr>
-</tbody></table>
+</tbody>
+</table>
 </div>
 <p>Pipelining is a common hardware design technique for splitting large computations into smaller computations over time. ReWire makes such pipelining both easy to express and formally verify.</p>
-<p>In the Salsa20 hash function (<a href="chapters/pipelining/../salsa20/hashfunction.html">Section 3.1.8</a>), there is a place where the <code>doubleround</code> function is composed ten times:</p>
+<p>In the Salsa20 hash function (<a href="#salsa20-hash-function">Section 3.1.8</a>), there is a place where the <code>doubleround</code> function is composed ten times:</p>
 <pre><code class="language-haskell">dr10 :: Hex (W 32) -&gt; Hex (W 32)
 dr10 = doubleround . doubleround . doubleround . doubleround . doubleround .
           doubleround . doubleround . doubleround . doubleround . doubleround 
 </code></pre>
-<p>The <code>doubleround</code> function has a lot of arithmetic operations contained in it and its tenfold composition <code>dr10</code>, when unrolled into combinational logic, has many, many such operations. So, it's a good opportunity for pipelining.
+<p>The <code>doubleround</code> function has a lot of arithmetic operations contained in it and its tenfold composition <code>dr10</code>, when unrolled into combinational logic, has many, many such operations. So, it’s a good opportunity for pipelining.
 This is a great opportunity for pipelining.</p>
 <p>First, we will illustrate how pipelines are defined in ReWire, and then apply that same structuring technique to <code>doubleround</code>.</p>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="a-hello-world-example"><a class="header" href="#a-hello-world-example">A Hello World Example</a></h2>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="hello-world-example"><a href="#hello-world-example" class="header">Hello World Example</a></h1>
+<h2 id="a-hello-world-example"><a class="header" href="#a-hello-world-example">A Hello World Example</a></h2>
 <p>As a simple example, consider the following three functions:</p>
 <pre><code class="language-haskell">one , two , three :: W 8 -&gt; W 8
 one x   = x + lit 1
@@ -1355,7 +1409,7 @@ three x = x + lit 3
 Say we want to pipeline this composition so that, <code>one</code> is applied in the first cycle, <code>two</code> is applied to that result in the second cycle, and <code>three</code> is applied in the third cycle.
 For a given input <code>i</code>, <code>i + 6</code> is produced after the third cycle completes.
 Graphically, this is:</p>
-<img src="chapters/pipelining/images/onetwothree.png"  style="height:30%; width:30%" >
+<img src="chapters/pipelining/images/onetwothree.png" style="height:30%; width:30%">
 <p>Here is the ReWire code for pipelining <code>one</code>, <code>two</code>, and <code>three</code> so that it behaves as the table above. We will explain each function below.
 On each cycle, each function  <code>one</code>, <code>two</code>, and <code>three</code> take an input and produce an output.</p>
 <pre><code class="language-haskell">times3 :: (W 8 , W 8 , W 8) -&gt; (W 8 ,  W 8 , W 8)
@@ -1365,7 +1419,7 @@ times3 (i1 , i2 , i3) = (one i1 , two i2 , three i3)
 <pre><code class="language-haskell">out3 :: (a , b , c) -&gt; c
 out3 (_ , _ , x) = x
 </code></pre>
-<p>Given the current outputs, <code>(o1 , o2 , _)</code> and a new input to the pipelined device, we "shift right":</p>
+<p>Given the current outputs, <code>(o1 , o2 , _)</code> and a new input to the pipelined device, we “shift right”:</p>
 <pre><code class="language-haskell">conn3 :: (W 8 , W 8 , W 8) -&gt; W 8 -&gt; (W 8 ,  W 8 , W 8)
 conn3 (o1 , o2 , _) ix = (ix , o1 , o2)
 </code></pre>
@@ -1378,7 +1432,7 @@ pipeline f out conn oi ix = do
                               ix' &lt;- signal (out o)
                               pipeline f out conn o ix'
 </code></pre>
-<p>While <code>pipeline</code> looks complicated, it's really pretty simple. Basically, <code>pipeline times3 out3 conn3</code> is the pipelined device portrayed above, although one has to provide it with the initial values for the output lines. It is significant to note that <code>pipeline</code> is ReWire code - i.e., it is not a special construct in the language, but, rather, is written in terms of the usual reactive resumption monadic operators.</p>
+<p>While <code>pipeline</code> looks complicated, it’s really pretty simple. Basically, <code>pipeline times3 out3 conn3</code> is the pipelined device portrayed above, although one has to provide it with the initial values for the output lines. It is significant to note that <code>pipeline</code> is ReWire code - i.e., it is not a special construct in the language, but, rather, is written in terms of the usual reactive resumption monadic operators.</p>
 <p>The non-stalling version of the pipelined <code>three . two . one</code> is:</p>
 <pre><code class="language-haskell">nostall :: W 8 -&gt; ReacT (W 8) (W 8) Identity ()
 nostall = pipeline times3 out3 conn3 (lit 0 , lit 0 , lit 0)
@@ -1402,14 +1456,16 @@ start = nostall (lit 99)
 <li><a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/pipelining/123/NoStallPipe123.hs">Haskell/ReWire version</a>. This is executable in GHCi.</li>
 <li><a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/pipelining/123/RW_NoStallPipe123.hs">ReWire version</a>. This is compilable by the ReWire compiler.</li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="a-hello-world-example-with-stalling"><a class="header" href="#a-hello-world-example-with-stalling">A Hello World Example with Stalling</a></h2>
-<p><em>Stalling</em> is the delaying the execution of a pipelined architecture to wait for some condition. In a pipelined processor, this may be due to a data hazard or resource conflict. In our simple example, let's suppose that valid inputs may not always be available.</p>
-<p>So, if an input isn't available, call is <code>Stall</code>. If a valid output isn't produced, then call it
-<code>DC</code> for <em>don't care</em>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="one-two-three-stall"><a href="#one-two-three-stall" class="header">One, Two, Three,... Stall</a></h1>
+<h2 id="a-hello-world-example-with-stalling"><a class="header" href="#a-hello-world-example-with-stalling">A Hello World Example with Stalling</a></h2>
+<p><em>Stalling</em> is the delaying the execution of a pipelined architecture to wait for some condition. In a pipelined processor, this may be due to a data hazard or resource conflict. In our simple example, let’s suppose that valid inputs may not always be available.</p>
+<p>So, if an input isn’t available, call is <code>Stall</code>. If a valid output isn’t produced, then call it
+<code>DC</code> for <em>don’t care</em>.</p>
 <pre><code class="language-haskell">data Inp a = Stall | Arg a deriving Show
 data Out a = DC    | Val a deriving Show 
 </code></pre>
-<p>Then, we'll lift <code>one</code>, <code>two</code>, and <code>three</code> to <code>io_one</code>, <code>io_two</code>, and <code>io_three</code>, respectively, and define <code>times3</code> as before.</p>
+<p>Then, we’ll lift <code>one</code>, <code>two</code>, and <code>three</code> to <code>io_one</code>, <code>io_two</code>, and <code>io_three</code>, respectively, and define <code>times3</code> as before.</p>
 <pre><code class="language-haskell">io_one , io_two , io_three :: Inp (W 8) -&gt; Out (W 8)
 io_one Stall     = DC
 io_one (Arg a)   = Val (one a)
@@ -1467,6 +1523,48 @@ Arg 0x01 : Stall : Arg 0x02 : Stall : Stall : Arg 0x03 : Stall : Stall : Stall :
 <li><a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/pipelining/123/WithStallPipe123.hs">Haskell/ReWire version</a>. This is executable in GHCi.</li>
 <li><a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/pipelining/123/RW_WithStallPipe123.hs">ReWire version</a>. This is compilable by the ReWire compiler.</li>
 </ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="pipelined-doubleround"><a href="#pipelined-doubleround" class="header">Pipelined Doubleround</a></h1>
+<h2 id="pipelined-versions-of-doubleround"><a class="header" href="#pipelined-versions-of-doubleround">Pipelined Versions of <code>doubleround</code></a></h2>
+<h2 id="naive-approach"><a class="header" href="#naive-approach">Naive Approach</a></h2>
+<p>We can write perfectly valid ReWire code for in the same style as the first carry-save adder from (<a href="#carry-save-adders">Section 2.3</a>). That is, as a simple loop that takes an input, applies <code>dr10</code>, and <code>signal</code>s the output:</p>
+<pre><code class="language-haskell">type HxW32 = Hex (W 32)
+
+dr10 :: HxW32 -&gt; HxW32
+dr10 = doubleround . doubleround . doubleround . doubleround . doubleround .
+       doubleround . doubleround . doubleround . doubleround . doubleround 
+
+loop :: Maybe HxW32 -&gt; ReacT (Maybe HxW32) (Maybe HxW32) Identity ()
+loop (Just hxw32) = signal (Just (dr10 hxw32)) &gt;&gt;= loop
+loop Nothing      = signal Nothing &gt;&gt;= loop
+
+start :: ReacT (Maybe HxW32) (Maybe HxW32) Identity ()
+start = loop Nothing
+</code></pre>
+<p>The full code is available here: <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/pipeline/double/Naive_DR10.hs">Naive_DR10.hs</a>. If the <code>loop</code> function is passed a valid input (i.e., <code>(Just hxw32)</code>), then <code>dr10</code> is applied to it. In each cycle, <code>dr10 hxw32</code> is calculated.</p>
+<p><em>Why is this naive?</em> If you look at the code for <code>doubleround</code>, there are a lot of operations going on in <code>dr10</code>. Pure functions like these are compiled to combinational logic, and, the combinational logic for ten <code>doubleround</code>s is substantial. It would be better to pipeline calls to <code>doubleround</code> to avoid this.</p>
+<p>There’s another way that this is naive in that inputs and outputs include <code>Hex (W 32)</code> which is \(16 \times 32 = 512\) bits. This means that, on an FGPA, one would need 1024 input and output ports and that is (I believe) beyond what’s currently available. We’ll come back to this issue later on.</p>
+<h2 id="the-plan"><a class="header" href="#the-plan">The Plan</a></h2>
+<ul>
+<li>Using the <code>doubleround</code> function, I’ll demonstrate 2- and 5-stage pipelines of <code>dr10</code>.</li>
+<li>I.e., ReWire versions of:</li>
+</ul>
+<pre><code class="language-haskell">	pipe2 = [doubleround . doubleround . doubleround . doubleround . doubleround] .
+               [doubleround . doubleround . doubleround . doubleround . doubleround]
+	pipe5 = [doubleround . doubleround] . [doubleround . doubleround] . [doubleround .
+               doubleround] . [doubleround . doubleround] . [doubleround . doubleround]
+</code></pre>
+<pre><code class="language-haskell">λ&gt; :t ins
+ins :: [W 8]
+λ&gt; pretty ins
+0x01 : 0x02 : 0x03 : 0x04 : 0x05 : 0x06 : 0x07 : 0x08 : 0x09 : 0x0A : 0x0B : 0x0C : 0x0D : 0x0E : 0x0F : []
+λ&gt; 
+λ&gt; pretty $ map (three . two . one) ins
+0x07 : 0x08 : 0x09 : 0x0A : 0x0B : 0x0C : 0x0D : 0x0E : 0x0F : 0x10 : 0x11 : 0x12 : 0x13 : 0x14 : 0x15 : []
+λ&gt; pretty $ runP start (Stall , DC) (map Arg ins)
+(Stall,DC) :&gt; (Arg 0x01,DC) :&gt; (Arg 0x02,DC) :&gt; (Arg 0x03,DC) :&gt; (Arg 0x04,Val 0x07) :&gt; (Arg 0x05,Val 0x08) :&gt; (Arg 0x06,Val 0x09) :&gt; (Arg 0x07,Val 0x0A) :&gt; (Arg 0x08,Val 0x0B) :&gt; (Arg 0x09,Val 0x0C) :&gt; (Arg 0x0A,Val 0x0D) :&gt; (Arg 0x0B,Val 0x0E) :&gt; (Arg 0x0C,Val 0x0F) :&gt; (Arg 0x0D,Val 0x10) :&gt; (Arg 0x0E,Val 0x11) :&gt; (Arg 0x0F,Val 0x12) :+&gt; Nothing
+λ&gt; 
+</code></pre>
 
                     </main>
 
@@ -1485,6 +1583,11 @@ Arg 0x01 : Stall : Arg 0x02 : Stall : Stall : Arg 0x03 : Stall : Stall : Stall :
 
         </div>
 
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
 
 
 
@@ -1493,13 +1596,13 @@ Arg 0x01 : Stall : Arg 0x02 : Stall : Stall : Arg 0x03 : Stall : Stall : Stall :
         </script>
 
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
 
         <!-- Custom JS scripts -->
 

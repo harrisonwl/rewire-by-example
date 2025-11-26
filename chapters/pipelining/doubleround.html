@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Reference Semantics - ReWire by Example</title>
+        <title>Pipelined Doubleround - ReWire by Example</title>
 
 
         <!-- Custom HTML head -->
@@ -176,38 +176,55 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="reference-semantics"><a class="header" href="#reference-semantics">Reference Semantics</a></h1>
-<p>This section introduces the reference semantics for Salsa20 written in Haskell/ReWire. The development follows Bernstein’s specification closely, including a section here corresponding to each one in his specification. The result is an executable, type-checked version of Salsa20 in Haskell/ReWire.</p>
-<p>With this Salsa20 reference semantics, we can define a test function (<code>encryptS20 :: String -&gt; String</code> below) that encrypts a message with the same key. Running <code>encryptS20</code> twice on the same plaintext message should, and does, return the original plaintext. For example, consider the following GHCi output where we first print the message and then run the test function on it twice:</p>
-<pre><code>λ&gt; putStrLn godzilla_haiku
-With artillery
-You greet your nuclear child
-Am I the monster?
-λ&gt; putStrLn (encryptS20 . encryptS20 $ godzilla_haiku)
-With artillery
-You greet your nuclear child
-Am I the monster?
+                        <h2 id="pipelined-versions-of-doubleround"><a class="header" href="#pipelined-versions-of-doubleround">Pipelined Versions of <code>doubleround</code></a></h2>
+<h2 id="naive-approach"><a class="header" href="#naive-approach">Naive Approach</a></h2>
+<p>We can write perfectly valid ReWire code for in the same style as the first carry-save adder from (<a href="../chapter1/carrysaveadders.html">Section 2.3</a>). That is, as a simple loop that takes an input, applies <code>dr10</code>, and <code>signal</code>s the output:</p>
+<pre><code class="language-haskell">type HxW32 = Hex (W 32)
+
+dr10 :: HxW32 -&gt; HxW32
+dr10 = doubleround . doubleround . doubleround . doubleround . doubleround .
+       doubleround . doubleround . doubleround . doubleround . doubleround 
+
+loop :: Maybe HxW32 -&gt; ReacT (Maybe HxW32) (Maybe HxW32) Identity ()
+loop (Just hxw32) = signal (Just (dr10 hxw32)) &gt;&gt;= loop
+loop Nothing      = signal Nothing &gt;&gt;= loop
+
+start :: ReacT (Maybe HxW32) (Maybe HxW32) Identity ()
+start = loop Nothing
 </code></pre>
-<h2 id="why-do-you-keep-saying-haskellrewire"><a class="header" href="#why-do-you-keep-saying-haskellrewire">Why do you keep saying <em>Haskell/ReWire</em>?</a></h2>
-<p>ReWire is a domain-specific language embedded in Haskell—i.e., every ReWire design is a legal Haskell program but the converse does not hold. When I say <em>Haskell/ReWire</em>, I mean a Haskell program that makes use of ReWire constructs (e.g., bit vectors) but that, for one reason or another, is not legal ReWire. A frequently used Haskell feature that is <em>not</em> inherited by ReWire currently is the type class system. More fundamental is the restrictions on recursion. However, it is often helpful while developing and testing ReWire designs to have access to Haskell’s full power.</p>
-<h4 id="aside-on-rewires-limits-on-recursion"><a class="header" href="#aside-on-rewires-limits-on-recursion">Aside on ReWire’s Limits on Recursion</a></h4>
-<p>Functional recursion is limited to functions with codomains typed in <code>ReacT</code>. E.g., recall the carry-save adder example from the previous chapter:</p>
-<pre><code class="language-haskell">csa :: (W 8, W 8, W 8) -&gt; ReacT (W 8, W 8, W 8) (W 8, W 8) Identity ()
+<p>The full code is available here: <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/pipeline/double/Naive_DR10.hs">Naive_DR10.hs</a>. If the <code>loop</code> function is passed a valid input (i.e., <code>(Just hxw32)</code>), then <code>dr10</code> is applied to it. In each cycle, <code>dr10 hxw32</code> is calculated.</p>
+<p><em>Why is this naive?</em> If you look at the code for <code>doubleround</code>, there are a lot of operations going on in <code>dr10</code>. Pure functions like these are compiled to combinational logic, and, the combinational logic for ten <code>doubleround</code>s is substantial. It would be better to pipeline calls to <code>doubleround</code> to avoid this.</p>
+<p>There’s another way that this is naive in that inputs and outputs include <code>Hex (W 32)</code> which is \(16 \times 32 = 512\) bits. This means that, on an FGPA, one would need 1024 input and output ports and that is (I believe) beyond what’s currently available. We’ll come back to this issue later on.</p>
+<h2 id="the-plan"><a class="header" href="#the-plan">The Plan</a></h2>
+<ul>
+<li>Using the <code>doubleround</code> function, I’ll demonstrate 2- and 5-stage pipelines of <code>dr10</code>.</li>
+<li>I.e., ReWire versions of:</li>
+</ul>
+<pre><code class="language-haskell">	pipe2 = [doubleround . doubleround . doubleround . doubleround . doubleround] .
+               [doubleround . doubleround . doubleround . doubleround . doubleround]
+	pipe5 = [doubleround . doubleround] . [doubleround . doubleround] . [doubleround .
+               doubleround] . [doubleround . doubleround] . [doubleround . doubleround]
 </code></pre>
-<p>Similarly, data recursion (e.g., lists) is not allowed in ReWire because hardware data structures are necessarily finite.</p>
-<p>Arbitrary recursion for functions and data requires unbounded storage like heaps and stacks to implement and that is incompatible with hardware’s fixed, finite storage footprint.</p>
+<pre><code class="language-haskell">λ&gt; :t ins
+ins :: [W 8]
+λ&gt; pretty ins
+0x01 : 0x02 : 0x03 : 0x04 : 0x05 : 0x06 : 0x07 : 0x08 : 0x09 : 0x0A : 0x0B : 0x0C : 0x0D : 0x0E : 0x0F : []
+λ&gt; 
+λ&gt; pretty $ map (three . two . one) ins
+0x07 : 0x08 : 0x09 : 0x0A : 0x0B : 0x0C : 0x0D : 0x0E : 0x0F : 0x10 : 0x11 : 0x12 : 0x13 : 0x14 : 0x15 : []
+λ&gt; pretty $ runP start (Stall , DC) (map Arg ins)
+(Stall,DC) :&gt; (Arg 0x01,DC) :&gt; (Arg 0x02,DC) :&gt; (Arg 0x03,DC) :&gt; (Arg 0x04,Val 0x07) :&gt; (Arg 0x05,Val 0x08) :&gt; (Arg 0x06,Val 0x09) :&gt; (Arg 0x07,Val 0x0A) :&gt; (Arg 0x08,Val 0x0B) :&gt; (Arg 0x09,Val 0x0C) :&gt; (Arg 0x0A,Val 0x0D) :&gt; (Arg 0x0B,Val 0x0E) :&gt; (Arg 0x0C,Val 0x0F) :&gt; (Arg 0x0D,Val 0x10) :&gt; (Arg 0x0E,Val 0x11) :&gt; (Arg 0x0F,Val 0x12) :+&gt; Nothing
+λ&gt; 
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../../chapters/salsa20/front.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../../chapters/pipelining/stalling123.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="../../chapters/salsa20/introduction.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
-                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -215,13 +232,10 @@ Am I the monster?
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../../chapters/salsa20/front.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../../chapters/pipelining/stalling123.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="../../chapters/salsa20/introduction.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
-                    </a>
             </nav>
 
         </div>
