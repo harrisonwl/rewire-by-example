@@ -16,8 +16,8 @@
         <link rel="icon" href="favicon-de23e50b.svg">
         <link rel="shortcut icon" href="favicon-8114d1fc.png">
         <link rel="stylesheet" href="css/variables-8adf115d.css">
-        <link rel="stylesheet" href="css/general-2459343d.css">
-        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
         <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
@@ -38,10 +38,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-0ed34fe9.js";
+            window.path_to_searchindex_js = "searchindex-c2d4718b.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-4b9b0ed5.js"></script>
+        <script src="toc-74d93bed.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -728,6 +728,14 @@ $ ls -l CSA.*
 $ 
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
+<h1 id="uart"><a class="header" href="#uart">UART</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="blake2b-case-study"><a class="header" href="#blake2b-case-study">Blake2b Case Study</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="reference-semantics"><a class="header" href="#reference-semantics">Reference Semantics</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="conversion-into-rewire"><a class="header" href="#conversion-into-rewire">Conversion into ReWire</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
 <h1 id="salsa20-case-study"><a class="header" href="#salsa20-case-study">Salsa20 Case Study</a></h1>
 <p>This document presents a case study in constructing verified cryptographic hardware in ReWire. In it, I follow the Daniel Bernstein’s Salsa20 specification: <a href="https://cr.yp.to/snuffle/spec.pdf">https://cr.yp.to/snuffle/spec.pdf</a>. Throughout this tutorial, I’ll refer to this document (i.e., the PDF I just linked to) as either the <em>Salsa20 specification</em> or simply the “<em>spec</em>”. Page and section numbers will refer to that document.</p>
 <p>The source code for this example can be found here <a href="https://github.com/harrisonwl/rwcrypto">https://github.com/harrisonwl/rwcrypto</a> under <code>src/salsa20</code>. The original version of the ReWire design here was presented at FPT 2015 (linked to below). ReWire’s syntax has evolved since then, but the case study here follows that paper.</p>
@@ -751,7 +759,7 @@ type-check it, and run test cases.</p>
 <li><em>Provably Correct Development of Reconfigurable Designs via Equational Reasoning.</em>, Ian Graves, Adam Procter, Bill Harrison, and Gerry Allwein. Proceedings of the 2015 International Conference on Field-Programmable Technology (FPT), <a href="https://harrisonwl.github.io/assets/papers/fpt15.pdf">pdf</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="reference-semantics"><a class="header" href="#reference-semantics">Reference Semantics</a></h1>
+<h1 id="reference-semantics-1"><a class="header" href="#reference-semantics-1">Reference Semantics</a></h1>
 <p>This section introduces the reference semantics for Salsa20 written in Haskell/ReWire. The development follows Bernstein’s specification closely, including a section here corresponding to each one in his specification. The result is an executable, type-checked version of Salsa20 in Haskell/ReWire.</p>
 <p>With this Salsa20 reference semantics, we can define a test function (<code>encryptS20 :: String -&gt; String</code> below) that encrypts a message with the same key. Running <code>encryptS20</code> twice on the same plaintext message should, and does, return the original plaintext. For example, consider the following GHCi output where we first print the message and then run the test function on it twice:</p>
 <pre><code>λ&gt; putStrLn godzilla_haiku
@@ -765,12 +773,14 @@ Am I the monster?
 </code></pre>
 <h2 id="why-do-you-keep-saying-haskellrewire"><a class="header" href="#why-do-you-keep-saying-haskellrewire">Why do you keep saying <em>Haskell/ReWire</em>?</a></h2>
 <p>ReWire is a domain-specific language embedded in Haskell—i.e., every ReWire design is a legal Haskell program but the converse does not hold. When I say <em>Haskell/ReWire</em>, I mean a Haskell program that makes use of ReWire constructs (e.g., bit vectors) but that, for one reason or another, is not legal ReWire. A frequently used Haskell feature that is <em>not</em> inherited by ReWire currently is the type class system. More fundamental is the restrictions on recursion. However, it is often helpful while developing and testing ReWire designs to have access to Haskell’s full power.</p>
-<h4 id="aside-on-rewires-limits-on-recursion"><a class="header" href="#aside-on-rewires-limits-on-recursion">Aside on ReWire’s Limits on Recursion</a></h4>
+<blockquote>
+<p><strong>Aside on ReWire’s Limits on Recursion</strong></p>
 <p>Functional recursion is limited to functions with codomains typed in <code>ReacT</code>. E.g., recall the carry-save adder example from the previous chapter:</p>
 <pre><code class="language-haskell">csa :: (W 8, W 8, W 8) -&gt; ReacT (W 8, W 8, W 8) (W 8, W 8) Identity ()
 </code></pre>
 <p>Similarly, data recursion (e.g., lists) is not allowed in ReWire because hardware data structures are necessarily finite.</p>
 <p>Arbitrary recursion for functions and data requires unbounded storage like heaps and stacks to implement and that is incompatible with hardware’s fixed, finite storage footprint.</p>
+</blockquote>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
 <p>The reference semantics culminates in the definition of a Salsa20 encryption function of the following type:</p>
@@ -1565,6 +1575,26 @@ ins :: [W 8]
 (Stall,DC) :&gt; (Arg 0x01,DC) :&gt; (Arg 0x02,DC) :&gt; (Arg 0x03,DC) :&gt; (Arg 0x04,Val 0x07) :&gt; (Arg 0x05,Val 0x08) :&gt; (Arg 0x06,Val 0x09) :&gt; (Arg 0x07,Val 0x0A) :&gt; (Arg 0x08,Val 0x0B) :&gt; (Arg 0x09,Val 0x0C) :&gt; (Arg 0x0A,Val 0x0D) :&gt; (Arg 0x0B,Val 0x0E) :&gt; (Arg 0x0C,Val 0x0F) :&gt; (Arg 0x0D,Val 0x10) :&gt; (Arg 0x0E,Val 0x11) :&gt; (Arg 0x0F,Val 0x12) :+&gt; Nothing
 λ&gt; 
 </code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="aes-case-study"><a class="header" href="#aes-case-study">AES Case Study</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="reference-semantics-2"><a class="header" href="#reference-semantics-2">Reference Semantics</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="key-expansion"><a class="header" href="#key-expansion">Key Expansion</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="rot--and-subword"><a class="header" href="#rot--and-subword">Rot- and SubWord</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="cipher-operations"><a class="header" href="#cipher-operations">Cipher Operations</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="shiftrows"><a class="header" href="#shiftrows">ShiftRows</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="addroundkey"><a class="header" href="#addroundkey">AddRoundKey</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="mixcolumns"><a class="header" href="#mixcolumns">MixColumns</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="subbytes"><a class="header" href="#subbytes">SubBytes</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="conversion-into-rewire-1"><a class="header" href="#conversion-into-rewire-1">Conversion into ReWire</a></h1>
 
                     </main>
 
@@ -1598,11 +1628,11 @@ ins :: [W 8]
 
         <script src="elasticlunr-ef4e11c1.min.js"></script>
         <script src="mark-09e88c2c.min.js"></script>
-        <script src="searcher-c2a407aa.js"></script>
+        <script src="searcher-09f2665d.js"></script>
 
         <script src="clipboard-1626706a.min.js"></script>
         <script src="highlight-abc7f01d.js"></script>
-        <script src="book-a0b12cfe.js"></script>
+        <script src="book-609e4cb8.js"></script>
 
         <!-- Custom JS scripts -->
 
