@@ -1,6 +1,12 @@
 [book]
 title = "ReWire by Example"
 [output.html]
+default-theme = "light"
+preferred-dark-theme = "navy"
 mathjax-support = true
+definition-lists = true
+admonitions = true
 [output.html.fold]
 enable = true
+
+[preprocessor]

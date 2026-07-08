@@ -18,15 +18,15 @@ Am I the monster?
 
 ReWire is a domain-specific language embedded in Haskell---i.e., every ReWire design is a legal Haskell program but the converse does not hold. When I say *Haskell/ReWire*, I mean a Haskell program that makes use of ReWire constructs (e.g., bit vectors) but that, for one reason or another, is not legal ReWire. A frequently used Haskell feature that is *not* inherited by ReWire currently is the type class system. More fundamental is the restrictions on recursion. However, it is often helpful while developing and testing ReWire designs to have access to Haskell's full power.
 
-#### Aside on ReWire's Limits on Recursion 
-
-Functional recursion is limited to functions with codomains typed in `ReacT`. E.g., recall the carry-save adder example from the previous chapter:
-```haskell
-csa :: (W 8, W 8, W 8) -> ReacT (W 8, W 8, W 8) (W 8, W 8) Identity ()
-```
-Similarly, data recursion (e.g., lists) is not allowed in ReWire because hardware data structures are necessarily finite. 
-
-Arbitrary recursion for functions and data requires unbounded storage like heaps and stacks to implement and that is incompatible with hardware's fixed, finite storage footprint.
+> **Aside on ReWire's Limits on Recursion**
+>
+> Functional recursion is limited to functions with codomains typed in `ReacT`. E.g., recall the carry-save adder example from the previous chapter:
+> ```haskell
+> csa :: (W 8, W 8, W 8) -> ReacT (W 8, W 8, W 8) (W 8, W 8) Identity ()
+> ```
+> Similarly, data recursion (e.g., lists) is not allowed in ReWire because hardware data structures are necessarily finite. 
+>
+> Arbitrary recursion for functions and data requires unbounded storage like heaps and stacks to implement and that is incompatible with hardware's fixed, finite storage footprint.
 
 
 

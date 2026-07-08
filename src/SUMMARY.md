@@ -18,7 +18,15 @@ UNDER CONSTRUCTION!
 
    - [Carry Save Adders](./chapters/chapter1/carrysaveadders.md)
 
-- [Cryptographic Hardware in ReWire](./chapters/salsa20/front.md)
+   - [UART](./chapters/chapter1/UART.md)
+   
+- [Blake2b Case Study](./chapters/blake2b/front.md)
+
+   - [Reference Semantics](./chapters/blake2b/semantics.md)
+ 
+   - [Conversion into ReWire](./chapters/blake2b/correctbyconstruction.md)
+ 
+- [Salsa20 Case Study](./chapters/salsa20/front.md)
 
    - [Reference Semantics](./chapters/salsa20/semantics.md)
    
@@ -48,6 +56,20 @@ UNDER CONSTRUCTION!
    - [One, Two, Three,... Stall](./chapters/pipelining/stalling123.md)
    - [Pipelined Doubleround](./chapters/pipelining/doubleround.md)
 
+- [AES Case Study](./chapters/aes/aescasestudy.md)
+
+   - [Reference Semantics](./chapters/aes/semantics.md)
+ 
+     - [Key Expansion](./chapters/aes/keyexpansion.md)
+	     - [Rot- and SubWord](./chapters/aes/rotword.md)
+
+     - [Cipher Operations](./chapters/aes/operations.md)
+	     - [ShiftRows](./chapters/aes/shiftrows.md)
+	     - [AddRoundKey](./chapters/aes/addroundkey.md)
+	     - [MixColumns](./chapters/aes/mixcolumns.md)
+	     - [SubBytes](./chapters/aes/subbytes.md)
+
+   - [Conversion into ReWire](./chapters/aes/correctbyconstruction.md)
 
 <!-- - [Simple Processors](./chapters/chapter2/simpleprocs.md) -->
 
