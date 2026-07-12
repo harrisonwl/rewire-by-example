@@ -1,7 +1,7 @@
 ## The Obligatory Fibonacci Example
 
 
-The following Haskell code (the file is called [Fib.hs](Fib.hs)) creates an infinite list of `Int`s in a conventional manner using the `fibgen` function.
+The following Haskell code (the file is called [Fib.hs](../../code/chapter1/Fib.hs)) creates an infinite list of `Int`s in a conventional manner using the `fibgen` function.
 ```haskell
 module Fibonacci where
 

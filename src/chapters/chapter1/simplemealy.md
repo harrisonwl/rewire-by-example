@@ -6,7 +6,7 @@ The "theoretical computer science" picture of a Mealy machine is seen below:
 
 Here ``si`` is the start state, and there are two other states, ``s0`` and ``s1``. There is also an alphabet consisting of ``0`` and ``1``. On the transitions, a red digit denotes an input and a blue digit denotes an output, so, in the machine is currently in state ``si`` and receives a ``1`` as input, it outputs a ``0`` and proceeds to state ``s1``. 
 
-The ReWire code described in the section is found here, [SimpleMealy.hs](SimpleMealy.hs), and what follows is a line-by-line description.
+The ReWire code described in the section is found here, [SimpleMealy.hs](../../code/chapter1/SimpleMealy.hs), and what follows is a line-by-line description.
 
 First thing is to import a library with ReWire definitions, etc. What's ``DataKinds``? Don't worry about it for now. Collected in a comment is a tabular form of the state transitions.
 ```haskell

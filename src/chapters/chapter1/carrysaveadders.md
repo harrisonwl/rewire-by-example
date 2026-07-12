@@ -1,6 +1,6 @@
 ## Carry Save Addition
 
-There are three carry-save adders in the tutorial, [CSA.hs](CSA.hs), [SCSA.hs](SCSA.hs), and [PCSA.hs](PCSA.hs), and the first of these is explained in detail below.
+There are three carry-save adders in the tutorial, [CSA.hs](../../code/chapter1/CSA.hs), [SCSA.hs](../../code/chapter1/SCSA.hs), and [PCSA.hs](../../code/chapter1/PCSA.hs), and the first of these is explained in detail below.
 
 Carry save addition (<https://en.wikipedia.org/wiki/Carry-save_adder>) is defined as function `f`:
 ```haskell

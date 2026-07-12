@@ -38,7 +38,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e556ce64.js";
+            window.path_to_searchindex_js = "searchindex-4cdf116e.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-811dbe0c.js"></script>
@@ -519,7 +519,7 @@ eval3 X           = readX
 <p>The “theoretical computer science” picture of a Mealy machine is seen below:</p>
 <img src="chapters/chapter1/images/Mealy.png" style="height:17%; width:17%">
 <p>Here <code>si</code> is the start state, and there are two other states, <code>s0</code> and <code>s1</code>. There is also an alphabet consisting of <code>0</code> and <code>1</code>. On the transitions, a red digit denotes an input and a blue digit denotes an output, so, in the machine is currently in state <code>si</code> and receives a <code>1</code> as input, it outputs a <code>0</code> and proceeds to state <code>s1</code>.</p>
-<p>The ReWire code described in the section is found here, <a href="chapters/chapter1/SimpleMealy.hs">SimpleMealy.hs</a>, and what follows is a line-by-line description.</p>
+<p>The ReWire code described in the section is found here, <a href="code/chapter1/SimpleMealy.hs">SimpleMealy.hs</a>, and what follows is a line-by-line description.</p>
 <p>First thing is to import a library with ReWire definitions, etc. What’s <code>DataKinds</code>? Don’t worry about it for now. Collected in a comment is a tabular form of the state transitions.</p>
 <pre><code class="language-haskell">{-# LANGUAGE DataKinds #-}
 import ReWire
@@ -566,7 +566,7 @@ start = signal Zero &gt;&gt;= si
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="fibonacci-of-course"><a href="#fibonacci-of-course" class="header">Fibonacci, of course</a></h1>
 <h2 id="the-obligatory-fibonacci-example"><a class="header" href="#the-obligatory-fibonacci-example">The Obligatory Fibonacci Example</a></h2>
-<p>The following Haskell code (the file is called <a href="chapters/chapter1/Fib.hs">Fib.hs</a>) creates an infinite list of <code>Int</code>s in a conventional manner using the <code>fibgen</code> function.</p>
+<p>The following Haskell code (the file is called <a href="code/chapter1/Fib.hs">Fib.hs</a>) creates an infinite list of <code>Int</code>s in a conventional manner using the <code>fibgen</code> function.</p>
 <pre><code class="language-haskell">module Fibonacci where
 
 fibs :: [Int]
@@ -609,7 +609,7 @@ fibdev n m = do b &lt;- signal n
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="carry-save-adders"><a href="#carry-save-adders" class="header">Carry Save Adders</a></h1>
 <h2 id="carry-save-addition"><a class="header" href="#carry-save-addition">Carry Save Addition</a></h2>
-<p>There are three carry-save adders in the tutorial, <a href="chapters/chapter1/CSA.hs">CSA.hs</a>, <a href="chapters/chapter1/SCSA.hs">SCSA.hs</a>, and <a href="chapters/chapter1/PCSA.hs">PCSA.hs</a>, and the first of these is explained in detail below.</p>
+<p>There are three carry-save adders in the tutorial, <a href="code/chapter1/CSA.hs">CSA.hs</a>, <a href="code/chapter1/SCSA.hs">SCSA.hs</a>, and <a href="code/chapter1/PCSA.hs">PCSA.hs</a>, and the first of these is explained in detail below.</p>
 <p>Carry save addition (<a href="https://en.wikipedia.org/wiki/Carry-save_adder">https://en.wikipedia.org/wiki/Carry-save_adder</a>) is defined as function <code>f</code>:</p>
 <pre><code class="language-haskell">f :: W 8 -&gt; W 8 -&gt; W 8 -&gt; (W 8, W 8)
 f a b c = ( ((a .&amp;. b) .|. (a .&amp;. c) .|. (b .&amp;. c) ) &lt;&lt;. lit 1 , (a ^ b) ^ c )
@@ -729,6 +729,7 @@ $
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="uart"><a class="header" href="#uart">UART</a></h1>
+<p>The UART code is <a href="code/chapter1/TX_UART.hs">TX_UART.hs</a></p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="blake2b-case-study"><a class="header" href="#blake2b-case-study">Blake2b Case Study</a></h1>
 <p>The case study in this section concerns a correct-by-construction design and implementation of the Blake2b cryptographic hash function in ReWire. This case</p>
