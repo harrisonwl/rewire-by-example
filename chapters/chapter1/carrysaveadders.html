@@ -37,7 +37,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-c2d4718b.js";
+            window.path_to_searchindex_js = "../../searchindex-0ffd8d37.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-74d93bed.js"></script>
@@ -177,7 +177,7 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h2 id="carry-save-addition"><a class="header" href="#carry-save-addition">Carry Save Addition</a></h2>
-<p>There are three carry-save adders in the tutorial, <a href="CSA.hs">CSA.hs</a>, <a href="SCSA.hs">SCSA.hs</a>, and <a href="PCSA.hs">PCSA.hs</a>, and the first of these is explained in detail below.</p>
+<p>There are three carry-save adders in the tutorial, <a href="../../code/chapter1/CSA.hs">CSA.hs</a>, <a href="../../code/chapter1/SCSA.hs">SCSA.hs</a>, and <a href="../../code/chapter1/PCSA.hs">PCSA.hs</a>, and the first of these is explained in detail below.</p>
 <p>Carry save addition (<a href="https://en.wikipedia.org/wiki/Carry-save_adder">https://en.wikipedia.org/wiki/Carry-save_adder</a>) is defined as function <code>f</code>:</p>
 <pre><code class="language-haskell">f :: W 8 -&gt; W 8 -&gt; W 8 -&gt; (W 8, W 8)
 f a b c = ( ((a .&amp;. b) .|. (a .&amp;. c) .|. (b .&amp;. c) ) &lt;&lt;. lit 1 , (a ^ b) ^ c )
