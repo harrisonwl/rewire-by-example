@@ -1,0 +1,31 @@
+cabal-version: 3.0
+
+name:         rewire-by-example
+version:      0.1.0.0
+synopsis:     Runnable code for the ReWire-by-Example tutorial.
+build-type:   Simple
+
+-- Shared settings for anything that loads chapter code. The chapter code
+-- uses type-level bit widths (e.g. `W 8`), so the ghc-typelits-* plugins are
+-- needed for it to type-check, and DataKinds is turned on by default.
+common rewire
+  default-language:   Haskell2010
+  default-extensions: DataKinds
+  ghc-options:
+    -fplugin=GHC.TypeLits.Normalise
+    -fplugin=GHC.TypeLits.KnownNat.Solver
+    -fplugin=GHC.TypeLits.Extra.Solver
+  build-depends:
+      base >=4.18 && <5
+    , rewire-user
+    , ghc-typelits-natnormalise
+    , ghc-typelits-knownnat
+    , ghc-typelits-extra
+
+-- A trivial executable whose only job is to force `stack build` to compile
+-- and cache the ReWire dependency. Once built, use `stack ghci` or
+-- `stack runghc` to load individual chapter files (see README).
+executable rewire-by-example
+  import:         rewire
+  main-is:        Main.hs
+  hs-source-dirs: app

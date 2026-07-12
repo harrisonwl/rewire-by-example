@@ -1,0 +1,21 @@
+# Stack configuration for rewire-by-example.
+#
+# This project lets you load and evaluate the Haskell/ReWire code that
+# accompanies each chapter (under src/code/<chapter>/) using GHC via stack.
+#
+# The chapter code depends on the `rewire-user` library from the ReWire
+# project, which provides the `ReWire`, `ReWire.Bits`, `ReWire.Finite`,
+# `ReWire.Vectors`, and `ReWire.Interactive` modules. We track the same
+# resolver ReWire itself uses so the dependency resolves cleanly.
+resolver: lts-24.46
+
+packages:
+  - .
+
+# Pull just the user-facing simulation library out of the ReWire repo.
+# Bump `commit` deliberately to move to a newer ReWire.
+extra-deps:
+  - git: https://github.com/rewire-hardware/ReWire.git
+    commit: bddbe1ca29d7324b4908cbf67fd9496fbaac193a
+    subdirs:
+      - rewire-user
