@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Key Expansion - ReWire by Example</title>
+        <title>Second Interpreter: Errors and Maybe - ReWire by Example</title>
 
 
         <!-- Custom HTML head -->
@@ -12,20 +12,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="../../favicon-de23e50b.svg">
-        <link rel="shortcut icon" href="../../favicon-8114d1fc.png">
-        <link rel="stylesheet" href="../../css/variables-8adf115d.css">
-        <link rel="stylesheet" href="../../css/general-e96d0476.css">
-        <link rel="stylesheet" href="../../css/chrome-d279d366.css">
-        <link rel="stylesheet" href="../../css/print-9e4910d8.css" media="print">
+        <link rel="icon" href="../../../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../../../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../../../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../../../css/general-e96d0476.css">
+        <link rel="stylesheet" href="../../../css/chrome-d279d366.css">
+        <link rel="stylesheet" href="../../../css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="../../fonts/fonts-9644e21d.css">
+        <link rel="stylesheet" href="../../../fonts/fonts-9644e21d.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="mdbook-highlight-css" href="../../highlight-493f70e1.css">
-        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../../tomorrow-night-4c0ae647.css">
-        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../../ayu-highlight-3fdfc3ac.css">
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../../../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../../../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../../../ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
 
@@ -34,13 +34,13 @@
 
         <!-- Provide site root and default themes to javascript -->
         <script>
-            const path_to_root = "../../";
+            const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-4e531882.js";
+            window.path_to_searchindex_js = "../../../searchindex-4e531882.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc-858a4e06.js"></script>
+        <script src="../../../toc-858a4e06.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -107,7 +107,7 @@
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
-                <iframe class="sidebar-iframe-outer" src="../../toc.html"></iframe>
+                <iframe class="sidebar-iframe-outer" src="../../../toc.html"></iframe>
             </noscript>
             <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -142,7 +142,7 @@
                     <h1 class="menu-title">ReWire by Example</h1>
 
                     <div class="right-buttons">
-                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                        <a href="../../../print.html" title="Print this book" aria-label="Print this book">
                             <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
                         </a>
 
@@ -176,17 +176,88 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="key-expansion"><a class="header" href="#key-expansion">Key Expansion</a></h1>
+                        <h1 id="2nd-interpreter-errors-and-maybe"><a class="header" href="#2nd-interpreter-errors-and-maybe">2nd Interpreter: Errors and Maybe</a></h1>
+<p>The code for this section is found in <a href="Errors.hs">Errors.hs</a>. This new interpreter adds a new arithmetic operation <code>Div</code>. I pasted in the <code>eval0</code> with a new case for <code>Div</code>.</p>
+<pre><code class="language-haskell">module Errors where
+
+data Exp = Const Int | Neg Exp | Add Exp Exp
+         | Div Exp Exp                      -- new
+
+instance Show Exp where
+  show (Const i) = show i
+  show (Neg e)   = "-" ++ show e
+  show (Add e1 e2) = show e1 ++ " + " ++ show e2
+  show (Div e1 e2) = show e1 ++ " / " ++ show e2
+
+-- | Same as before, but with a new case
+eval0 :: Exp -&gt; Int
+eval0 (Const i)   = i
+eval0 (Neg e)     = - (eval0 e)
+eval0 (Add e1 e2) = eval0 e1 + eval0 e2
+eval0 (Div e1 e2) = eval0 e1 `div` eval0 e2 -- new
+
+a    = Add c (Neg c)
+        where
+          c = Const 99
+uhoh = Div (Const 1) (Const 0)              -- new
+</code></pre>
+<p>Note that, when you run the <code>Div</code>-extended version of <code>eval0</code>, things don’t always end well:</p>
+<pre><code class="language-haskell">λ&gt; uhoh
+1 / 0
+λ&gt; eval0 uhoh
+*** Exception: divide by zero
+λ&gt; 
+</code></pre>
+<h3 id="why-cant-we-just-check-for-0"><a class="header" href="#why-cant-we-just-check-for-0">Why can’t we just check for 0?</a></h3>
+<p>Think about it this way, what should I replace <code>????</code> with below? There’s no way of handling that exceptional case and it crashes the program.</p>
+<pre><code class="language-haskell">eval0 (Div e1 e2) = if v2 == 0 then ???? else eval0 e1 `div` v2 
+   where
+      v2 = eval0 e2
+</code></pre>
+<p>But with the <code>Maybe</code> monad, we can use its <code>Nothing</code> constructor for this erroneous case; recall the definition of the <code>Maybe</code> data type:</p>
+<pre><code class="language-haskell">data Maybe a = Nothing | Just a
+</code></pre>
+<p>Here’s the definition of <code>eval2</code> whhich is typed in the <code>Maybe</code> monad:</p>
+<pre><code class="language-haskell">eval2 :: Exp -&gt; Maybe Int     -- N.b., the new type
+eval2 (Const i)   = return i
+eval2 (Neg e)     = do
+                      v &lt;- eval2 e
+                      return (- v)
+eval2 (Add e1 e2) = do
+                      v1 &lt;- eval2 e1
+                      v2 &lt;- eval2 e2
+                      return (v1 + v2)
+eval2 (Div e1 e2) = do
+                      v1 &lt;- eval2 e1
+                      v2 &lt;- eval2 e2
+                      if v2==0 then Nothing else return (v1 `div` v2) -- fill in ???? with Nothing
+</code></pre>
+<pre><code class="language-haskell">λ&gt; uhoh
+1 / 0
+λ&gt; eval2 uhoh
+Nothing
+</code></pre>
+<h3 id="maybe-under-the-hood"><a class="header" href="#maybe-under-the-hood">Maybe Under the Hood</a></h3>
+<p>Below is the definition of the <code>Maybe</code> monad. The way to think of a computation <code>x &gt;&gt;= f</code> is that, if <code>x</code> is returns some value (i.e., it’s <code>Just v</code>), then just proceed normally. If an exception is thrown by computing <code>x</code> (i.e., it’s <code>Nothing</code>), then the whole computation <code>x &gt;&gt;= f</code></p>
+<pre><code class="language-haskell">data Maybe a = Nothing | Just a
+
+return :: a -&gt; Maybe a
+return v = Just v
+
+(&gt;&gt;=) :: Maybe a -&gt; (a -&gt; Maybe b) -&gt; Maybe b 
+(Just v) &gt;&gt;= f = f v
+Nothing &gt;&gt;= f  = Nothing
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../../chapters/aes/semantics.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../../../chapters/chapter0/monadwrangling/IdentityBigNothing.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="../../chapters/aes/rotword.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../../../chapters/chapter0/monadwrangling/Register.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -196,11 +267,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../../chapters/aes/semantics.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../../../chapters/chapter0/monadwrangling/IdentityBigNothing.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="../../chapters/aes/rotword.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../../../chapters/chapter0/monadwrangling/Register.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>
@@ -220,13 +291,13 @@
         </script>
 
 
-        <script src="../../elasticlunr-ef4e11c1.min.js"></script>
-        <script src="../../mark-09e88c2c.min.js"></script>
-        <script src="../../searcher-09f2665d.js"></script>
+        <script src="../../../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../../../mark-09e88c2c.min.js"></script>
+        <script src="../../../searcher-09f2665d.js"></script>
 
-        <script src="../../clipboard-1626706a.min.js"></script>
-        <script src="../../highlight-bc8f37c5.js"></script>
-        <script src="../../book-609e4cb8.js"></script>
+        <script src="../../../clipboard-1626706a.min.js"></script>
+        <script src="../../../highlight-bc8f37c5.js"></script>
+        <script src="../../../book-609e4cb8.js"></script>
 
         <!-- Custom JS scripts -->
 

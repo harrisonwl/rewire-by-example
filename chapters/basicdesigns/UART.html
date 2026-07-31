@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Key Expansion - ReWire by Example</title>
+        <title>UART - ReWire by Example</title>
 
 
         <!-- Custom HTML head -->
@@ -176,17 +176,87 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="key-expansion"><a class="header" href="#key-expansion">Key Expansion</a></h1>
+                        <h1 id="rewire-for-verilog-programmers"><a class="header" href="#rewire-for-verilog-programmers">ReWire for Verilog Programmers</a></h1>
+<p>This section presents a Verilog design for a UART (created by some AI agent) and rewrites it in ReWire. The structure of the resulting ReWire specification follows the structure of the Verilog design very closely. The codes for the UART is:</p>
+<ul>
+<li><a href="../../code/chapter1/rtl_uart.sv">Verilog</a></li>
+<li><a href="../../code/chapter1/TX_UART.hs">ReWire</a></li>
+</ul>
+<p>Throughout this section, I’ll focus on the <code>uart_tx</code> routine defined in <code>rtl_uart.sv</code> and demonstrate how Verilog code is translated into corresponding ReWire definitions. Recall from the beginning of this chapter that the type <code>ReacT i o (StateT s Identity) ()</code> corresponds to a Mealy machine:</p>
+<img src="../../images/beautifullestmealy.png" style="height:50%; width:50%">
+<p>The first thing to do is determine what the types <code>i</code>, <code>o</code>, and <code>s</code> are for the UART.</p>
+<h2 id="inputs"><a class="header" href="#inputs">Inputs</a></h2>
+<p>In the Verilog specification, here is the snippet defining the inputs:</p>
+<pre><code class="language-verilog">input clk,
+input rst,
+input tx_start,
+input [7:0] tx_data,
+</code></pre>
+<p>Corresponding to this is the ReWire declaration <code>I</code>. Only the <code>clk</code> signal is left out because it is already encoded by the reactive resumption monad structure. The first two inputs then are <code>rst</code> and <code>tx_start</code>, which are both <code>Bit</code>s, and <code>tx_data</code>, which is an 8-bit word:</p>
+<pre><code class="language-haskell">data I = I { rst      :: Bit
+           , tx_start :: Bit
+           , tx_data  :: W 8 }
+</code></pre>
+<h2 id="fsm-states"><a class="header" href="#fsm-states">FSM States</a></h2>
+<p>The UART transfer routing has four states, each of which is explicitly named:</p>
+<pre><code class="language-verilog">// FSM States
+localparam IDLE      = 2'b00;
+localparam START_BIT = 2'b01;
+localparam DATA_BITS = 2'b10;
+localparam STOP_BIT  = 2'b11;
+</code></pre>
+<p>In ReWire, these are expressed as a <code>data</code> declaration:</p>
+<pre><code class="language-haskell">data State = IDLE | START_BIT | DATA_BITS | STOP_BIT 
+</code></pre>
+<h2 id="register-file"><a class="header" href="#register-file">Register File</a></h2>
+<p>Anything declared as a <code>reg</code> in Verilog is a register, some (<code>tx_pin</code> and <code>tx_done</code>) being also connected to outputs.</p>
+<pre><code class="language-verilog">output reg tx_pin,
+output reg tx_done
+reg [1:0] state;
+reg [15:0] clk_count;
+reg [2:0] bit_index;
+reg [7:0] data_reg;
+</code></pre>
+<p>For each <code>reg</code> above, there is a corresponding tag in the following type <code>RF</code>; note that ``RF uses Haskell’s record syntax.</p>
+<pre><code class="language-haskell">data RF = RF { state     :: State
+             , clk_count :: W 16
+             , bit_index :: W 3
+             , data_reg  :: W 8
+             , tx_pin    :: Bit
+             , tx_done   :: Bit }
+</code></pre>
+<h3 id="initial-register-file"><a class="header" href="#initial-register-file">Initial Register File</a></h3>
+<pre><code class="language-verilog">state     &lt;= IDLE;
+tx_pin    &lt;= 1'b1;
+tx_done   &lt;= 1'b0;
+clk_count &lt;= 0;
+bit_index &lt;= 0;
+</code></pre>
+<pre><code class="language-haskell">rf0 :: RF
+rf0 = RF { state     = IDLE
+         , tx_pin    = True
+         , tx_done   = False
+         , clk_count = lit 0
+         , bit_index = lit 0
+         , data_reg  = lit 0
+         }
+</code></pre>
+<h2 id="output-type"><a class="header" href="#output-type">Output Type</a></h2>
+<p>The following code defines the two outputs in <code>rtl_uart.sv</code>:</p>
+<pre><code class="language-verilog">output reg tx_pin,
+output reg tx_done
+</code></pre>
+<p>Therefore, the output type will be <code>(Bit , Bit)</code>.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../../chapters/aes/semantics.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../../chapters/basicdesigns/basics.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="../../chapters/aes/rotword.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../../chapters/basicdesigns/simpleprocs.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -196,11 +266,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../../chapters/aes/semantics.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../../chapters/basicdesigns/basics.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="../../chapters/aes/rotword.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../../chapters/basicdesigns/simpleprocs.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>

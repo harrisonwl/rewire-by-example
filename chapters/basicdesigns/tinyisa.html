@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Key Expansion - ReWire by Example</title>
+        <title>Tiny ISA - ReWire by Example</title>
 
 
         <!-- Custom HTML head -->
@@ -176,17 +176,115 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="key-expansion"><a class="header" href="#key-expansion">Key Expansion</a></h1>
+                        <h2 id="tiny-isa"><a class="header" href="#tiny-isa">Tiny ISA</a></h2>
+<p>We now describe a simple processor with a tiny instruction set (hence the name <a href="TinyISA.hs">TinyISA.hs</a>). TinyISA has four 8-bit registers, 6-bit addresses, and five instructions.</p>
+<pre><code class="language-haskell">type W6    = W 6
+type W8    = W 8
+data Reg   = R0 | R1 | R2 | R3 
+type Addr  = W6
+data Instr = NOP
+           | LD Addr
+           | ST Addr
+           | NAND Reg Reg Reg
+           | BNZ Addr
+</code></pre>
+<h3 id="inputs-outputs-and-register-file"><a class="header" href="#inputs-outputs-and-register-file">Inputs, outputs, and register file.</a></h3>
+<p>TinyISA has two inputs, represented by the record type <code>Ins</code>, with two fields for the instruction to execute (<code>instrIn</code>) and a <code>dataIn</code> for data read from memory.
+The register file <code>RegFile</code> is a record type as well</p>
+<pre><code class="language-haskell">data Ins     = Ins { instrIn :: Instr,
+                     dataIn  :: W 8 }
+data Out     = Out { weOut   :: Bit,
+                     addrOut :: Addr,
+                     dataOut :: W 8 }
+data RegFile = RegFile { r0 :: W 8, r1 :: W 8, r2 :: W 8, r3 :: W 8,
+                         pc :: Addr, inputs :: Ins, outputs :: Out }
+</code></pre>
+<pre><code class="language-haskell">type S   = StateT RegFile Identity
+type Dev = ReacT Ins Out S
+</code></pre>
+<pre><code class="language-haskell">-- read, write, and increment the PC
+getPC :: S Addr
+getPC = do s &lt;- get
+           return (pc s)
+           
+putPC :: Addr -&gt; S ()
+putPC a = do s &lt;- get
+             put (s { pc = a })
+
+incrPC :: S ()
+incrPC = do pc &lt;- getPC
+            putPC (pc + lit 1)
+</code></pre>
+<pre><code class="language-haskell">-- read and write each register
+getReg :: Reg -&gt; S (W 8)
+getReg R0 = get &gt;&gt;= return . r0
+getReg R1 = get &gt;&gt;= return . r1 
+getReg R2 = get &gt;&gt;= return . r2 
+getReg R3 = get &gt;&gt;= return . r3
+            
+putReg :: Reg -&gt; W 8 -&gt; S ()
+putReg R0 b = get &gt;&gt;= \ s -&gt; put (s { r0 = b })
+putReg R1 b = get &gt;&gt;= \ s -&gt; put (s { r1 = b })
+putReg R2 b = get &gt;&gt;= \ s -&gt; put (s { r2 = b })
+putReg R3 b = get &gt;&gt;= \ s -&gt; put (s { r3 = b })
+</code></pre>
+<pre><code class="language-haskell">getOut :: S Out
+getOut   = do
+             s &lt;- get
+             return (outputs s) 
+
+putOut :: Out -&gt; S ()
+putOut o = do
+             s &lt;- get
+             put (s { outputs = o })
+
+getIns :: S Ins
+getIns   = do
+             s &lt;- get
+             return (inputs s)
+
+getDataIn :: S (W 8)
+getDataIn = do
+              i &lt;- getIns
+              return (dataIn i) 
+
+getInstr :: S Instr
+getInstr = do
+             i &lt;- getIns
+             return (instrIn i) 
+
+putIns :: Ins -&gt; S ()
+putIns i = do
+             s &lt;- get
+             put (s { inputs = i })
+
+tick :: Dev ()
+tick     = do o &lt;- lift getOut
+              i &lt;- signal o
+              lift (putIns i)
+
+putWeOut :: Bit -&gt; S ()
+putWeOut b = do o &lt;- getOut
+                putOut (o { weOut = b })
+
+putAddrOut :: Addr -&gt; S ()                       
+putAddrOut a = do o &lt;- getOut
+                  putOut (o { addrOut = a })
+
+putDataOut :: W 8 -&gt; S ()                  
+putDataOut d = do o &lt;- getOut
+                  putOut (o { dataOut = d })
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../../chapters/aes/semantics.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../../chapters/basicdesigns/simpleprocs.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="../../chapters/aes/rotword.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../../chapters/basicdesigns/crossbarswitch.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -196,11 +294,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../../chapters/aes/semantics.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../../chapters/basicdesigns/simpleprocs.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="../../chapters/aes/rotword.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../../chapters/basicdesigns/crossbarswitch.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>
