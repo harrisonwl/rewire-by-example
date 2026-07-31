@@ -1,3 +1,4 @@
+
 # ReWire for Verilog Programmers
 
 This section presents a Verilog design for a UART (created by some AI agent) and rewrites it in ReWire. The structure of the resulting ReWire specification follows the structure of the Verilog design very closely. The codes for the UART is:
@@ -6,7 +7,7 @@ This section presents a Verilog design for a UART (created by some AI agent) and
 
 Throughout this section, I'll focus on the ``uart_tx`` routine defined in ``rtl_uart.sv`` and demonstrate how Verilog code is translated into corresponding ReWire definitions. Recall from the beginning of this chapter that the type ``ReacT i o (StateT s Identity) ()`` corresponds to a Mealy machine:
 
-<img src="images/beautifullestmealy.png"  style="height:50%; width:50%" >
+<img src="../../images/beautifullestmealy.png"  style="height:50%; width:50%" >
 
 The first thing to do is determine what the types ``i``, ``o``, and ``s`` are for the UART.
 

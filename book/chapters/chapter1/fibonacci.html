@@ -15,8 +15,8 @@
         <link rel="icon" href="../../favicon-de23e50b.svg">
         <link rel="shortcut icon" href="../../favicon-8114d1fc.png">
         <link rel="stylesheet" href="../../css/variables-8adf115d.css">
-        <link rel="stylesheet" href="../../css/general-2459343d.css">
-        <link rel="stylesheet" href="../../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../../css/general-e96d0476.css">
+        <link rel="stylesheet" href="../../css/chrome-d279d366.css">
         <link rel="stylesheet" href="../../css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
@@ -37,10 +37,10 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-4cdf116e.js";
+            window.path_to_searchindex_js = "../../searchindex-0198648b.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc-811dbe0c.js"></script>
+        <script src="../../toc-858a4e06.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -176,7 +176,7 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h2 id="the-obligatory-fibonacci-example"><a class="header" href="#the-obligatory-fibonacci-example">The Obligatory Fibonacci Example</a></h2>
+                        <h1 id="the-obligatory-fibonacci-example"><a class="header" href="#the-obligatory-fibonacci-example">The Obligatory Fibonacci Example</a></h1>
 <p>The following Haskell code (the file is called <a href="../../code/chapter1/Fib.hs">Fib.hs</a>) creates an infinite list of <code>Int</code>s in a conventional manner using the <code>fibgen</code> function.</p>
 <pre><code class="language-haskell">module Fibonacci where
 
@@ -191,7 +191,7 @@ fibs = fibgen 0 1
 take 10 fibs
 [0,1,1,2,3,5,8,13,21,34]
 </code></pre>
-<h3 id="making-hardware-out-of-this"><a class="header" href="#making-hardware-out-of-this">Making Hardware Out of This.</a></h3>
+<h2 id="making-hardware-out-of-this"><a class="header" href="#making-hardware-out-of-this">Making Hardware Out of This.</a></h2>
 <p>In the ReWire code below, <code>fibdev</code> plays the same role as <code>fibgen</code> above. For the moment, just ignore the monadic type, <code>ReacT Bit (W 8) Identity ()</code>. (I’ll explain its significance shortly.) Instead of using Haskell’s <code>Int</code> type, we will compute over eight bit words (i.e., <code>W 8</code>). There is also a definition of <code>start</code>, which is a special symbol that unsurprisingly specifies how to start the device.</p>
 <p>What <code>fibdev</code> does is, given two words <code>n</code> and <code>m</code>, it puts <code>n</code> on the output port using <code>signal</code> and accepts a new input <code>b</code> off of the input port. If bit <code>b</code> is <code>1</code>, then it continues on. However, if <code>b</code> is <code>0</code>, then it calls itself on <code>m</code> and <code>m + n</code> just like <code>fibgen</code> above.</p>
 <pre><code class="language-haskell">{-# LANGUAGE DataKinds #-}
@@ -206,7 +206,7 @@ fibdev :: W 8 -&gt; W 8 -&gt; ReacT Bit (W 8) Identity ()
 fibdev n m = do b &lt;- signal n
                 if b then fibdev n m else fibdev m (n + m)
 </code></pre>
-<h3 id="lessons-learned"><a class="header" href="#lessons-learned">Lessons Learned.</a></h3>
+<h2 id="lessons-learned"><a class="header" href="#lessons-learned">Lessons Learned.</a></h2>
 <p>There are some lessons to be learned from this example.</p>
 <ul>
 <li>Just like a state machine, every ReWire device has to have a <code>start</code>.</li>
@@ -278,11 +278,11 @@ fibdev n m = do b &lt;- signal n
 
         <script src="../../elasticlunr-ef4e11c1.min.js"></script>
         <script src="../../mark-09e88c2c.min.js"></script>
-        <script src="../../searcher-c2a407aa.js"></script>
+        <script src="../../searcher-09f2665d.js"></script>
 
         <script src="../../clipboard-1626706a.min.js"></script>
-        <script src="../../highlight-abc7f01d.js"></script>
-        <script src="../../book-a0b12cfe.js"></script>
+        <script src="../../highlight-bc8f37c5.js"></script>
+        <script src="../../book-609e4cb8.js"></script>
 
         <!-- Custom JS scripts -->
 

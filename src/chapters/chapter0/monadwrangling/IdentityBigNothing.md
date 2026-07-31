@@ -42,11 +42,11 @@ Identity 0
 λ> 
 ```
 
-## Lessons Learned
+# Lessons Learned
 
 As people say, `eval1` and `eval0` are morally equivalent, in the sense that, if you were so inclined, you could *prove* the equality `eval1 a = Identity (eval0 a)` holds for any `a`.
 
-### Monadic Syntactic Sugar or Saccharine? 
+## Monadic Syntactic Sugar or Saccharine? 
 
 Haskell overloads its monad syntax, so when we see the `>>=` and `return` again, they will be typed in different monads than `Identity`. Overloading is great for some uses, because it removes clutter. I find for formal methods it can be kind of confusing. So, reader beware!
 

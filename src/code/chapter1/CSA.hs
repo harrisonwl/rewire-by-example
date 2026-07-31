@@ -1,4 +1,6 @@
 {-# LANGUAGE DataKinds #-}
+module CSA where
+
 import Prelude hiding ((^))
 import ReWire
 import ReWire.Bits

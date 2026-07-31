@@ -15,8 +15,8 @@
         <link rel="icon" href="../../../favicon-de23e50b.svg">
         <link rel="shortcut icon" href="../../../favicon-8114d1fc.png">
         <link rel="stylesheet" href="../../../css/variables-8adf115d.css">
-        <link rel="stylesheet" href="../../../css/general-2459343d.css">
-        <link rel="stylesheet" href="../../../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../../../css/general-e96d0476.css">
+        <link rel="stylesheet" href="../../../css/chrome-d279d366.css">
         <link rel="stylesheet" href="../../../css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
@@ -37,10 +37,10 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-4cdf116e.js";
+            window.path_to_searchindex_js = "../../../searchindex-0198648b.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../../toc-811dbe0c.js"></script>
+        <script src="../../../toc-858a4e06.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -181,265 +181,6 @@
 <p>What this section does is introduce the monad idea through a sequence of simple language interpreters. As we add features to the language, we have to change the monad we use to define the new interpreter. We will see four interpreters whose core is a language of simple arithmetic expressions.</p>
 <p>To see all of the monads discussed in this tutorial defined in one convenient Haskell file, download this:
 <a href="MonadWrangling.hs">MonadWrangling.hs</a>. These monad and monad transformer definitions are in the style of earlier versions of GHC, which were immensely easier to understand than the current mess.</p>
-<hr>
-<h2 id="simple-arithmetic-expressions"><a class="header" href="#simple-arithmetic-expressions">Simple Arithmetic Expressions</a></h2>
-<p>The first interpreter, found in <a href="Arith.hs">Arith.hs</a>, defines a language <code>Exp</code> that has integer constants, negation, and addition. These correspond to the constructors <code>Const</code>, <code>Neg</code>, and <code>Add</code> of the <code>Exp</code> data type. The interpreter <code>eval0</code> does not use a monad and should be fairly self-explanatory.</p>
-<pre><code class="language-haskell">module Arith where
-
-data Exp = Const Int | Neg Exp | Add Exp Exp
-
-instance Show Exp where
-  show (Const i) = show i
-  show (Neg e)   = "-" ++ show e
-  show (Add e1 e2) = show e1 ++ " + " ++ show e2
-
-eval0 :: Exp -&gt; Int
-eval0 (Const i)   = i
-eval0 (Neg e)     = - (eval0 e)
-eval0 (Add e1 e2) = eval0 e1 + eval0 e2
-
-c = Const 99
-n = Neg c
-a = Add c n
-</code></pre>
-<p>Loading this into GHCi gives you what you’d expect:</p>
-<pre><code>λ&gt; a
-99 + -99
-λ&gt; eval0 a
-0
-</code></pre>
-<hr>
-<h2 id="the-identity-monad-is-a-big-nothingburger"><a class="header" href="#the-identity-monad-is-a-big-nothingburger">The <code>Identity</code> Monad is a Big Nothingburger</a></h2>
-<p>We introduce now the <code>Identity</code> monad, which doesn’t really give you anything at all. I introduce it first because it uses Haskell’s built-in monad syntax, and it’s useful to meet that syntax first when the monad is just a big nothing. The code for this section is found in <a href="IdentityMonad.hs">IdentityMonad.hs</a> and <a href="IdentityMonadDo.hs">IdentityMonadDo.hs</a>.</p>
-<p>First, here’s the new interpreter <code>eval1</code>. The salient point is that <code>eval0</code> and <code>eval1</code> are doing the same thing, but what’s all this <code>return</code> and <code>&gt;&gt;=</code> business? (They’re explained below if you want to skip ahead.)</p>
-<pre><code class="language-haskell">module IdentityMonad where
-
-import Control.Monad.Identity -- this is new.
-
-data Exp = Const Int | Neg Exp | Add Exp Exp
-
-instance Show Exp where
-  show (Const i) = show i
-  show (Neg e)   = "-" ++ show e
-  show (Add e1 e2) = show e1 ++ " + " ++ show e2
-
-eval1 :: Exp -&gt; Identity Int
-eval1 (Const i)   = return i
-eval1 (Neg e)     = eval1 e &gt;&gt;= \ v -&gt; return (- v)
-eval1 (Add e1 e2) = eval1 e1 &gt;&gt;= \ v1 -&gt; eval1 e2 &gt;&gt;= \ v2 -&gt; return (v1 + v2)
-
-c = Const 99
-n = Neg c
-a = Add c n
-</code></pre>
-<p>The <code>Identity</code> monad has the following definition (it’s actually a simplification).</p>
-<pre><code class="language-haskell">data Identity a = Identity a -- apologies for overloading the constructors.
-return :: a -&gt; Identity a
-return v = Identity v
-(&gt;&gt;=) :: Identity a -&gt; (a -&gt; Identity b) -&gt; Identity b
-(Identity v) &gt;&gt;= f = f v
-</code></pre>
-<p>So, <code>return</code> just injects its argument into <code>Identity</code>. The operation <code>&gt;&gt;=</code> (a.k.a., “bind”) boils down to a backwards apply. It’s just a whole lot of applying and pattern-matching on the <code>Identity</code> constructor, signifying nothing. When you load all this into GHCi, you get just what you’d expect:</p>
-<pre><code>λ&gt; a
-99 + -99
-λ&gt; eval1 a
-Identity 0
-λ&gt; 
-</code></pre>
-<h2 id="lessons-learned"><a class="header" href="#lessons-learned">Lessons Learned</a></h2>
-<p>As people say, <code>eval1</code> and <code>eval0</code> are morally equivalent, in the sense that, if you were so inclined, you could <em>prove</em> the equality <code>eval1 a = Identity (eval0 a)</code> holds for any <code>a</code>.</p>
-<h3 id="monadic-syntactic-sugar-or-saccharine"><a class="header" href="#monadic-syntactic-sugar-or-saccharine">Monadic Syntactic Sugar or Saccharine?</a></h3>
-<p>Haskell overloads its monad syntax, so when we see the <code>&gt;&gt;=</code> and <code>return</code> again, they will be typed in different monads than <code>Identity</code>. Overloading is great for some uses, because it removes clutter. I find for formal methods it can be kind of confusing. So, reader beware!</p>
-<p>There is also another shorthand for <code>&gt;&gt;=</code> that is frequently used called <code>do</code> notation; it’s defined as:</p>
-<pre><code class="language-haskell">   x &gt;&gt;= f = do
-               v &lt;- x
-		       f v
-</code></pre>
-<p>So, the clause of <code>eval1</code> for <code>Neg</code> is as follows when written in <code>do</code> notation:</p>
-<pre><code class="language-haskell">eval1 (Neg e)     = do
-                      v &lt;- eval1 e
-                      return (- v)
-</code></pre>
-<p>The code <code>IdentityMonadDo.hs</code> just reformulates the code in <code>IdentityMonad.hs</code> using <code>do</code> notation.</p>
-<hr>
-<h2 id="2nd-interpreter-errors-and-maybe"><a class="header" href="#2nd-interpreter-errors-and-maybe">2nd Interpreter: Errors and Maybe</a></h2>
-<p>The code for this section is found in <a href="Errors.hs">Errors.hs</a>. This new interpreter adds a new arithmetic operation <code>Div</code>. I pasted in the <code>eval0</code> with a new case for <code>Div</code>.</p>
-<pre><code class="language-haskell">module Errors where
-
-data Exp = Const Int | Neg Exp | Add Exp Exp
-         | Div Exp Exp                      -- new
-
-instance Show Exp where
-  show (Const i) = show i
-  show (Neg e)   = "-" ++ show e
-  show (Add e1 e2) = show e1 ++ " + " ++ show e2
-  show (Div e1 e2) = show e1 ++ " / " ++ show e2
-
--- | Same as before, but with a new case
-eval0 :: Exp -&gt; Int
-eval0 (Const i)   = i
-eval0 (Neg e)     = - (eval0 e)
-eval0 (Add e1 e2) = eval0 e1 + eval0 e2
-eval0 (Div e1 e2) = eval0 e1 `div` eval0 e2 -- new
-
-a    = Add c (Neg c)
-        where
-          c = Const 99
-uhoh = Div (Const 1) (Const 0)              -- new
-</code></pre>
-<p>Note that, when you run the <code>Div</code>-extended version of <code>eval0</code>, things don’t always end well:</p>
-<pre><code class="language-haskell">λ&gt; uhoh
-1 / 0
-λ&gt; eval0 uhoh
-*** Exception: divide by zero
-λ&gt; 
-</code></pre>
-<h3 id="why-cant-we-just-check-for-0"><a class="header" href="#why-cant-we-just-check-for-0">Why can’t we just check for 0?</a></h3>
-<p>Think about it this way, what should I replace <code>????</code> with below? There’s no way of handling that exceptional case and it crashes the program.</p>
-<pre><code class="language-haskell">eval0 (Div e1 e2) = if v2 == 0 then ???? else eval0 e1 `div` v2 
-   where
-      v2 = eval0 e2
-</code></pre>
-<p>But with the <code>Maybe</code> monad, we can use its <code>Nothing</code> constructor for this erroneous case; recall the definition of the <code>Maybe</code> data type:</p>
-<pre><code class="language-haskell">data Maybe a = Nothing | Just a
-</code></pre>
-<p>Here’s the definition of <code>eval2</code> whhich is typed in the <code>Maybe</code> monad:</p>
-<pre><code class="language-haskell">eval2 :: Exp -&gt; Maybe Int     -- N.b., the new type
-eval2 (Const i)   = return i
-eval2 (Neg e)     = do
-                      v &lt;- eval2 e
-                      return (- v)
-eval2 (Add e1 e2) = do
-                      v1 &lt;- eval2 e1
-                      v2 &lt;- eval2 e2
-                      return (v1 + v2)
-eval2 (Div e1 e2) = do
-                      v1 &lt;- eval2 e1
-                      v2 &lt;- eval2 e2
-                      if v2==0 then Nothing else return (v1 `div` v2) -- fill in ???? with Nothing
-</code></pre>
-<pre><code class="language-haskell">λ&gt; uhoh
-1 / 0
-λ&gt; eval2 uhoh
-Nothing
-</code></pre>
-<h3 id="maybe-under-the-hood"><a class="header" href="#maybe-under-the-hood">Maybe Under the Hood</a></h3>
-<p>Below is the definition of the <code>Maybe</code> monad. The way to think of a computation <code>x &gt;&gt;= f</code> is that, if <code>x</code> is returns some value (i.e., it’s <code>Just v</code>), then just proceed normally. If an exception is thrown by computing <code>x</code> (i.e., it’s <code>Nothing</code>), then the whole computation <code>x &gt;&gt;= f</code></p>
-<pre><code class="language-haskell">data Maybe a = Nothing | Just a
-
-return :: a -&gt; Maybe a
-return v = Just v
-
-(&gt;&gt;=) :: Maybe a -&gt; (a -&gt; Maybe b) -&gt; Maybe b 
-(Just v) &gt;&gt;= f = f v
-Nothing &gt;&gt;= f  = Nothing
-</code></pre>
-<hr>
-<h1 id="3rd-interpreter-adding-a-register"><a class="header" href="#3rd-interpreter-adding-a-register">3rd Interpreter: Adding a Register</a></h1>
-<p>The code for this section is <a href="Register.hs">Register.hs</a>.</p>
-<pre><code class="language-haskell">module Register where
-
-import Control.Monad.State
-
-data Exp = Const Int | Neg Exp | Add Exp Exp
-         | X  -- new register X
-
-instance Show Exp where
-  show (Const i) = show i
-  show (Neg e)   = "-" ++ show e
-  show (Add e1 e2) = show e1 ++ " + " ++ show e2
-  show X           = "X"
-
--- | Just a copy 
-eval2 :: Exp -&gt; Maybe Int
-eval2 (Const i)   = return i
-eval2 (Neg e)     = do
-                      v &lt;- eval2 e
-                      return (- v)
-eval2 (Add e1 e2) = do
-                      v1 &lt;- eval2 e1
-                      v2 &lt;- eval2 e2
-                      return (v1 + v2)
-
-eval2 X           = undefined -- How do we do handle this?
-</code></pre>
-<p>Here’s how we handle this:</p>
-<ul>
-<li>Create a new monad from <code>Identity</code> with an <code>Int</code> register: <code>StateT Int Identity</code></li>
-<li>This new monad has two operations
-<ul>
-<li><code>get</code> that reads the current value of the register</li>
-<li><code>put</code> that updates the value of the register</li>
-</ul>
-</li>
-<li><code>StateT Int</code> is known as a <em>monad transformer</em></li>
-</ul>
-<p>The code below does just that</p>
-<pre><code class="language-haskell">readX :: StateT Int Identity Int
-readX = get
-
-eval3 :: Exp -&gt; StateT Int Identity Int
-eval3 (Const i)   = return i
-eval3 (Neg e)     = do
-                      v &lt;- eval3 e
-                      return (- v)
-eval3 (Add e1 e2) = do
-                      v1 &lt;- eval3 e1
-                      v2 &lt;- eval3 e2
-                      return (v1 + v2)
-
-eval3 X           = readX
-</code></pre>
-<hr>
-<h1 id="4th-errors--register"><a class="header" href="#4th-errors--register">4th: Errors + Register</a></h1>
-<p>The code for this is <a href="RegisterError.hs">RegisterError.hs</a>. In this example, we want to add both a possibly error-producing computation along with the register. This is done mostly through monadic means.</p>
-<pre><code class="language-haskell">module Register where
-
-import Control.Monad.State
-
-data Exp = Const Int | Neg Exp | Add Exp Exp
-         | Div Exp Exp  -- Both errors
-         | X            -- and a register X
-
-instance Show Exp where
-  show (Const i) = show i
-  show (Neg e)   = "-" ++ show e
-  show (Add e1 e2) = show e1 ++ " + " ++ show e2
-  show (Div e1 e2) = show e1 ++ " / " ++ show e2
-  show X           = "X"
-</code></pre>
-<p>Here’s how we handle this:</p>
-<ul>
-<li>Create a new monad from <code>Maybe</code> with an <code>Int</code> register: <code>StateT Int Maybe</code></li>
-<li>This new monad has two operations
-<ul>
-<li><code>get</code> that reads the current value of the register</li>
-<li><code>put</code> that updates the value of the register</li>
-</ul>
-</li>
-<li><code>StateT Int</code> is known as a <em>monad transformer</em></li>
-</ul>
-<p>The code below does just that</p>
-<pre><code class="language-haskell">readX :: StateT Int Maybe Int
-readX = get
-
-eval3 :: Exp -&gt; StateT Int Maybe Int
-eval3 (Const i)   = return i
-eval3 (Neg e)     = do
-                      v &lt;- eval3 e
-                      return (- v)
-eval3 (Add e1 e2) = do
-                      v1 &lt;- eval3 e1
-                      v2 &lt;- eval3 e2
-                      return (v1 + v2)
-eval3 (Div e1 e2) = do
-                      v1 &lt;- eval3 e1
-                      v2 &lt;- eval3 e2
-                      if v2==0 then lift Nothing else return (v1 `div` v2)
-                                 -- N.b., this is new.
-
-eval3 X           = readX
-</code></pre>
 
                     </main>
 
@@ -449,7 +190,7 @@ eval3 X           = readX
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="../../../chapters/chapter1/helloworlds.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../../../chapters/chapter0/monadwrangling/FirstInterpreter.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -463,7 +204,7 @@ eval3 X           = readX
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="../../../chapters/chapter1/helloworlds.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../../../chapters/chapter0/monadwrangling/FirstInterpreter.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>
@@ -501,11 +242,11 @@ eval3 X           = readX
 
         <script src="../../../elasticlunr-ef4e11c1.min.js"></script>
         <script src="../../../mark-09e88c2c.min.js"></script>
-        <script src="../../../searcher-c2a407aa.js"></script>
+        <script src="../../../searcher-09f2665d.js"></script>
 
         <script src="../../../clipboard-1626706a.min.js"></script>
-        <script src="../../../highlight-abc7f01d.js"></script>
-        <script src="../../../book-a0b12cfe.js"></script>
+        <script src="../../../highlight-bc8f37c5.js"></script>
+        <script src="../../../book-609e4cb8.js"></script>
 
         <!-- Custom JS scripts -->
 

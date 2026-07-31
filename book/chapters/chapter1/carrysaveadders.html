@@ -15,8 +15,8 @@
         <link rel="icon" href="../../favicon-de23e50b.svg">
         <link rel="shortcut icon" href="../../favicon-8114d1fc.png">
         <link rel="stylesheet" href="../../css/variables-8adf115d.css">
-        <link rel="stylesheet" href="../../css/general-2459343d.css">
-        <link rel="stylesheet" href="../../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../../css/general-e96d0476.css">
+        <link rel="stylesheet" href="../../css/chrome-d279d366.css">
         <link rel="stylesheet" href="../../css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
@@ -37,10 +37,10 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-4cdf116e.js";
+            window.path_to_searchindex_js = "../../searchindex-0198648b.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc-811dbe0c.js"></script>
+        <script src="../../toc-858a4e06.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -176,7 +176,7 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h2 id="carry-save-addition"><a class="header" href="#carry-save-addition">Carry Save Addition</a></h2>
+                        <h1 id="carry-save-addition"><a class="header" href="#carry-save-addition">Carry Save Addition</a></h1>
 <p>There are three carry-save adders in the tutorial, <a href="../../code/chapter1/CSA.hs">CSA.hs</a>, <a href="../../code/chapter1/SCSA.hs">SCSA.hs</a>, and <a href="../../code/chapter1/PCSA.hs">PCSA.hs</a>, and the first of these is explained in detail below.</p>
 <p>Carry save addition (<a href="https://en.wikipedia.org/wiki/Carry-save_adder">https://en.wikipedia.org/wiki/Carry-save_adder</a>) is defined as function <code>f</code>:</p>
 <pre><code class="language-haskell">f :: W 8 -&gt; W 8 -&gt; W 8 -&gt; (W 8, W 8)
@@ -204,7 +204,7 @@ f :: W 8 -&gt; W 8 -&gt; W 8 -&gt; (W 8, W 8)
 (50,36)
 λ&gt; 
 </code></pre>
-<h3 id="making-a-basic-carry-save-adder"><a class="header" href="#making-a-basic-carry-save-adder">Making a basic carry save adder</a></h3>
+<h2 id="making-a-basic-carry-save-adder"><a class="header" href="#making-a-basic-carry-save-adder">Making a basic carry save adder</a></h2>
 <pre><code class="language-haskell">-- |
 -- | Example 1. CSA
 -- |
@@ -226,7 +226,7 @@ start = csa (_0, _0, _0)
 <li>The output type is <code>(W 8, W 8)</code>, meaning that every it produces two <code>W 8</code>s each clock cycle; and</li>
 <li>It does not use any internal storage or registers, hence the <code>Identity</code> monad is used rather than a state monad.</li>
 </ul>
-<h4 id="running-it-in-ghci"><a class="header" href="#running-it-in-ghci">Running it in GHCi</a></h4>
+<h2 id="running-it-in-ghci"><a class="header" href="#running-it-in-ghci">Running it in GHCi</a></h2>
 <p>You can run this using <code>pretty</code> and <code>runP</code> from <code>ReWire.Interactive</code>. First, define some inputs that look familiar:</p>
 <pre><code class="language-haskell">inputs :: [(W 8 , W 8 , W 8)]
 inputs = (_40 , _25 , _20)
@@ -239,7 +239,7 @@ pretty :: Pretty a =&gt; a -&gt; IO ()
 ((0,0,0),(0,0)) :&gt; ((40,25,20),(0,0)) :&gt; ((41,25,20),(48,37)) :&gt; ((40,25,20),(50,36)) :+&gt; Nothing
 </code></pre>
 <p>(<strong>WARNING:</strong> <code>ReWire.Interactive</code> is currently in <em>super-king-kong-major-hacky</em> form right now.)</p>
-<h4 id="compiling-it-with-rwc"><a class="header" href="#compiling-it-with-rwc">Compiling it with RWC</a></h4>
+<h2 id="compiling-it-with-rwc"><a class="header" href="#compiling-it-with-rwc">Compiling it with RWC</a></h2>
 <p>First, here’s the entire file as it stands:</p>
 <pre><code class="language-haskell">{-# LANGUAGE DataKinds #-}
 import Prelude hiding ((^))
@@ -304,7 +304,7 @@ $
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="../../chapters/chapter1/UART.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../../chapters/basicdesigns/basics.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -318,7 +318,7 @@ $
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="../../chapters/chapter1/UART.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../../chapters/basicdesigns/basics.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>
@@ -356,11 +356,11 @@ $
 
         <script src="../../elasticlunr-ef4e11c1.min.js"></script>
         <script src="../../mark-09e88c2c.min.js"></script>
-        <script src="../../searcher-c2a407aa.js"></script>
+        <script src="../../searcher-09f2665d.js"></script>
 
         <script src="../../clipboard-1626706a.min.js"></script>
-        <script src="../../highlight-abc7f01d.js"></script>
-        <script src="../../book-a0b12cfe.js"></script>
+        <script src="../../highlight-bc8f37c5.js"></script>
+        <script src="../../book-609e4cb8.js"></script>
 
         <!-- Custom JS scripts -->
 

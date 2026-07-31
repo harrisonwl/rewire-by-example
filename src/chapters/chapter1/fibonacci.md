@@ -1,4 +1,4 @@
-## The Obligatory Fibonacci Example
+# The Obligatory Fibonacci Example
 
 
 The following Haskell code (the file is called [Fib.hs](../../code/chapter1/Fib.hs)) creates an infinite list of `Int`s in a conventional manner using the `fibgen` function.
@@ -19,7 +19,7 @@ take 10 fibs
 [0,1,1,2,3,5,8,13,21,34]
 ```
 
-### Making Hardware Out of This.
+## Making Hardware Out of This.
 
 In the ReWire code below, `fibdev` plays the same role as `fibgen` above. For the moment, just ignore the monadic type, `ReacT Bit (W 8) Identity ()`. (I'll explain its significance shortly.) Instead of using Haskell's `Int` type, we will compute over eight bit words (i.e., `W 8`). There is also a definition of `start`, which is a special symbol that unsurprisingly specifies how to start the device.
 
@@ -39,7 +39,7 @@ fibdev n m = do b <- signal n
                 if b then fibdev n m else fibdev m (n + m)
 ```
 
-### Lessons Learned.
+## Lessons Learned.
 
 There are some lessons to be learned from this example.
 - Just like a state machine, every ReWire device has to have a `start`. 

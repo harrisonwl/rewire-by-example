@@ -1,14 +1,26 @@
 # Summary
 
-UNDER CONSTRUCTION!
-
 [ReWire by Example](./rewire-by-example.md)
+
+# Prerequisites
 
 - [Prerequisites](./chapters/chapter0/prequisites.md)
 
-   - [Haskell](./chapters/chapter0/haskell.md)
-   
-   - [Monads in Haskell](./chapters/chapter0/monadwrangling/monadwrangling.md)
+- [Haskell Resources](./chapters/chapter0/haskell.md)
+  
+- [Monads in Haskell](./chapters/chapter0/monadwrangling/monadwrangling.md)
+
+     - [Simple Arithmetic Expressions](./chapters/chapter0/monadwrangling/FirstInterpreter.md)
+
+     - [Identity Monad](./chapters/chapter0/monadwrangling/IdentityBigNothing.md)
+
+     - [Second Interpreter: Errors and Maybe](./chapters/chapter0/monadwrangling/Errors.md)
+
+     - [Register](./chapters/chapter0/monadwrangling/Register.md)
+
+     - [Errors and Register](./chapters/chapter0/monadwrangling/RegisterErrors.md)
+  
+# Introduction
 
 - [Hello Worlds in ReWire](./chapters/chapter1/helloworlds.md)
 
@@ -18,7 +30,14 @@ UNDER CONSTRUCTION!
 
    - [Carry Save Adders](./chapters/chapter1/carrysaveadders.md)
 
-   - [UART](./chapters/chapter1/UART.md)
+- [Basic Designs](./chapters/basicdesigns/basics.md)
+    - [UART](./chapters/basicdesigns/UART.md)
+    - [Simple Processors](./chapters/basicdesigns/simpleprocs.md)
+         - [Tiny ISA](./chapters/basicdesigns/tinyisa.md)
+    - [Cross Bar Switch](./chapters/basicdesigns/crossbarswitch.md)
+
+
+# Cryptographic Hardware in ReWire
    
 - [Blake2b Case Study](./chapters/blake2b/front.md)
 
@@ -71,12 +90,6 @@ UNDER CONSTRUCTION!
 
    - [Conversion into ReWire](./chapters/aes/correctbyconstruction.md)
 
-<!-- - [Simple Processors](./chapters/chapter2/simpleprocs.md) -->
-
-<!--    - [Tiny ISA](./chapters/chapter2/tinyisa.md) -->
-
-
-<!-- - [Cross Bar Switch](./crossbarswitch.md) -->
 
    <!--  - [Simple Arithmetic](./chapters/chapter0/monadwrangling/FirstInterpreter.md) -->
    <!-- - [Identity is a Big Nothingburger](./chapters/chapter0/monadwrangling/IdentityBigNothing.md) -->
