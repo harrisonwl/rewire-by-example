@@ -1,4 +1,3 @@
-## Simple Arithmetic Expressions
 
 The first interpreter, found in [Arith.hs](Arith.hs), defines a language `Exp` that has integer constants, negation, and addition. These correspond to the constructors `Const`, `Neg`, and `Add` of the `Exp` data type. The interpreter `eval0` does not use a monad and should be fairly self-explanatory.
 

@@ -1,4 +1,3 @@
-## Haskell
 
 Here are some good sources:
 - **Programming in Haskell** by Graham Hutton.

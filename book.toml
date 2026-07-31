@@ -6,7 +6,9 @@ preferred-dark-theme = "navy"
 mathjax-support = true
 definition-lists = true
 admonitions = true
+theme = "theme"
 [output.html.fold]
 enable = true
 
 [preprocessor]
+

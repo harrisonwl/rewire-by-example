@@ -1,4 +1,4 @@
-## Carry Save Addition
+# Carry Save Addition
 
 There are three carry-save adders in the tutorial, [CSA.hs](../../code/chapter1/CSA.hs), [SCSA.hs](../../code/chapter1/SCSA.hs), and [PCSA.hs](../../code/chapter1/PCSA.hs), and the first of these is explained in detail below.
 
@@ -34,7 +34,7 @@ What's this mess? `W 8` values are represented internally using Haskell's `Data.
 λ> 
 ```
 
-### Making a basic carry save adder
+## Making a basic carry save adder
 
 ```haskell
 -- |
@@ -60,7 +60,7 @@ First, `csa` consumes its three inputs `a`, `b`, and `c` as a tuple. Then, it co
 - It does not use any internal storage or registers, hence the `Identity` monad is used rather than a state monad.
 
 
-#### Running it in GHCi
+## Running it in GHCi
 You can run this using `pretty` and `runP` from `ReWire.Interactive`. First, define some inputs that look familiar:
 ```haskell
 inputs :: [(W 8 , W 8 , W 8)]
@@ -76,7 +76,7 @@ pretty :: Pretty a => a -> IO ()
 ```
 (**WARNING:** `ReWire.Interactive` is currently in *super-king-kong-major-hacky* form right now.)
 
-#### Compiling it with RWC
+## Compiling it with RWC
 
 First, here's the entire file as it stands:
 ```haskell

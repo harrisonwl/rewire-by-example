@@ -1,4 +1,4 @@
-# Chapter 0: Before You Start
+## Chapter 0: Before You Start
 
 These are the tutorial notes for the ReWire language.
 
@@ -12,7 +12,7 @@ There's no way of learning ReWire without knowing basic Haskell. I'm a Mac guy s
 
 ### Installing ReWire
 
-ReWire is freely available. Here is the repository where you find the most recent version: [ReWire source](https://github.com/twosixlabs/ReWire). Follow the directions -- `stack` makes it easy.
+ReWire is freely available. Here is the repository where you find the most recent version: [ReWire source](https://github.com/rewire-hardware/ReWire). Follow the directions -- `stack` makes it easy.
   * This installation will build the ReWire compiler `rwc` and
   * Install libraries (aka `ReWire-user`) that allow you to program in ReWire with the Haskell interpreter `ghci`.
 
@@ -26,6 +26,7 @@ You have to be comfortable with the basics of "monad wrangling". You don't need 
 Understanding the basic usage of the `StateT` monad transformer is important. It's a shame that they are known as "transformer" instead of "constructor", because all a monad transformer is is a way to construct monads in a canonical fashion. 
 
 Monads are a concept from Category Theory. I love Category Theory, really I do. But I'd **strongly** recommend avoiding categorical treatments of monads if this is your first time with this material. Rather, check out Graham Hutton or Miran Lipovaca's texts as they're both excellent.
+
 
 #### Reactive Resumption Monads
 
