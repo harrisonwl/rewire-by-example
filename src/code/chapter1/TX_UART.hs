@@ -176,7 +176,8 @@ loop :: I -> ReacT I (Bit, Bit) (StateT RF Identity) I
 loop i = if rst i then
             do
               lift reset
-              click
+              i' <- click
+              loop i'
          else
             do
               rf <- lift get
@@ -198,6 +199,30 @@ loop i = if rst i then
                                 lift $ stop_bit
                                 i' <- click
                                 loop i'
+
+body :: I -> ReacT I (Bit, Bit) (StateT RF Identity) I
+body i = if rst i then
+            do
+              lift reset
+              click
+         else
+            do
+              rf <- lift get
+              let st = state rf
+              case st of
+                IDLE      -> do
+                                lift $ idle i
+                                click
+                START_BIT -> do
+                                lift $ start_bit
+                                click
+                DATA_BITS -> do
+                                lift $ data_bits
+                                click
+                STOP_BIT  -> do
+                                lift $ stop_bit
+                                click
+
 
               
 start :: ReacT I (Bit , Bit) Identity I
