@@ -37,7 +37,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-4e531882.js";
+            window.path_to_searchindex_js = "../../searchindex-0198648b.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-858a4e06.js"></script>
@@ -177,6 +177,12 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="shiftrows"><a class="header" href="#shiftrows">ShiftRows</a></h1>
+<img src="images/ShiftRows.png" style="height:75%; width:75%">
+<pre><code class="language-haskell">shiftrows :: State -&gt; State
+shiftrows v = generate $ \ i -&gt;
+              generate $ \ j -&gt;
+                            (v `index` i) `index` (j FC.+ i)
+</code></pre>
 
                     </main>
 

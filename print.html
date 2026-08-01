@@ -38,7 +38,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-4e531882.js";
+            window.path_to_searchindex_js = "searchindex-0198648b.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-858a4e06.js"></script>
@@ -1052,10 +1052,40 @@ bill$ ls -l RWC.vhd
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="blake2b-case-study"><a class="header" href="#blake2b-case-study">Blake2b Case Study</a></h1>
-<div style="break-before: page; page-break-before: always;"></div>
-<h1 id="reference-semantics"><a class="header" href="#reference-semantics">Reference Semantics</a></h1>
+<p>The case study in this section concerns a correct-by-construction design and implementation of the Blake2b cryptographic hash function in ReWire. This case</p>
+<p>There are several relevant publications:</p>
+<ol>
+<li><a href="https://bibbase.org/network/publication/forman-harrison-temporalstagingforcorrectbyconstructioncryptographichardware-2024">Temporal Staging for Correct-by-Construction Cryptographic Hardware.</a> This paper was written by Yakir Forman and myself and published in the <em>Rapid Systems Prototyping Symposium</em> in 2024. This paper describes a reference semantics for Blake2b and a ReWire hardware design that comes directly from it. It also describes a formal verification in Coq of the correctness of the ReWire design. There are slides for this paper and (2) at the respective links.</li>
+<li><a href="https://bibbase.org/network/publication/harrison-blumenfeld-bond-hathhorn-li-torrence-ziegler-formalizedhighlevelsynthesiswithapplicationstocryptographichardware-2023">Formalized High Level Synthesis with Applications to Cryptographic Hardware.</a> This paper presents the mechanized semantics for ReWire on which the formal verification in (1) is based.</li>
+<li>The RFP for Blake2 written by Markku-Juhani O. Saarinen and Jean-Philippe Aumasson. This is available here: <a href="https://www.rfc-editor.org/info/rfc7693">https://www.rfc-editor.org/info/rfc7693</a>. The reference semantics for Blake2b is a transliteration of this into Haskell/ReWire.</li>
+</ol>
+<h2 id="reference-semantics"><a class="header" href="#reference-semantics">Reference Semantics</a></h2>
+<p>The reference semantics is defined in terms of a state monad, <code>Storage</code>, that manages accesses to a register file, <code>RegFile</code>. There are 40 registers, each of which is a 64-bit word (i.e., <code>W 64</code> in ReWire). The <code>RegFile</code> itself is represented as a 40 element vector of <code>W 64</code> and individual registers are indices into this vector, represented by the <code>Finite 40</code> type.</p>
+<pre><code class="language-haskell">type Storage s = StateT s Identity
+type RegFile   = Vec 40 (W 64)
+type Reg       = Finite 40
+</code></pre>
+<p>Just as an example, consider the compression function <code>F</code> of Blake2b; here is its pseudocode:</p>
+<p align="center"><img src="chapters/blake2b/CompressionFIPS.png" style="height:50%; width:50%"></p>
+
+<pre><code class="language-haskell">_F :: W 128 -&gt; Bit -&gt; Storage RegFile ()
+_F t f = do
+           init_local_work_vector
+           v12 &lt;== do { w &lt;- readReg v12 ; return $ w ^ lowword t }
+           v13 &lt;== do { w &lt;- readReg v13 ; return $ w ^ highword t }
+           if f then
+                  v14 &lt;== do { w &lt;- readReg v14 ; return $ w ^ lit 0xffffffffffffffff }
+                else
+                  return ()
+           cryptographic_mixing
+           xor_two_halves
+</code></pre>
+<pre><code class="language-haskell">import Blake2b.Reference hiding (readH , _F , _BLAKE2b)
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="conversion-into-rewire"><a class="header" href="#conversion-into-rewire">Conversion into ReWire</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="conversion-into-rewire-1"><a class="header" href="#conversion-into-rewire-1">Conversion into ReWire</a></h1>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="salsa20-case-study"><a class="header" href="#salsa20-case-study">Salsa20 Case Study</a></h1>
 <p>This document presents a case study in constructing verified cryptographic hardware in ReWire. In it, I follow the Daniel Bernstein’s Salsa20 specification: <a href="https://cr.yp.to/snuffle/spec.pdf">https://cr.yp.to/snuffle/spec.pdf</a>. Throughout this tutorial, I’ll refer to this document (i.e., the PDF I just linked to) as either the <em>Salsa20 specification</em> or simply the “<em>spec</em>”. Page and section numbers will refer to that document.</p>
@@ -1898,24 +1928,167 @@ ins :: [W 8]
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="aes-case-study"><a class="header" href="#aes-case-study">AES Case Study</a></h1>
+<p>This section describes the correct-by-construction development of an AES-256 device in ReWire. Online resources that were used include:</p>
+<ul>
+<li><a href="https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197-upd1.pdf">NIST FIPS 197</a></li>
+<li>Cryptol was used as a <em>gold standard</em> to generate known answer tests:
+<ul>
+<li>Galois’s <a href="https://github.com/GaloisInc/cryptol-specs">cryptol-specs</a> repository contains a large number of formal specifications of cryptographic functions; and</li>
+<li>in particular, I used: <a href="https://github.com/GaloisInc/cryptol-specs/blob/master/Primitive/Symmetric/Cipher/Block/AES/Specification.cry">AES Specification in Cryptol</a>.</li>
+</ul>
+</li>
+</ul>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: center">Key Size</th><th style="text-align: center">Key Length (Nk)</th><th style="text-align: center">Block Size (Nb words)</th><th style="text-align: center">Number of Rounds (Nr)</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: center">AES-128</td><td style="text-align: center">4</td><td style="text-align: center">4</td><td style="text-align: center">10</td></tr>
+<tr><td style="text-align: center">AES-192</td><td style="text-align: center">6</td><td style="text-align: center">4</td><td style="text-align: center">12</td></tr>
+<tr><td style="text-align: center"><strong>AES-256</strong></td><td style="text-align: center">8</td><td style="text-align: center">4</td><td style="text-align: center">14</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="basic-types-for-aes-256"><a class="header" href="#basic-types-for-aes-256">Basic Types for AES-256</a></h2>
+<p>In all three versions of this algorithm, the word size is 32 bits, which is expressed in ReWire as <code>W 32</code>.</p>
+<p>Below is a listing of the type declarations for AES-256. The <code>State</code> is an intermediate result “of the AES block cipher that is represented as a two-dimensional array of bytes with four rows and Nb columns” which is defined as a vector of byte-vectors. Similarly, both a <code>Column</code> and a <code>RoundKey</code> are 4-vectors of bytes. A <code>KeySchedule</code> is an array of \(Nb * (Nr + 1)\) words, which, for AES-256, is an array of 60 words.</p>
+<pre><code class="language-haskell">-- |
+type Key         = W 256
+type State       = Vec 4 (Vec 4 (W 8))
+type Column      = Vec 4 (W 8)
+type RoundKey    = Vec 4 (Vec 4 (W 8))
+-- | For AES-256, Nb * (Nr + 1) = 60, hence the key schedule has 60 elements:
+type KeySchedule = Vec 60 (W 32)
+</code></pre>
+<h3 id="defining-the-encryption-function"><a class="header" href="#defining-the-encryption-function">Defining the encryption function</a></h3>
+<p>In NIST FIPS-197, the encryption functions for each key size are defined as:
+<img src="chapters/aes/images/encryptspec.png" style="height:55%; width:55%"></p>
+<pre><code class="language-haskell">-- 
+-- This corresponds to Specification.cry's encrypt
+-- 
+encrypt256 :: Key -&gt; W 128 -&gt; State
+encrypt256 k inp = cipher (initState inp) (keyexpand k)
+</code></pre>
+<pre><code class="language-haskell">λ&gt; :t cipher
+cipher :: State -&gt; KeySchedule -&gt; State
+λ&gt; :t keyexpand
+keyexpand :: Key -&gt; KeySchedule
+λ&gt; :t initState
+initState :: W 128 -&gt; State
+λ&gt; 
+</code></pre>
+<h3 id="built-in-operations"><a class="header" href="#built-in-operations">Built-in Operations</a></h3>
+<pre><code class="language-haskell">generate :: KnownNat n =&gt; (Finite n -&gt; a) -&gt; Vec n a
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="reference-semantics-2"><a class="header" href="#reference-semantics-2">Reference Semantics</a></h1>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="key-expansion"><a class="header" href="#key-expansion">Key Expansion</a></h1>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="rot--and-subword"><a class="header" href="#rot--and-subword">Rot- and SubWord</a></h1>
+<h1 id="rotword--subword"><a class="header" href="#rotword--subword">RotWord &amp; SubWord</a></h1>
+<p>The rotate word, <code>RotWord</code>, and substitute word, <code>SubWord</code>, functions are defined in FIPS-197 as:
+<img src="chapters/aes/images/RotWordSubWord.png" style="height:75%; width:75%"></p>
+<p>Both the <code>RotWord</code> and <code>SubWord</code> functions take a 32 bit word as input, viewed as four bytes. <code>RotWord</code>  rotates the bytes once to the left. The <code>SubWord</code> function takes FINISH THIS</p>
+<h2 id="rotword"><a class="header" href="#rotword">RotWord</a></h2>
+<p>The <code>rotword</code> function is defined in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/aes/RotWord.hs">RotWord.hs</a>.</p>
+<pre><code class="language-haskell">rotword :: W 32 -&gt; W 32
+rotword w32 = toW32 (rot4 (toByte4 w32))
+  where
+    rot4 :: Vec 4 (W 8) -&gt; Vec 4 (W 8)
+    rot4 v4 = tail v4 `snoc` head v4
+
+v4 :: Vec 4 (W 8)
+v4 = fromList [lit 0 , lit 1 , lit 2 , lit 3]
+</code></pre>
+<p>This uses two helper functions defined in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/aes/Basic.hs">Basic.hs</a></p>
+<pre><code class="language-haskell">toByte4 :: W 32 -&gt; Vec 4 (W 8)
+toW32   :: Vec 4 (W 8) -&gt; W 32
+</code></pre>
+<h2 id="subword"><a class="header" href="#subword">SubWord</a></h2>
+<p>The <code>subword</code> function is defined in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/aes/SubBytes.hs">SubBytes.hs</a> along with <code>subbytes</code> because they share the substitution box <code>SBox</code> (defined below).</p>
+<pre><code class="language-haskell">subword :: W 32 -&gt; W 32
+subword w32 = toW32 (sub4 (toByte4 w32))
+  where
+    -- | This is used later in the key expansion routine.
+    sub4 :: Vec 4 (W 8) -&gt; Vec 4 (W 8)
+    sub4 bytes4 = generate $ \ i -&gt; sbox (bytes4 `index` i)
+</code></pre>
+<pre><code class="language-haskell">type SBox   = Vec 0x10 (Vec 0x10 (W 8))
+type Index  = Finite 0x10
+</code></pre>
+<pre><code class="language-haskell">mkix :: W 8 -&gt; (Index , Index)
+mkix b = (toFinite t4 , toFinite b4)
+  where
+     nibbles :: W 8 -&gt; (W 4 , W 4)
+     nibbles w = (take w , drop w)
+
+     t4 , b4 :: W 4
+     (t4 , b4) = nibbles b
+  
+sbox :: W 8 -&gt; W 8
+sbox w = lkup (mkix w)
+   where
+     
+     lkup :: (Index , Index) -&gt; W 8
+     lkup (i , j) = (sboxTable `index` i) `index` j
+</code></pre>
+<img src="chapters/aes/images/SBox.png" style="height:75%; width:75%">
+<pre><code class="language-haskell">sboxTable :: SBox 
+sboxTable = fromList [ r0 , r1 , r2 , r3 , r4 , r5 , r6 , r7 
+                     , r8 , r9 , ra , rb , rc , rd , re , rf ]
+  where
+    r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, ra, rb, rc, rd, re, rf :: Vec 0x10 (W 8)
+    r0 = fromList [ lit 0x63, lit 0x7C, lit 0x77, lit 0x7B
+	              , lit 0xF2, lit 0x6B, lit 0x6F, lit 0xC5
+	              , lit 0x30, lit 0x01, lit 0x67, lit 0x2B
+				  , lit 0xFE, lit 0xD7, lit 0xAB, lit 0x76 ]
+                         ...deleted...
+    rf = fromList [ lit 0x8C, lit 0xA1, lit 0x89, lit 0x0D
+	              , lit 0xBF, lit 0xE6, lit 0x42, lit 0x68
+				  , lit 0x41, lit 0x99, lit 0x2D, lit 0x0F
+				  , lit 0xB0, lit 0x54, lit 0xBB, lit 0x16 ]
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="cipher-operations"><a class="header" href="#cipher-operations">Cipher Operations</a></h1>
+<h1 id="operations"><a class="header" href="#operations">Operations</a></h1>
+<pre><code class="language-haskell">addRoundKey :: RoundKey -&gt; State -&gt; State
+addRoundKey rk s = generate $ \ i -&gt;
+                   generate $ \ j -&gt;
+                      lkup s (i , j) ^ lkup rk (i , j)             
+</code></pre>
+<pre><code class="language-haskell">subbytes :: State -&gt; State
+subbytes s = generate $ \ i -&gt;
+             generate $ \ j -&gt; let xij = (s `index` i) `index` j in
+                                 sbox xij
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="shiftrows"><a class="header" href="#shiftrows">ShiftRows</a></h1>
+<img src="chapters/aes/images/ShiftRows.png" style="height:75%; width:75%">
+<pre><code class="language-haskell">shiftrows :: State -&gt; State
+shiftrows v = generate $ \ i -&gt;
+              generate $ \ j -&gt;
+                            (v `index` i) `index` (j FC.+ i)
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="addroundkey"><a class="header" href="#addroundkey">AddRoundKey</a></h1>
+<img src="chapters/aes/images/addroundkey.png" style="height:75%; width:75%">
+<pre><code class="language-haskell">addRoundKey :: RoundKey -&gt; State -&gt; State
+addRoundKey rk s = generate $ \ i -&gt;
+                   generate $ \ j -&gt;
+                      lkup s (i , j) ^ lkup rk (i , j)
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="mixcolumns"><a class="header" href="#mixcolumns">MixColumns</a></h1>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="subbytes"><a class="header" href="#subbytes">SubBytes</a></h1>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="conversion-into-rewire-1"><a class="header" href="#conversion-into-rewire-1">Conversion into ReWire</a></h1>
+<h1 id="conversion-into-rewire-2"><a class="header" href="#conversion-into-rewire-2">Conversion into ReWire</a></h1>
+<blockquote class="blockquote-tag blockquote-tag-tip">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"></path></svg>Tip</p>
+<p>The proper <code>rwc</code> incantation uses <code>--loadpath=...path-to-rwcrypto/src...</code>, as in:</p>
+<pre><code class="language-haskell">rwc RW_AES256.hs --verilog --loadpath=/Users/bill/work/rwcrypto/src
+</code></pre>
+</blockquote>
 
                     </main>
 

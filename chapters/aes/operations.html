@@ -37,7 +37,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-4e531882.js";
+            window.path_to_searchindex_js = "../../searchindex-0198648b.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-858a4e06.js"></script>
@@ -176,7 +176,17 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="cipher-operations"><a class="header" href="#cipher-operations">Cipher Operations</a></h1>
+                        <h1 id="operations"><a class="header" href="#operations">Operations</a></h1>
+<pre><code class="language-haskell">addRoundKey :: RoundKey -&gt; State -&gt; State
+addRoundKey rk s = generate $ \ i -&gt;
+                   generate $ \ j -&gt;
+                      lkup s (i , j) ^ lkup rk (i , j)             
+</code></pre>
+<pre><code class="language-haskell">subbytes :: State -&gt; State
+subbytes s = generate $ \ i -&gt;
+             generate $ \ j -&gt; let xij = (s `index` i) `index` j in
+                                 sbox xij
+</code></pre>
 
                     </main>
 

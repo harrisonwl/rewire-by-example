@@ -37,7 +37,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-4e531882.js";
+            window.path_to_searchindex_js = "../../searchindex-0198648b.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-858a4e06.js"></script>
@@ -176,7 +176,69 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="rot--and-subword"><a class="header" href="#rot--and-subword">Rot- and SubWord</a></h1>
+                        <h1 id="rotword--subword"><a class="header" href="#rotword--subword">RotWord &amp; SubWord</a></h1>
+<p>The rotate word, <code>RotWord</code>, and substitute word, <code>SubWord</code>, functions are defined in FIPS-197 as:
+<img src="images/RotWordSubWord.png" style="height:75%; width:75%"></p>
+<p>Both the <code>RotWord</code> and <code>SubWord</code> functions take a 32 bit word as input, viewed as four bytes. <code>RotWord</code>  rotates the bytes once to the left. The <code>SubWord</code> function takes FINISH THIS</p>
+<h2 id="rotword"><a class="header" href="#rotword">RotWord</a></h2>
+<p>The <code>rotword</code> function is defined in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/aes/RotWord.hs">RotWord.hs</a>.</p>
+<pre><code class="language-haskell">rotword :: W 32 -&gt; W 32
+rotword w32 = toW32 (rot4 (toByte4 w32))
+  where
+    rot4 :: Vec 4 (W 8) -&gt; Vec 4 (W 8)
+    rot4 v4 = tail v4 `snoc` head v4
+
+v4 :: Vec 4 (W 8)
+v4 = fromList [lit 0 , lit 1 , lit 2 , lit 3]
+</code></pre>
+<p>This uses two helper functions defined in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/aes/Basic.hs">Basic.hs</a></p>
+<pre><code class="language-haskell">toByte4 :: W 32 -&gt; Vec 4 (W 8)
+toW32   :: Vec 4 (W 8) -&gt; W 32
+</code></pre>
+<h2 id="subword"><a class="header" href="#subword">SubWord</a></h2>
+<p>The <code>subword</code> function is defined in <a href="https://github.com/harrisonwl/rwcrypto/blob/main/src/aes/SubBytes.hs">SubBytes.hs</a> along with <code>subbytes</code> because they share the substitution box <code>SBox</code> (defined below).</p>
+<pre><code class="language-haskell">subword :: W 32 -&gt; W 32
+subword w32 = toW32 (sub4 (toByte4 w32))
+  where
+    -- | This is used later in the key expansion routine.
+    sub4 :: Vec 4 (W 8) -&gt; Vec 4 (W 8)
+    sub4 bytes4 = generate $ \ i -&gt; sbox (bytes4 `index` i)
+</code></pre>
+<pre><code class="language-haskell">type SBox   = Vec 0x10 (Vec 0x10 (W 8))
+type Index  = Finite 0x10
+</code></pre>
+<pre><code class="language-haskell">mkix :: W 8 -&gt; (Index , Index)
+mkix b = (toFinite t4 , toFinite b4)
+  where
+     nibbles :: W 8 -&gt; (W 4 , W 4)
+     nibbles w = (take w , drop w)
+
+     t4 , b4 :: W 4
+     (t4 , b4) = nibbles b
+  
+sbox :: W 8 -&gt; W 8
+sbox w = lkup (mkix w)
+   where
+     
+     lkup :: (Index , Index) -&gt; W 8
+     lkup (i , j) = (sboxTable `index` i) `index` j
+</code></pre>
+<img src="images/SBox.png" style="height:75%; width:75%">
+<pre><code class="language-haskell">sboxTable :: SBox 
+sboxTable = fromList [ r0 , r1 , r2 , r3 , r4 , r5 , r6 , r7 
+                     , r8 , r9 , ra , rb , rc , rd , re , rf ]
+  where
+    r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, ra, rb, rc, rd, re, rf :: Vec 0x10 (W 8)
+    r0 = fromList [ lit 0x63, lit 0x7C, lit 0x77, lit 0x7B
+	              , lit 0xF2, lit 0x6B, lit 0x6F, lit 0xC5
+	              , lit 0x30, lit 0x01, lit 0x67, lit 0x2B
+				  , lit 0xFE, lit 0xD7, lit 0xAB, lit 0x76 ]
+                         ...deleted...
+    rf = fromList [ lit 0x8C, lit 0xA1, lit 0x89, lit 0x0D
+	              , lit 0xBF, lit 0xE6, lit 0x42, lit 0x68
+				  , lit 0x41, lit 0x99, lit 0x2D, lit 0x0F
+				  , lit 0xB0, lit 0x54, lit 0xBB, lit 0x16 ]
+</code></pre>
 
                     </main>
 

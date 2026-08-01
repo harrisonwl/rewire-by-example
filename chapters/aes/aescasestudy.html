@@ -37,7 +37,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-4e531882.js";
+            window.path_to_searchindex_js = "../../searchindex-0198648b.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-858a4e06.js"></script>
@@ -177,6 +177,59 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="aes-case-study"><a class="header" href="#aes-case-study">AES Case Study</a></h1>
+<p>This section describes the correct-by-construction development of an AES-256 device in ReWire. Online resources that were used include:</p>
+<ul>
+<li><a href="https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197-upd1.pdf">NIST FIPS 197</a></li>
+<li>Cryptol was used as a <em>gold standard</em> to generate known answer tests:
+<ul>
+<li>Galois’s <a href="https://github.com/GaloisInc/cryptol-specs">cryptol-specs</a> repository contains a large number of formal specifications of cryptographic functions; and</li>
+<li>in particular, I used: <a href="https://github.com/GaloisInc/cryptol-specs/blob/master/Primitive/Symmetric/Cipher/Block/AES/Specification.cry">AES Specification in Cryptol</a>.</li>
+</ul>
+</li>
+</ul>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: center">Key Size</th><th style="text-align: center">Key Length (Nk)</th><th style="text-align: center">Block Size (Nb words)</th><th style="text-align: center">Number of Rounds (Nr)</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: center">AES-128</td><td style="text-align: center">4</td><td style="text-align: center">4</td><td style="text-align: center">10</td></tr>
+<tr><td style="text-align: center">AES-192</td><td style="text-align: center">6</td><td style="text-align: center">4</td><td style="text-align: center">12</td></tr>
+<tr><td style="text-align: center"><strong>AES-256</strong></td><td style="text-align: center">8</td><td style="text-align: center">4</td><td style="text-align: center">14</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="basic-types-for-aes-256"><a class="header" href="#basic-types-for-aes-256">Basic Types for AES-256</a></h2>
+<p>In all three versions of this algorithm, the word size is 32 bits, which is expressed in ReWire as <code>W 32</code>.</p>
+<p>Below is a listing of the type declarations for AES-256. The <code>State</code> is an intermediate result “of the AES block cipher that is represented as a two-dimensional array of bytes with four rows and Nb columns” which is defined as a vector of byte-vectors. Similarly, both a <code>Column</code> and a <code>RoundKey</code> are 4-vectors of bytes. A <code>KeySchedule</code> is an array of \(Nb * (Nr + 1)\) words, which, for AES-256, is an array of 60 words.</p>
+<pre><code class="language-haskell">-- |
+type Key         = W 256
+type State       = Vec 4 (Vec 4 (W 8))
+type Column      = Vec 4 (W 8)
+type RoundKey    = Vec 4 (Vec 4 (W 8))
+-- | For AES-256, Nb * (Nr + 1) = 60, hence the key schedule has 60 elements:
+type KeySchedule = Vec 60 (W 32)
+</code></pre>
+<h3 id="defining-the-encryption-function"><a class="header" href="#defining-the-encryption-function">Defining the encryption function</a></h3>
+<p>In NIST FIPS-197, the encryption functions for each key size are defined as:
+<img src="images/encryptspec.png" style="height:55%; width:55%"></p>
+<pre><code class="language-haskell">-- 
+-- This corresponds to Specification.cry's encrypt
+-- 
+encrypt256 :: Key -&gt; W 128 -&gt; State
+encrypt256 k inp = cipher (initState inp) (keyexpand k)
+</code></pre>
+<pre><code class="language-haskell">λ&gt; :t cipher
+cipher :: State -&gt; KeySchedule -&gt; State
+λ&gt; :t keyexpand
+keyexpand :: Key -&gt; KeySchedule
+λ&gt; :t initState
+initState :: W 128 -&gt; State
+λ&gt; 
+</code></pre>
+<h3 id="built-in-operations"><a class="header" href="#built-in-operations">Built-in Operations</a></h3>
+<pre><code class="language-haskell">generate :: KnownNat n =&gt; (Finite n -&gt; a) -&gt; Vec n a
+</code></pre>
 
                     </main>
 

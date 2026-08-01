@@ -37,7 +37,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-4e531882.js";
+            window.path_to_searchindex_js = "../../searchindex-0198648b.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-858a4e06.js"></script>
@@ -177,6 +177,36 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="blake2b-case-study"><a class="header" href="#blake2b-case-study">Blake2b Case Study</a></h1>
+<p>The case study in this section concerns a correct-by-construction design and implementation of the Blake2b cryptographic hash function in ReWire. This case</p>
+<p>There are several relevant publications:</p>
+<ol>
+<li><a href="https://bibbase.org/network/publication/forman-harrison-temporalstagingforcorrectbyconstructioncryptographichardware-2024">Temporal Staging for Correct-by-Construction Cryptographic Hardware.</a> This paper was written by Yakir Forman and myself and published in the <em>Rapid Systems Prototyping Symposium</em> in 2024. This paper describes a reference semantics for Blake2b and a ReWire hardware design that comes directly from it. It also describes a formal verification in Coq of the correctness of the ReWire design. There are slides for this paper and (2) at the respective links.</li>
+<li><a href="https://bibbase.org/network/publication/harrison-blumenfeld-bond-hathhorn-li-torrence-ziegler-formalizedhighlevelsynthesiswithapplicationstocryptographichardware-2023">Formalized High Level Synthesis with Applications to Cryptographic Hardware.</a> This paper presents the mechanized semantics for ReWire on which the formal verification in (1) is based.</li>
+<li>The RFP for Blake2 written by Markku-Juhani O. Saarinen and Jean-Philippe Aumasson. This is available here: <a href="https://www.rfc-editor.org/info/rfc7693">https://www.rfc-editor.org/info/rfc7693</a>. The reference semantics for Blake2b is a transliteration of this into Haskell/ReWire.</li>
+</ol>
+<h2 id="reference-semantics"><a class="header" href="#reference-semantics">Reference Semantics</a></h2>
+<p>The reference semantics is defined in terms of a state monad, <code>Storage</code>, that manages accesses to a register file, <code>RegFile</code>. There are 40 registers, each of which is a 64-bit word (i.e., <code>W 64</code> in ReWire). The <code>RegFile</code> itself is represented as a 40 element vector of <code>W 64</code> and individual registers are indices into this vector, represented by the <code>Finite 40</code> type.</p>
+<pre><code class="language-haskell">type Storage s = StateT s Identity
+type RegFile   = Vec 40 (W 64)
+type Reg       = Finite 40
+</code></pre>
+<p>Just as an example, consider the compression function <code>F</code> of Blake2b; here is its pseudocode:</p>
+<p align="center"><img src="./CompressionFIPS.png" style="height:50%; width:50%"></p>
+
+<pre><code class="language-haskell">_F :: W 128 -&gt; Bit -&gt; Storage RegFile ()
+_F t f = do
+           init_local_work_vector
+           v12 &lt;== do { w &lt;- readReg v12 ; return $ w ^ lowword t }
+           v13 &lt;== do { w &lt;- readReg v13 ; return $ w ^ highword t }
+           if f then
+                  v14 &lt;== do { w &lt;- readReg v14 ; return $ w ^ lit 0xffffffffffffffff }
+                else
+                  return ()
+           cryptographic_mixing
+           xor_two_halves
+</code></pre>
+<pre><code class="language-haskell">import Blake2b.Reference hiding (readH , _F , _BLAKE2b)
+</code></pre>
 
                     </main>
 
