@@ -19,7 +19,6 @@ type Cfg = Vec 4 (Vec 4 Bit)
 column :: KnownNat n1 => Vec n1 (Vec n2 a) -> Finite n2 -> Vec n1 a
 column cfg j = ReWire.Vectors.generate $ \ i -> cfg @@ (i , j)
 
--- (@@) :: Cfg -> (Finite 4 , Finite 4) -> Bit
 (@@) :: Vec n1 (Vec n2 a) -> (Finite n1, Finite n2) -> a
 s @@ (i , j) = s `index` i `index` j
 
